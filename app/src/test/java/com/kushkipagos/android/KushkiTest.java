@@ -7,7 +7,10 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.net.HttpURLConnection;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
@@ -27,8 +30,11 @@ public class KushkiTest {
         String expectedToken = RandomStringUtils.randomAlphanumeric(32);
         String responseBody = "{\"response_code\": \"000\", \"response_text\": \"Transacción aprobada\"," +
                 "\"transaction_token_validity\": \"1800000\", \"transaction_token\": \"" + expectedToken + "\"}";
+        String expectedRequestBody = "";
         wireMockRule.stubFor(post(urlEqualTo("/kushki/api/v1/tokens"))
-                        .willReturn(aResponse()
+                .withRequestBody(equalToJson(expectedRequestBody))
+                .willReturn(aResponse()
+                        .withStatus(HttpURLConnection.HTTP_OK)
                         .withHeader("Content-Type", "application/json")
                         .withBody(responseBody)));
         assertThat(transaction.getToken(), is(expectedToken));
