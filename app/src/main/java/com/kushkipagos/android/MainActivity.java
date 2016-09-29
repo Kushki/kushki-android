@@ -12,9 +12,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Kushki kushki = new Kushki();
+        KushkiOld kushkiOld = new KushkiOld();
         TextView textField = (TextView) findViewById(R.id.txtEncryptedMessage);
-        ExampleAsyncTask exampleAsyncTask = new ExampleAsyncTask(textField, kushki);
+        ExampleAsyncTask exampleAsyncTask = new ExampleAsyncTask(textField, kushkiOld);
         exampleAsyncTask.execute("https://ping.aurusinc.com/kushki/api/v1/tokens");
     }
 

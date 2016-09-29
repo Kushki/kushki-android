@@ -7,18 +7,18 @@ import java.io.IOException;
 
 class ExampleAsyncTask extends AsyncTask<String, Void, String> {
 
-    private Kushki kushki;
+    private KushkiOld kushkiOld;
     private TextView textView;
 
-    public ExampleAsyncTask(TextView textView, Kushki kushki) {
+    public ExampleAsyncTask(TextView textView, KushkiOld kushkiOld) {
         this.textView = textView;
-        this.kushki = kushki;
+        this.kushkiOld = kushkiOld;
     }
 
     @Override
     protected String doInBackground(String... endpoints) {
         try {
-            return kushki.requestToken(endpoints[0]);
+            return kushkiOld.requestToken(endpoints[0]);
         } catch (IOException e) {
             e.printStackTrace();
             return "ERROR!";
