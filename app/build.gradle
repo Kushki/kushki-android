@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    // TODO: See if we can use 23, but 15 for test because of WireMock
-    compileSdkVersion 15
-    buildToolsVersion "23.0.3"
+    // We can't use 23+ because it messes with WireMock
+    compileSdkVersion 22
+    buildToolsVersion "24.0.3"
     defaultConfig {
         applicationId "com.kushkipagos.android"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -25,9 +25,10 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:22.2.1'
 
     testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
     // Source: https://github.com/handstandsam/AndroidHttpMockingExamples
     testCompile 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
     testCompile('com.github.tomakehurst:wiremock:2.1.12') {
