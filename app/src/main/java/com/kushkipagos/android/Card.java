@@ -5,6 +5,27 @@ public class Card {
     private final String number;
     private final String cvv;
     private final String expiryMonth;
+
+    public String getExpiryYear() {
+        return expiryYear;
+    }
+
+    public String getExpiryMonth() {
+        return expiryMonth;
+    }
+
+    public String getCvv() {
+        return cvv;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     private final String expiryYear;
 
     public Card(String name, String number, String cvv, String expiryMonth, String expiryYear) {

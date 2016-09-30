@@ -1,14 +1,17 @@
 package com.kushkipagos.android;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Transaction {
 
-    private String token;
+    private JSONObject jsonResponse;
 
-    public Transaction(String token) {
-        this.token = token;
+    public Transaction(String responseBody) throws JSONException {
+        this.jsonResponse = new JSONObject(responseBody);
     }
 
-    public String getToken() {
-        return token;
+    public String getToken() throws JSONException {
+        return jsonResponse.getString("transaction_token");
     }
 }
