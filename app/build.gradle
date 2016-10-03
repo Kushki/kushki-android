@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     // We can't use 23+ because it messes with WireMock
     compileSdkVersion 22
-    buildToolsVersion "24.0.3"
+    buildToolsVersion "22.0.1"
     defaultConfig {
         applicationId "com.kushkipagos.android"
         minSdkVersion 15

@@ -8,7 +8,7 @@ INITIALIZATION_FILE="$ANDROID_HOME/.initialized-dependencies-$(git log -n 1 --fo
 if [ ! -e ${INITIALIZATION_FILE} ]; then
   download-android
   echo y | android update sdk --no-ui --filter tools,platform-tools
-  echo y | android update sdk --no-ui --filter build-tools-24.0.3 --all
+  echo y | android update sdk --no-ui --filter build-tools-22.0.1 --all
   echo y | android update sdk --no-ui --filter android-22
   echo y | android update sdk --no-ui --filter extra-google-m2repository --all
   echo y | android update sdk --no-ui --filter extra-android-m2repository --all
