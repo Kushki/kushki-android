@@ -1,5 +1,8 @@
 package com.kushkipagos.android;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Card {
     private final String name;
     private final String number;
@@ -33,5 +36,15 @@ public class Card {
         this.cvv = cvv;
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
+    }
+
+    JSONObject toJson() throws JSONException {
+        return new JSONObject()
+                .put("name", getName())
+                .put("number", getNumber())
+                .put("expiry_month", getExpiryMonth())
+                .put("expiry_year", getExpiryYear())
+                .put("cvv", getCvv())
+                .put("card_present", "1");
     }
 }

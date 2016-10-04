@@ -62,7 +62,7 @@ public class KushkiUnitTest {
         double totalAmount = 10.0;
         Card card = new Card("Invalid John Doe", "424242", "123", "12", "21");
         Kushki kushki = new Kushki("10000001436354684173102102", "USD", KushkiEnvironment.LOCAL, aurusEncryption);
-        String responseBody = buildResponse("017", "Tarjeta no válida", "", "");
+        String responseBody = buildResponse("017", "Tarjeta no válida");
         String encryptedRequest = RandomStringUtils.randomAlphanumeric(50);
         String expectedRequestMessage = buildRequestMessage("10000001436354684173102102", card, totalAmount);
         when(aurusEncryption.encryptMessageChunk(expectedRequestMessage)).thenReturn(encryptedRequest);
@@ -76,6 +76,10 @@ public class KushkiUnitTest {
         Transaction transaction = kushki.requestToken(card, totalAmount);
         assertThat(transaction.getToken(), is(""));
         assertThat(transaction.getCode(), is("017"));
+    }
+
+    private String buildResponse(String code, String text) throws JSONException {
+        return buildResponse(code, text, "", "");
     }
 
     private String buildResponse(String code, String text, String tokenValidity, String token) throws JSONException {
