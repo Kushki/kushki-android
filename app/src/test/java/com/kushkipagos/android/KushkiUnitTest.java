@@ -41,7 +41,7 @@ public class KushkiUnitTest {
         Card card = new Card("John Doe", "4242424242424242", "123", "12", "21");
         Kushki kushki = new Kushki("10000001436354684173102102", "USD", KushkiEnvironment.LOCAL, aurusEncryption);
         String expectedToken = RandomStringUtils.randomAlphanumeric(32);
-        String responseBody = buildSuccessfulResponse(expectedToken);
+        String responseBody = buildResponse("000", "Transacción aprobada", "1800000", expectedToken);
         String encryptedRequest = RandomStringUtils.randomAlphanumeric(50);
         String expectedRequestMessage = buildRequestMessage("10000001436354684173102102", card, totalAmount);
         when(aurusEncryption.encryptMessageChunk(expectedRequestMessage)).thenReturn(encryptedRequest);
@@ -62,7 +62,7 @@ public class KushkiUnitTest {
         double totalAmount = 10.0;
         Card card = new Card("Invalid John Doe", "424242", "123", "12", "21");
         Kushki kushki = new Kushki("10000001436354684173102102", "USD", KushkiEnvironment.LOCAL, aurusEncryption);
-        String responseBody = buildFailureResponse();
+        String responseBody = buildResponse("017", "Tarjeta no válida", "", "");
         String encryptedRequest = RandomStringUtils.randomAlphanumeric(50);
         String expectedRequestMessage = buildRequestMessage("10000001436354684173102102", card, totalAmount);
         when(aurusEncryption.encryptMessageChunk(expectedRequestMessage)).thenReturn(encryptedRequest);
@@ -78,23 +78,12 @@ public class KushkiUnitTest {
         assertThat(transaction.getCode(), is("017"));
     }
 
-    private String buildFailureResponse() throws JSONException {
+    private String buildResponse(String code, String text, String tokenValidity, String token) throws JSONException {
         return new JSONObject()
-                .put("response_code", "017")
-                .put("response_text", "Tarjeta no válida")
-                .put("transaction_token_validity", "")
-                .put("transaction_token", "")
-                .toString();
-    }
-
-    // TODO: Add sad paths unit tests
-
-    private String buildSuccessfulResponse(String expectedToken) throws JSONException {
-        return new JSONObject()
-                .put("response_code", "000")
-                .put("response_text", "Transacción aprobada")
-                .put("transaction_token_validity", "1800000")
-                .put("transaction_token", expectedToken)
+                .put("response_code", code)
+                .put("response_text", text)
+                .put("transaction_token_validity", tokenValidity)
+                .put("transaction_token", token)
                 .toString();
     }
 
