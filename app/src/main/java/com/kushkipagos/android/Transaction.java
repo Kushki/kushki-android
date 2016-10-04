@@ -22,4 +22,8 @@ public class Transaction {
     public String getText() throws JSONException {
         return jsonResponse.getString("response_text");
     }
+
+    public boolean isSuccessful() throws JSONException {
+        return getCode().equals("000");
+    }
 }
