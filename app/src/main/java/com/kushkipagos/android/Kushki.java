@@ -21,16 +21,17 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+// TODO: Refactor this class, extract private methods to classes
 public class Kushki {
 
-    private String publicMerchantId;
-    private String currency;
-    private KushkiEnvironment environment;
-    private AurusEncryption aurusEncryption;
+    private final String publicMerchantId;
+    private final String currency;
+    private final KushkiEnvironment environment;
+    private final AurusEncryption aurusEncryption;
 
     // TODO: Check what to do about throwing all those exceptions
     public Kushki(String publicMerchantId, String currency, KushkiEnvironment environment) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IOException {
-        new Kushki(publicMerchantId, currency, environment, new AurusEncryption());
+        this(publicMerchantId, currency, environment, new AurusEncryption());
     }
 
     @VisibleForTesting
@@ -66,7 +67,6 @@ public class Kushki {
         requestTokenParams.put("token_type", "transaction-token");
         return requestTokenParams.toString();
     }
-
 
     private HttpURLConnection prepareConnection(String endpoint, String encryptedRequest) throws IOException {
         URL url = new URL(endpoint);

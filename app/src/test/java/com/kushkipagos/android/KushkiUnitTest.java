@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 
-public class KushkiTest {
+public class KushkiUnitTest {
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8888);
@@ -54,7 +54,40 @@ public class KushkiTest {
                         .withBody(responseBody)));
         Transaction transaction = kushki.requestToken(card, totalAmount);
         assertThat(transaction.getToken(), is(expectedToken));
+        assertThat(transaction.getCode(), is("000"));
     }
+
+    @Test
+    public void shouldNotReturnTokenWhenCalledWithInvalidParams() throws Exception {
+        double totalAmount = 10.0;
+        Card card = new Card("Invalid John Doe", "424242", "123", "12", "21");
+        Kushki kushki = new Kushki("10000001436354684173102102", "USD", KushkiEnvironment.LOCAL, aurusEncryption);
+        String responseBody = buildFailureResponse();
+        String encryptedRequest = RandomStringUtils.randomAlphanumeric(50);
+        String expectedRequestMessage = buildRequestMessage("10000001436354684173102102", card, totalAmount);
+        when(aurusEncryption.encryptMessageChunk(expectedRequestMessage)).thenReturn(encryptedRequest);
+        String expectedRequestBody = "{\"request\": \"" + encryptedRequest + "\"}";
+        wireMockRule.stubFor(post(urlEqualTo("/kushki/api/v1/tokens"))
+                .withRequestBody(equalToJson(expectedRequestBody))
+                .willReturn(aResponse()
+                        .withStatus(HttpURLConnection.HTTP_BAD_REQUEST)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(responseBody)));
+        Transaction transaction = kushki.requestToken(card, totalAmount);
+        assertThat(transaction.getToken(), is(""));
+        assertThat(transaction.getCode(), is("017"));
+    }
+
+    private String buildFailureResponse() throws JSONException {
+        return new JSONObject()
+                .put("response_code", "017")
+                .put("response_text", "Tarjeta no válida")
+                .put("transaction_token_validity", "")
+                .put("transaction_token", "")
+                .toString();
+    }
+
+    // TODO: Add sad paths unit tests
 
     private String buildSuccessfulResponse(String expectedToken) throws JSONException {
         return new JSONObject()

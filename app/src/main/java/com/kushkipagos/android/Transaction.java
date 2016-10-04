@@ -11,7 +11,15 @@ public class Transaction {
         this.jsonResponse = new JSONObject(responseBody);
     }
 
+    public String getCode() throws JSONException {
+        return jsonResponse.getString("response_code");
+    }
+
     public String getToken() throws JSONException {
         return jsonResponse.getString("transaction_token");
+    }
+
+    public String getText() throws JSONException {
+        return jsonResponse.getString("response_text");
     }
 }
