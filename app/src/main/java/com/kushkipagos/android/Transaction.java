@@ -7,7 +7,7 @@ public class Transaction {
 
     private JSONObject jsonResponse;
 
-    public Transaction(String responseBody) throws JSONException {
+    Transaction(String responseBody) throws JSONException {
         this.jsonResponse = new JSONObject(responseBody);
     }
 
@@ -24,6 +24,6 @@ public class Transaction {
     }
 
     public boolean isSuccessful() throws JSONException {
-        return getCode().equals("000");
+        return "000".equals(getCode());
     }
 }
