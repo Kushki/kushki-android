@@ -30,8 +30,9 @@ class ExampleAsyncTask extends AsyncTask<String, Void, Transaction> {
     @Override
     protected Transaction doInBackground(String... endpoints) {
         try {
-            Kushki kushki = new Kushki("", "USD", KushkiEnvironment.TESTING);
-            return kushki.requestToken(new Card("", "", "", "", ""), 10.0);
+            Kushki kushki = new Kushki("10000001656015280078454110039965", "USD", KushkiEnvironment.TESTING);
+            Card card = new Card("Lisbeth Salander", "4017779991118888", "123", "12", "21");
+            return kushki.requestToken(card, 10.0);
         } catch (IOException | BadPaddingException | IllegalBlockSizeException | JSONException |
                 NoSuchPaddingException | NoSuchAlgorithmException | InvalidKeySpecException | InvalidKeyException e) {
             e.printStackTrace();
