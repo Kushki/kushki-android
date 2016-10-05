@@ -27,7 +27,7 @@ public class KushkiIntegrationTest {
     }
 
     @Test
-    public void shouldReturnTokenWhenCalledWithValidParams() throws Exception{
+    public void shouldReturnTokenWhenCalledWithValidParams() throws Exception {
         Card card = new Card("Lisbeth Salander", "4017779991118888", "123", "12", "21");
         Double totalAmount = 10.0;
         Transaction resultTransaction = kushki.requestToken(card, totalAmount);
@@ -38,7 +38,7 @@ public class KushkiIntegrationTest {
     }
 
     @Test
-    public void shouldNotReturnTokenWhenCalledWithInvalidParams() throws Exception{
+    public void shouldNotReturnTokenWhenCalledWithInvalidParams() throws Exception {
         Card card = new Card("Lisbeth Salander", "00000", "123", "12", "21");
         Double totalAmount = 10.0;
         Transaction resultTransaction = kushki.requestToken(card, totalAmount);
