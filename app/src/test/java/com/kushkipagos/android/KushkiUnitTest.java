@@ -14,6 +14,9 @@ import org.mockito.MockitoAnnotations;
 import java.net.HttpURLConnection;
 import java.util.Locale;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
@@ -26,74 +29,65 @@ import static org.mockito.Mockito.when;
 public class KushkiUnitTest {
 
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8888);
+    public final WireMockRule wireMockRule = new WireMockRule(8888);
 
     @Mock
     private AurusEncryption aurusEncryption;
+    private Kushki kushki;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        kushki = new Kushki("10000001436354684173102102", "USD", KushkiEnvironment.LOCAL, aurusEncryption);
     }
 
     @Test
     public void shouldReturnTokenWhenCalledWithValidParams() throws Exception {
         double totalAmount = 10.0;
         Card card = new Card("John Doe", "4242424242424242", "123", "12", "21");
-        Kushki kushki = new Kushki("10000001436354684173102102", "USD", KushkiEnvironment.LOCAL, aurusEncryption);
-        String expectedToken = RandomStringUtils.randomAlphanumeric(32);
-        String responseBody = buildResponse("000", "Transacción aprobada", "1800000", expectedToken);
-        String encryptedRequest = RandomStringUtils.randomAlphanumeric(50);
-        String expectedRequestMessage = buildRequestMessage("10000001436354684173102102", card, totalAmount);
-        when(aurusEncryption.encryptMessageChunk(expectedRequestMessage)).thenReturn(encryptedRequest);
-        String expectedRequestBody = "{\"request\": \"" + encryptedRequest + "\"}";
+        String token = RandomStringUtils.randomAlphanumeric(32);
+        String expectedRequestBody = buildExpectedRequestBody(card, totalAmount);
         wireMockRule.stubFor(post(urlEqualTo("/kushki/api/v1/tokens"))
                 .withRequestBody(equalToJson(expectedRequestBody))
                 .willReturn(aResponse()
                         .withStatus(HttpURLConnection.HTTP_OK)
                         .withHeader("Content-Type", "application/json")
-                        .withBody(responseBody)));
+                        .withBody(buildResponse("000", "Transacción aprobada", "1800000", token))));
         Transaction transaction = kushki.requestToken(card, totalAmount);
-        assertThat(transaction.getToken(), is(expectedToken));
-        assertThat(transaction.getCode(), is("000"));
+        assertThat(transaction.getToken(), is(token));
     }
 
     @Test
     public void shouldReturnErrorMessageWhenCalledWithInvalidParams() throws Exception {
         double totalAmount = 10.0;
         Card card = new Card("Invalid John Doe", "424242", "123", "12", "21");
-        Kushki kushki = new Kushki("10000001436354684173102102", "USD", KushkiEnvironment.LOCAL, aurusEncryption);
         String errorCode = RandomStringUtils.randomNumeric(3);
         String errorMessage = RandomStringUtils.randomAlphabetic(15);
-        String responseBody = buildResponse(errorCode, errorMessage);
-        String encryptedRequest = RandomStringUtils.randomAlphanumeric(50);
-        String expectedRequestMessage = buildRequestMessage("10000001436354684173102102", card, totalAmount);
-        when(aurusEncryption.encryptMessageChunk(expectedRequestMessage)).thenReturn(encryptedRequest);
-        String expectedRequestBody = "{\"request\": \"" + encryptedRequest + "\"}";
+        String expectedRequestBody = buildExpectedRequestBody(card, totalAmount);
         wireMockRule.stubFor(post(urlEqualTo("/kushki/api/v1/tokens"))
                 .withRequestBody(equalToJson(expectedRequestBody))
                 .willReturn(aResponse()
-                        .withStatus(HttpURLConnection.HTTP_BAD_REQUEST)
+                        .withStatus(HttpURLConnection.HTTP_PAYMENT_REQUIRED)
                         .withHeader("Content-Type", "application/json")
-                        .withBody(responseBody)));
+                        .withBody(buildResponse(errorCode, errorMessage))));
         Transaction transaction = kushki.requestToken(card, totalAmount);
         assertThat(transaction.getToken(), is(""));
         assertThat(transaction.getCode(), is(errorCode));
         assertThat(transaction.getText(), is(errorMessage));
     }
 
+    private String buildExpectedRequestBody(Card card, double totalAmount) throws JSONException, BadPaddingException, IllegalBlockSizeException {
+        String encryptedRequest = RandomStringUtils.randomAlphanumeric(50);
+        String expectedRequestMessage = buildRequestMessage("10000001436354684173102102", card, totalAmount);
+        when(aurusEncryption.encryptMessageChunk(expectedRequestMessage)).thenReturn(encryptedRequest);
+        return "{\"request\": \"" + encryptedRequest + "\"}";
+    }
+
     private String buildRequestMessage(String publicMerchantId, Card card, double totalAmount) throws JSONException {
         JSONObject requestTokenParams = new JSONObject();
-        JSONObject cardParams = new JSONObject();
-        cardParams.put("name", card.getName());
-        cardParams.put("number", card.getNumber());
-        cardParams.put("expiry_month", card.getExpiryMonth());
-        cardParams.put("expiry_year", card.getExpiryYear());
-        cardParams.put("cvv", card.getCvv());
-        cardParams.put("card_present", "1");
         requestTokenParams.put("merchant_identifier", publicMerchantId);
         requestTokenParams.put("language_indicator", "es");
-        requestTokenParams.put("card", cardParams);
+        requestTokenParams.put("card", card.toJson());
         requestTokenParams.put("amount", String.format(Locale.ENGLISH, "%.2f", totalAmount));
         requestTokenParams.put("remember_me", "0");
         requestTokenParams.put("deferred_payment", "0");

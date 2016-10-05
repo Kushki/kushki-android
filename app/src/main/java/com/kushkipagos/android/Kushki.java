@@ -19,7 +19,7 @@ public class Kushki {
     private final AurusClient client;
 
     // TODO: Check what to do about throwing all those exceptions
-    public Kushki(String publicMerchantId, String currency, KushkiEnvironment environment) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, IOException {
+    public Kushki(String publicMerchantId, String currency, KushkiEnvironment environment) throws InvalidKeySpecException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
         this(publicMerchantId, currency, environment, new AurusEncryption());
     }
 
@@ -29,7 +29,7 @@ public class Kushki {
         this.client = new AurusClient(environment, aurusEncryption);
     }
 
-    public Transaction requestToken(Card card, double totalAmount) throws IOException, JSONException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, InvalidKeyException, BadPaddingException, IllegalBlockSizeException {
+    public Transaction requestToken(Card card, double totalAmount) throws JSONException, BadPaddingException, IOException, IllegalBlockSizeException {
         String requestMessage = client.buildParameters(publicMerchantId, card, totalAmount);
         return client.post("/tokens", requestMessage);
     }

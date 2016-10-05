@@ -6,7 +6,7 @@ public enum KushkiEnvironment {
     STAGING("https://staging.aurusinc.com/kushki/api/v1"),
     PRODUCTION("https://p1.kushkipagos.com/kushki/api/v1");
 
-    private String url;
+    private final String url;
 
     KushkiEnvironment(String url) {
         this.url = url;

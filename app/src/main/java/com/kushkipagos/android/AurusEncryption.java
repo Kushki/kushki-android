@@ -2,7 +2,6 @@ package com.kushkipagos.android;
 
 import android.util.Base64;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -16,18 +15,18 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class AurusEncryption {
+class AurusEncryption {
 
     private static final int CHUNK_SIZE = 117;
     private final Cipher cipher;
 
-    public AurusEncryption() throws InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, IOException, InvalidKeySpecException {
+    AurusEncryption() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
         String publickey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC81t5iu5C0JxYq5/XNPiD5ol3Zw8rw3LtFIUm7y3m8o8wv5qVnzGh6XwQ8LWypdkbBDKWZZrAUd3lybZOP7/82Nb1/noYj8ixVRdbnYtbsSAbu9PxjB7a/7LCGKsugLkou74PJDadQweM88kzQOx/kzAyVbS9gCCVUguHcq2vRRQIDAQAB";
         cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
         cipher.init(Cipher.ENCRYPT_MODE, loadPublicKey(publickey));
     }
 
-    public String encryptMessageChunk(String requestMessage) throws BadPaddingException, IllegalBlockSizeException {
+    String encryptMessageChunk(String requestMessage) throws BadPaddingException, IllegalBlockSizeException {
         int index = 0;
         StringBuilder stringBuilder = new StringBuilder();
         while (index < requestMessage.length()) {
@@ -51,7 +50,7 @@ public class AurusEncryption {
         return cipher.doFinal(eMessageBytes);
     }
 
-    private PublicKey loadPublicKey(String stored) throws IOException, NoSuchAlgorithmException, InvalidKeySpecException {
+    private PublicKey loadPublicKey(String stored) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] data = Base64.decode(stored, Base64.DEFAULT);
         X509EncodedKeySpec spec = new X509EncodedKeySpec(data);
         KeyFactory fact = KeyFactory.getInstance("RSA");

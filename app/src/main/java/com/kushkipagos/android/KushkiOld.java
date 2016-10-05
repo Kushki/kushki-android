@@ -9,9 +9,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-public class KushkiOld {
+class KushkiOld {
 
-    public String requestToken(String endpoint) throws IOException {
+    String requestToken(String endpoint) throws IOException {
         HttpURLConnection connection = prepareConnection(endpoint);
         connection.connect();
         int responseCode = connection.getResponseCode();

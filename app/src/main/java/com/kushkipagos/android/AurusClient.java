@@ -17,8 +17,8 @@ import javax.crypto.IllegalBlockSizeException;
 
 class AurusClient {
 
-    private KushkiEnvironment environment;
-    private AurusEncryption aurusEncryption;
+    private final KushkiEnvironment environment;
+    private final AurusEncryption aurusEncryption;
 
     AurusClient(KushkiEnvironment environment, AurusEncryption aurusEncryption) {
         this.environment = environment;

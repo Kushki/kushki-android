@@ -7,10 +7,10 @@ import java.io.IOException;
 
 class ExampleAsyncTask extends AsyncTask<String, Void, String> {
 
-    private KushkiOld kushkiOld;
-    private TextView textView;
+    private final KushkiOld kushkiOld;
+    private final TextView textView;
 
-    public ExampleAsyncTask(TextView textView, KushkiOld kushkiOld) {
+    ExampleAsyncTask(TextView textView, KushkiOld kushkiOld) {
         this.textView = textView;
         this.kushkiOld = kushkiOld;
     }
