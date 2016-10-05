@@ -2,4 +2,4 @@
 set -e
 
 source pipeline/initialize-android.sh
-./gradlew test
+./gradlew clean testReleaseUnitTest
