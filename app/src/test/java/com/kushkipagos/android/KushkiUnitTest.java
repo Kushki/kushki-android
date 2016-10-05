@@ -18,6 +18,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.kushkipagos.android.Helpers.buildResponse;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
@@ -58,11 +59,13 @@ public class KushkiUnitTest {
     }
 
     @Test
-    public void shouldNotReturnTokenWhenCalledWithInvalidParams() throws Exception {
+    public void shouldReturnErrorMessageWhenCalledWithInvalidParams() throws Exception {
         double totalAmount = 10.0;
         Card card = new Card("Invalid John Doe", "424242", "123", "12", "21");
         Kushki kushki = new Kushki("10000001436354684173102102", "USD", KushkiEnvironment.LOCAL, aurusEncryption);
-        String responseBody = buildResponse("017", "Tarjeta no válida");
+        String errorCode = RandomStringUtils.randomNumeric(3);
+        String errorMessage = RandomStringUtils.randomAlphabetic(15);
+        String responseBody = buildResponse(errorCode, errorMessage);
         String encryptedRequest = RandomStringUtils.randomAlphanumeric(50);
         String expectedRequestMessage = buildRequestMessage("10000001436354684173102102", card, totalAmount);
         when(aurusEncryption.encryptMessageChunk(expectedRequestMessage)).thenReturn(encryptedRequest);
@@ -75,20 +78,8 @@ public class KushkiUnitTest {
                         .withBody(responseBody)));
         Transaction transaction = kushki.requestToken(card, totalAmount);
         assertThat(transaction.getToken(), is(""));
-        assertThat(transaction.getCode(), is("017"));
-    }
-
-    private String buildResponse(String code, String text) throws JSONException {
-        return buildResponse(code, text, "", "");
-    }
-
-    private String buildResponse(String code, String text, String tokenValidity, String token) throws JSONException {
-        return new JSONObject()
-                .put("response_code", code)
-                .put("response_text", text)
-                .put("transaction_token_validity", tokenValidity)
-                .put("transaction_token", token)
-                .toString();
+        assertThat(transaction.getCode(), is(errorCode));
+        assertThat(transaction.getText(), is(errorMessage));
     }
 
     private String buildRequestMessage(String publicMerchantId, Card card, double totalAmount) throws JSONException {
