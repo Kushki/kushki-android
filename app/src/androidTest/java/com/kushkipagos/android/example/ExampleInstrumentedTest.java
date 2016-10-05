@@ -1,4 +1,4 @@
-package com.kushkipagos.android;
+package com.kushkipagos.android.example;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.kushkipagos.android.test", appContext.getPackageName());
+        assertEquals("com.kushkipagos.android", appContext.getPackageName());
     }
 }
