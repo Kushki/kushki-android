@@ -28,7 +28,7 @@ class ExampleAsyncTask extends AsyncTask<String, Void, Transaction> {
     }
 
     @Override
-    protected Transaction doInBackground(String... endpoints) {
+    protected Transaction doInBackground(String... args) {
         try {
             Kushki kushki = new Kushki("10000001656015280078454110039965", "USD", KushkiEnvironment.TESTING);
             Card card = new Card("Lisbeth Salander", "4017779991118888", "123", "12", "21");

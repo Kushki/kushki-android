@@ -12,6 +12,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         TextView textField = (TextView) findViewById(R.id.txtEncryptedMessage);
         ExampleAsyncTask exampleAsyncTask = new ExampleAsyncTask(textField);
-        exampleAsyncTask.execute("https://ping.aurusinc.com/kushki/api/v1/tokens");
+        exampleAsyncTask.execute();
     }
 }
