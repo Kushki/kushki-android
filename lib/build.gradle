@@ -1,16 +1,22 @@
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
+plugins {
+    id 'com.github.dcendents.android-maven' version '1.5'
+    id 'com.jfrog.bintray' version '1.7.1'
+}
+
 apply plugin: 'com.android.library'
+
+group = 'com.kushkipagos'
+version '0.1.0'
 
 android {
     // We can't use 23+ because it messes with WireMock
     compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    buildToolsVersion '22.0.1'
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
     }
     buildTypes {
         release {
@@ -39,5 +45,74 @@ tasks.withType(Test) {
     testLogging {
         events TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED,
                 TestLogEvent.STANDARD_ERROR, TestLogEvent.STANDARD_OUT
+    }
+}
+
+ext {
+    license = 'MIT'
+    licenseUrl = 'https://github.com/Kushki/kushki-android/blob/master/LICENSE.txt'
+    gitUrl = 'https://github.com/Kushki/kushki-android.git'
+    scmUrl = 'scm:git:' + gitUrl
+    packageName = 'kushki-android'
+    packageDescription = 'Librería para integrarse con Kushki desde Android'
+    versionTag = version
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.artifactId = packageName
+        pom.version = versionTag
+        pom.project {
+            name packageName
+            description packageDescription
+            url gitUrl
+            organization {
+                name 'Kushki S.A.'
+                url 'https://www.kushkipagos.com'
+            }
+            licenses {
+                license {
+                    name license
+                    url licenseUrl
+                    distribution 'repo'
+                }
+            }
+            scm {
+                url gitUrl
+                connection scmUrl
+                developerConnection scmUrl
+            }
+        }
+    }
+}
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_API_KEY')
+    configurations = ['archives']
+    publish = true
+    pkg {
+        repo = 'maven'
+        name = packageName
+        desc = packageDescription
+        userOrg = user
+        licenses = [license]
+        vcsUrl = gitUrl
+        websiteUrl = gitUrl
+        publicDownloadNumbers = false
+        version {
+            name = versionTag
+            desc = packageDescription
+            vcsTag = versionTag
+            gpg {
+                sign = true
+            }
+            mavenCentralSync {
+                sync = true
+                user = System.getenv('MAVEN_CENTRAL_USER')
+                password = System.getenv('MAVEN_CENTRAL_TOKEN')
+                close = '1'
+            }
+        }
     }
 }
