@@ -18,20 +18,20 @@ import javax.crypto.NoSuchPaddingException;
 class AurusEncryption {
 
     private static final int CHUNK_SIZE = 117;
-    private final Cipher cipher;
+    private static final String PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC81t5iu5C0JxYq5/XNPiD5ol3Z" +
+            "w8rw3LtFIUm7y3m8o8wv5qVnzGh6XwQ8LWypdkbBDKWZZrAUd3lybZOP7/82Nb1/" +
+            "noYj8ixVRdbnYtbsSAbu9PxjB7a/7LCGKsugLkou74PJDadQweM88kzQOx/kzAyV" +
+            "bS9gCCVUguHcq2vRRQIDAQAB";
 
-    AurusEncryption() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
-        String publickey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC81t5iu5C0JxYq5/XNPiD5ol3Zw8rw3LtFIUm7y3m8o8wv5qVnzGh6XwQ8LWypdkbBDKWZZrAUd3lybZOP7/82Nb1/noYj8ixVRdbnYtbsSAbu9PxjB7a/7LCGKsugLkou74PJDadQweM88kzQOx/kzAyVbS9gCCVUguHcq2vRRQIDAQAB";
-        cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, loadPublicKey(publickey));
-    }
-
-    String encryptMessageChunk(String requestMessage) throws BadPaddingException, IllegalBlockSizeException {
+    String encryptMessageChunk(String requestMessage) throws BadPaddingException, IllegalBlockSizeException,
+            NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException {
+        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, loadPublicKey(PUBLIC_KEY));
         int index = 0;
         StringBuilder stringBuilder = new StringBuilder();
         while (index < requestMessage.length()) {
             String messageChunk = getNextChunk(requestMessage, index);
-            byte[] encryptedChunk = encrypt(messageChunk);
+            byte[] encryptedChunk = encrypt(messageChunk, cipher);
             String encodedChunk = Base64.encodeToString(encryptedChunk, Base64.DEFAULT).replace("\n", "");
             stringBuilder.append(encodedChunk);
             stringBuilder.append("<FS>");
@@ -45,8 +45,8 @@ class AurusEncryption {
         return requestMessage.substring(index, endIndex);
     }
 
-    private byte[] encrypt(String message) throws BadPaddingException, IllegalBlockSizeException {
-        byte[] eMessageBytes = message.getBytes(Charset.forName("UTF-8"));       // Request message conversion to Byte array
+    private byte[] encrypt(String message, Cipher cipher) throws BadPaddingException, IllegalBlockSizeException {
+        byte[] eMessageBytes = message.getBytes(Charset.forName("UTF-8"));
         return cipher.doFinal(eMessageBytes);
     }
 

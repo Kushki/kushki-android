@@ -14,9 +14,6 @@ import org.mockito.MockitoAnnotations;
 import java.net.HttpURLConnection;
 import java.util.Locale;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
@@ -30,7 +27,6 @@ public class KushkiUnitTest {
 
     @Rule
     public final WireMockRule wireMockRule = new WireMockRule(8888);
-
     @Mock
     private AurusEncryption aurusEncryption;
     private Kushki kushki;
@@ -38,7 +34,7 @@ public class KushkiUnitTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        kushki = new Kushki("10000001436354684173102102", "USD", KushkiEnvironment.LOCAL, aurusEncryption);
+        kushki = new Kushki("10000001436354684173102102", "USD", TestEnvironment.LOCAL, aurusEncryption);
     }
 
     @Test
@@ -76,7 +72,7 @@ public class KushkiUnitTest {
         assertThat(transaction.getText(), is(errorMessage));
     }
 
-    private String buildExpectedRequestBody(Card card, double totalAmount) throws JSONException, BadPaddingException, IllegalBlockSizeException {
+    private String buildExpectedRequestBody(Card card, double totalAmount) throws Exception {
         String encryptedRequest = RandomStringUtils.randomAlphanumeric(50);
         String expectedRequestMessage = buildRequestMessage("10000001436354684173102102", card, totalAmount);
         when(aurusEncryption.encryptMessageChunk(expectedRequestMessage)).thenReturn(encryptedRequest);
@@ -87,7 +83,7 @@ public class KushkiUnitTest {
         JSONObject requestTokenParams = new JSONObject();
         requestTokenParams.put("merchant_identifier", publicMerchantId);
         requestTokenParams.put("language_indicator", "es");
-        requestTokenParams.put("card", card.toJson());
+        requestTokenParams.put("card", card.toJsonObject());
         requestTokenParams.put("amount", String.format(Locale.ENGLISH, "%.2f", totalAmount));
         requestTokenParams.put("remember_me", "0");
         requestTokenParams.put("deferred_payment", "0");

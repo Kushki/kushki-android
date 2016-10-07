@@ -1,7 +1,6 @@
 package com.kushkipagos.android;
 
-public enum KushkiEnvironment {
-    LOCAL("http://localhost:8888/kushki/api/v1"),
+public enum KushkiEnvironment implements Environment {
     TESTING("https://uat.aurusinc.com/kushki/api/v1"),
     STAGING("https://staging.aurusinc.com/kushki/api/v1"),
     PRODUCTION("https://p1.kushkipagos.com/kushki/api/v1");
@@ -12,6 +11,7 @@ public enum KushkiEnvironment {
         this.url = url;
     }
 
+    @Override
     public String getUrl() {
         return url;
     }

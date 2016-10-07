@@ -19,7 +19,7 @@ public class Card {
         this.expiryYear = expiryYear;
     }
 
-    JSONObject toJson() throws JSONException {
+    JSONObject toJsonObject() throws JSONException {
         return new JSONObject()
                 .put("name", name)
                 .put("number", number)

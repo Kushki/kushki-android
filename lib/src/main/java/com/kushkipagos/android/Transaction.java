@@ -5,25 +5,36 @@ import org.json.JSONObject;
 
 public class Transaction {
 
-    private JSONObject jsonResponse;
+    private final String code;
+    private final String text;
+    private final String token;
+    private final boolean successful;
 
-    Transaction(String responseBody) throws JSONException {
-        this.jsonResponse = new JSONObject(responseBody);
+    Transaction(String responseBody) {
+        try {
+            JSONObject jsonResponse = new JSONObject(responseBody);
+            code = jsonResponse.getString("response_code");
+            text = jsonResponse.getString("response_text");
+            token = jsonResponse.getString("transaction_token");
+            successful = "000".equals(code);
+        } catch (JSONException jsonException) {
+            throw new IllegalArgumentException(jsonException);
+        }
     }
 
-    public String getCode() throws JSONException {
-        return jsonResponse.getString("response_code");
+    public String getCode() {
+        return code;
     }
 
-    public String getToken() throws JSONException {
-        return jsonResponse.getString("transaction_token");
+    public String getText() {
+        return text;
     }
 
-    public String getText() throws JSONException {
-        return jsonResponse.getString("response_text");
+    public String getToken() {
+        return token;
     }
 
-    public boolean isSuccessful() throws JSONException {
-        return "000".equals(getCode());
+    public boolean isSuccessful() {
+        return successful;
     }
 }

@@ -10,37 +10,50 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Locale;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 class AurusClient {
 
-    private final KushkiEnvironment environment;
+    private final Environment environment;
     private final AurusEncryption aurusEncryption;
 
-    AurusClient(KushkiEnvironment environment, AurusEncryption aurusEncryption) {
+    AurusClient(Environment environment, AurusEncryption aurusEncryption) {
         this.environment = environment;
         this.aurusEncryption = aurusEncryption;
     }
 
-    String buildParameters(String publicMerchantId, Card card, double totalAmount) throws JSONException {
-        return new JSONObject()
-                .put("remember_me", "0")
-                .put("deferred_payment", "0")
-                .put("language_indicator", "es")
-                .put("token_type", "transaction-token")
-                .put("amount", String.format(Locale.ENGLISH, "%.2f", totalAmount))
-                .put("merchant_identifier", publicMerchantId)
-                .put("card", card.toJson())
-                .toString();
+    String buildParameters(String publicMerchantId, Card card, double totalAmount) {
+        try {
+            return new JSONObject()
+                    .put("remember_me", "0")
+                    .put("deferred_payment", "0")
+                    .put("language_indicator", "es")
+                    .put("token_type", "transaction-token")
+                    .put("amount", String.format(Locale.ENGLISH, "%.2f", totalAmount))
+                    .put("merchant_identifier", publicMerchantId)
+                    .put("card", card.toJsonObject())
+                    .toString();
+        } catch (JSONException jsonException) {
+            throw new IllegalArgumentException(jsonException);
+        }
     }
 
-    Transaction post(String endpoint, String requestBody) throws IOException, JSONException, BadPaddingException, IllegalBlockSizeException {
+    Transaction post(String endpoint, String requestBody) throws BadPaddingException, IllegalBlockSizeException,
+            InvalidKeySpecException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, KushkiException {
         String encryptedRequestBody = aurusEncryption.encryptMessageChunk(requestBody);
-        HttpURLConnection connection = prepareConnection(endpoint, encryptedRequestBody);
-        return new Transaction(parseResponse(connection));
+        try {
+            HttpURLConnection connection = prepareConnection(endpoint, encryptedRequestBody);
+            return new Transaction(parseResponse(connection));
+        } catch (IOException ioException) {
+            throw new KushkiException(ioException);
+        }
     }
 
     private HttpURLConnection prepareConnection(String endpoint, String requestBody) throws IOException {
