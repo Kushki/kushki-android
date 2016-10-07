@@ -8,7 +8,7 @@ plugins {
 apply plugin: 'com.android.library'
 
 group = 'com.kushkipagos'
-version '0.1.0'
+version '0.1.1'
 
 android {
     // We can't use 23+ because it messes with WireMock
@@ -40,14 +40,6 @@ dependencies {
     }
 }
 
-tasks.withType(Test) {
-    outputs.upToDateWhen { false }
-    testLogging {
-        events TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED,
-                TestLogEvent.STANDARD_ERROR, TestLogEvent.STANDARD_OUT
-    }
-}
-
 ext {
     license = 'MIT'
     licenseUrl = 'https://github.com/Kushki/kushki-android/blob/master/LICENSE.txt'
@@ -56,6 +48,7 @@ ext {
     packageName = 'kushki-android'
     packageDescription = 'Librería para integrarse con Kushki desde Android'
     versionTag = version
+    archivesBaseName = packageName
 }
 
 install {
@@ -114,5 +107,26 @@ bintray {
                 close = '1'
             }
         }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+task printVersion << {
+    println project.version
+}
+
+tasks.withType(Test) {
+    outputs.upToDateWhen { false }
+    testLogging {
+        events TestLogEvent.FAILED, TestLogEvent.PASSED, TestLogEvent.SKIPPED,
+                TestLogEvent.STANDARD_ERROR, TestLogEvent.STANDARD_OUT
     }
 }
