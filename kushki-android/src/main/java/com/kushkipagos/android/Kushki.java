@@ -1,7 +1,5 @@
 package com.kushkipagos.android;
 
-import android.support.annotation.VisibleForTesting;
-
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -19,7 +17,6 @@ public class Kushki {
         this(publicMerchantId, currency, environment, new AurusEncryption());
     }
 
-    @VisibleForTesting
     Kushki(String publicMerchantId, String currency, Environment environment, AurusEncryption aurusEncryption) {
         this.publicMerchantId = publicMerchantId;
         this.client = new AurusClient(environment, aurusEncryption);
