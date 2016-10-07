@@ -1,7 +1,8 @@
 package com.kushkipagos.android.example;
 
+import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kushkipagos.android.Card;
 import com.kushkipagos.android.Kushki;
@@ -11,16 +12,17 @@ import com.kushkipagos.android.Transaction;
 
 class ExampleAsyncTask extends AsyncTask<String, Void, Transaction> {
 
-    private final TextView textView;
+    private final Context context;
+    private final Card card;
 
-    ExampleAsyncTask(TextView textView) {
-        this.textView = textView;
+    ExampleAsyncTask(Context context, Card card) {
+        this.context = context;
+        this.card = card;
     }
 
     @Override
     protected Transaction doInBackground(String... args) {
         Kushki kushki = new Kushki("10000001656015280078454110039965", "USD", KushkiEnvironment.TESTING);
-        Card card = new Card("Lisbeth Salander", "4017779991118888", "123", "12", "21");
         try {
             return kushki.requestToken(card, 10.0);
         } catch (KushkiException kushkiException) {
@@ -32,9 +34,14 @@ class ExampleAsyncTask extends AsyncTask<String, Void, Transaction> {
     @Override
     protected void onPostExecute(Transaction transaction) {
         if (transaction.isSuccessful()) {
-            textView.setText(transaction.getToken());
+            showToast(transaction.getToken());
         } else {
-            textView.setText("ERROR: " + transaction.getCode() + " " + transaction.getText());
+            showToast("ERROR: " + transaction.getCode() + " " + transaction.getText());
         }
+    }
+
+    private void showToast(String text) {
+        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }
