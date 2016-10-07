@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                TextView textField = (TextView) findViewById(R.id.txtEncryptedMessage);
                 EditText nameText = (EditText) findViewById(R.id.nameText);
                 EditText numberText = (EditText) findViewById(R.id.numberText);
                 EditText monthText = (EditText) findViewById(R.id.monthText);
@@ -27,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
                 EditText cvvText = (EditText) findViewById(R.id.cvvText);
                 Card card = new Card(nameText.getText().toString(), numberText.getText().toString(),
                         cvvText.getText().toString(), monthText.getText().toString(), yearText.getText().toString());
-                textField.setText("");
                 ExampleAsyncTask exampleAsyncTask = new ExampleAsyncTask(getApplicationContext(), card);
                 exampleAsyncTask.execute();
             }
