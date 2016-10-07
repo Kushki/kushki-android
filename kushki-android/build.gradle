@@ -8,7 +8,7 @@ plugins {
 apply plugin: 'com.android.library'
 
 group = 'com.kushkipagos'
-version '0.1.1'
+version '0.1.4'
 
 android {
     // We can't use 23+ because it messes with WireMock
@@ -48,7 +48,6 @@ ext {
     packageName = 'kushki-android'
     packageDescription = 'Librería para integrarse con Kushki desde Android'
     versionTag = version
-    archivesBaseName = packageName
 }
 
 install {
@@ -96,7 +95,7 @@ bintray {
         version {
             name = versionTag
             desc = packageDescription
-            vcsTag = versionTag
+            vcsTag = 'v' + versionTag
             gpg {
                 sign = true
             }
