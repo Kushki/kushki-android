@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 set -e
 
-source pipeline/initialize-android.sh
-./gradlew clean testReleaseUnitTest
+./gradlew kushki-android:clean kushki-android:test
