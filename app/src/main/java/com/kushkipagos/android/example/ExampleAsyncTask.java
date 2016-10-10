@@ -10,21 +10,19 @@ import com.kushkipagos.android.KushkiEnvironment;
 import com.kushkipagos.android.KushkiException;
 import com.kushkipagos.android.Transaction;
 
-class ExampleAsyncTask extends AsyncTask<String, Void, Transaction> {
+class ExampleAsyncTask extends AsyncTask<Card, Void, Transaction> {
 
     private final Context context;
-    private final Card card;
 
-    ExampleAsyncTask(Context context, Card card) {
+    ExampleAsyncTask(Context context) {
         this.context = context;
-        this.card = card;
     }
 
     @Override
-    protected Transaction doInBackground(String... args) {
+    protected Transaction doInBackground(Card... args) {
         Kushki kushki = new Kushki("10000001656015280078454110039965", "USD", KushkiEnvironment.TESTING);
         try {
-            return kushki.requestToken(card, 10.0);
+            return kushki.requestToken(args[0], 19.99);
         } catch (KushkiException kushkiException) {
             kushkiException.printStackTrace();
             return null;

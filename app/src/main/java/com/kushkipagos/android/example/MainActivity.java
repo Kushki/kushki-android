@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
                 EditText cvvText = (EditText) findViewById(R.id.cvvText);
                 Card card = new Card(nameText.getText().toString(), numberText.getText().toString(),
                         cvvText.getText().toString(), monthText.getText().toString(), yearText.getText().toString());
-                ExampleAsyncTask exampleAsyncTask = new ExampleAsyncTask(getApplicationContext(), card);
-                exampleAsyncTask.execute();
+                ExampleAsyncTask exampleAsyncTask = new ExampleAsyncTask(getApplicationContext());
+                exampleAsyncTask.execute(card);
             }
         });
     }
