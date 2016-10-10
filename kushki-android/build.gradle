@@ -7,10 +7,10 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'maven'
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 group = 'com.kushkipagos'
-version '0.1.5'
+version '0.1.6'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -46,6 +46,13 @@ install {
             organization {
                 name 'Kushki S.A.'
                 url 'https://www.kushkipagos.com'
+            }
+            developers {
+                developer {
+                    id 'thoughtworks'
+                    name 'ThoughtWorks'
+                    email 'kushki@thoughtworks.com'
+                }
             }
             licenses {
                 license {
@@ -99,8 +106,14 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 artifacts {
     archives sourcesJar
+    archives javadocJar
 }
 
 task printVersion << {
