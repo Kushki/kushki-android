@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+source pipeline/initialize-android.sh
 artifact_version=$(./gradlew --quiet kushki-android:printVersion)
 git tag --annotate "v$artifact_version" -m "Release for version $artifact_version"
 git push --tags
