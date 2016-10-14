@@ -32,11 +32,11 @@ public class TransactionTest {
     }
 
     @Test
-    public void shouldReturnTheTextFromTheResponseBody() {
-        String expectedText = RandomStringUtils.randomAlphabetic(15);
-        String responseBody = Helpers.buildResponse("123", expectedText);
+    public void shouldReturnTheMessageFromTheResponseBody() {
+        String expectedMessage = RandomStringUtils.randomAlphabetic(15);
+        String responseBody = Helpers.buildResponse("123", expectedMessage);
         Transaction transaction = new Transaction(responseBody);
-        assertThat(transaction.getText(), is(expectedText));
+        assertThat(transaction.getMessage(), is(expectedMessage));
     }
 
     @Test

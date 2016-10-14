@@ -6,7 +6,7 @@ import org.json.JSONObject;
 public class Transaction {
 
     private final String code;
-    private final String text;
+    private final String message;
     private final String token;
     private final boolean successful;
 
@@ -14,7 +14,7 @@ public class Transaction {
         try {
             JSONObject jsonResponse = new JSONObject(responseBody);
             code = jsonResponse.getString("response_code");
-            text = jsonResponse.getString("response_text");
+            message = jsonResponse.getString("response_text");
             token = jsonResponse.getString("transaction_token");
             successful = "000".equals(code);
         } catch (JSONException jsonException) {
@@ -26,8 +26,8 @@ public class Transaction {
         return code;
     }
 
-    public String getText() {
-        return text;
+    public String getMessage() {
+        return message;
     }
 
     public String getToken() {

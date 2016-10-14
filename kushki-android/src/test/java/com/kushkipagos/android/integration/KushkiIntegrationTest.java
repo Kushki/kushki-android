@@ -33,7 +33,7 @@ public class KushkiIntegrationTest {
         Transaction resultTransaction = kushki.requestToken(card, totalAmount);
         assertThat(resultTransaction.isSuccessful(), is(true));
         assertThat(resultTransaction.getCode(), is(SUCCESSFUL_CODE));
-        assertThat(resultTransaction.getText(), is(SUCCESSFUL_MESSAGE));
+        assertThat(resultTransaction.getMessage(), is(SUCCESSFUL_MESSAGE));
         assertThat(resultTransaction.getToken().length(), is(TOKEN_LENGTH));
     }
 
@@ -44,7 +44,7 @@ public class KushkiIntegrationTest {
         Transaction resultTransaction = kushki.requestToken(card, totalAmount);
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_CODE));
-        assertThat(resultTransaction.getText(), is(INVALID_CARD_MESSAGE));
+        assertThat(resultTransaction.getMessage(), is(INVALID_CARD_MESSAGE));
         assertThat(resultTransaction.getToken(), is(""));
     }
 }

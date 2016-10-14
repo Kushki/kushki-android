@@ -69,7 +69,7 @@ public class KushkiUnitTest {
         Transaction transaction = kushki.requestToken(card, totalAmount);
         assertThat(transaction.getToken(), is(""));
         assertThat(transaction.getCode(), is(errorCode));
-        assertThat(transaction.getText(), is(errorMessage));
+        assertThat(transaction.getMessage(), is(errorMessage));
     }
 
     private String buildExpectedRequestBody(Card card, double totalAmount) throws Exception {
