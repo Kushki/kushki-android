@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
-source pipeline/initialize-android.sh
-artifact_version=$(./gradlew --quiet kushki-android:printVersion)
+build_file=kushki-android/build.gradle
+artifact_version=$(./gradlew --quiet --no-search-upward --build-file $build_file printVersion)
 git tag --annotate "v$artifact_version" -m "Release for version $artifact_version"
 git push --tags
-./gradlew kushki-android:clean kushki-android:bintrayUpload
+./gradlew --no-search-upward --build-file $build_file clean bintrayUpload
 
 # ENVIRONMENT VARIABLES:
 # STAGE
