@@ -22,7 +22,7 @@ android {
 dependencies {
     // Uncomment this line and comment the next one in order to use the library source files instead
     // compile project(path: ':kushki-android')
-    compile 'com.kushkipagos:kushki-android:0.1.7' // TODO: Bump to 1.0.0 when available
+    compile 'com.kushkipagos:kushki-android:1.0.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.1'
     testCompile 'junit:junit:4.12'

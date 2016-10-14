@@ -34,7 +34,7 @@ class ExampleAsyncTask extends AsyncTask<Card, Void, Transaction> {
         if (transaction.isSuccessful()) {
             showToast(transaction.getToken());
         } else {
-            showToast("ERROR: " + transaction.getCode() + " " + transaction.getText());
+            showToast("ERROR: " + transaction.getCode() + " " + transaction.getMessage());
         }
     }
 
