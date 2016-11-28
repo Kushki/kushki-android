@@ -29,31 +29,21 @@ class AurusClient {
         this.aurusEncryption = aurusEncryption;
     }
 
-    String buildParameters(String publicMerchantId, Card card, double totalAmount) {
+    String buildParameters(String publicMerchantId, Card card) {
         try {
-            return new JSONObject()
-                    .put("remember_me", "0")
-                    .put("deferred_payment", "0")
-                    .put("language_indicator", "es")
-                    .put("token_type", "transaction-token")
-                    .put("amount", String.format(Locale.ENGLISH, "%.2f", totalAmount))
-                    .put("merchant_identifier", publicMerchantId)
-                    .put("card", card.toJsonObject())
+            return buildDefaultJsonObject(publicMerchantId, card)
+                    .put("token_type", "subscription-token")
                     .toString();
         } catch (JSONException jsonException) {
             throw new IllegalArgumentException(jsonException);
         }
     }
 
-    String buildSubscriptionParameters(String publicMerchantId, Card card) {
+    String buildParameters(String publicMerchantId, Card card, double totalAmount) {
         try {
-            return new JSONObject()
-                    .put("remember_me", "0")
-                    .put("deferred_payment", "0")
-                    .put("language_indicator", "es")
-                    .put("token_type", "subscription-token")
-                    .put("merchant_identifier", publicMerchantId)
-                    .put("card", card.toJsonObject())
+            return buildDefaultJsonObject(publicMerchantId, card)
+                    .put("token_type", "transaction-token")
+                    .put("amount", String.format(Locale.ENGLISH, "%.2f", totalAmount))
                     .toString();
         } catch (JSONException jsonException) {
             throw new IllegalArgumentException(jsonException);
@@ -69,6 +59,15 @@ class AurusClient {
         } catch (IOException ioException) {
             throw new KushkiException(ioException);
         }
+    }
+
+    private JSONObject buildDefaultJsonObject(String publicMerchantId, Card card) throws JSONException {
+        return new JSONObject()
+                .put("remember_me", "0")
+                .put("deferred_payment", "0")
+                .put("language_indicator", "es")
+                .put("merchant_identifier", publicMerchantId)
+                .put("card", card.toJsonObject());
     }
 
     private HttpURLConnection prepareConnection(String endpoint, String requestBody) throws IOException {

@@ -41,7 +41,7 @@ public class AurusClientTest {
         when(evilCard.toJsonObject()).thenThrow(jsonException);
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectCause(is(jsonException));
-        aurusClient.buildSubscriptionParameters("", evilCard);
+        aurusClient.buildParameters("", evilCard);
     }
 
     @Test

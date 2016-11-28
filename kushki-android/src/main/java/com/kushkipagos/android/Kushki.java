@@ -23,17 +23,14 @@ public class Kushki {
     }
 
     public Transaction requestToken(Card card, double totalAmount) throws KushkiException {
-        String requestMessage = client.buildParameters(publicMerchantId, card, totalAmount);
-        try {
-            return client.post("/tokens", requestMessage);
-        } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException |
-                NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeySpecException e) {
-            throw new KushkiException(e);
-        }
+        return request(client.buildParameters(publicMerchantId, card, totalAmount));
     }
 
     public Transaction requestSubscriptionToken(Card card) throws KushkiException {
-        String requestMessage = client.buildSubscriptionParameters(publicMerchantId, card);
+        return request(client.buildParameters(publicMerchantId, card));
+    }
+
+    private Transaction request(String requestMessage) throws KushkiException {
         try {
             return client.post("/tokens", requestMessage);
         } catch (NoSuchPaddingException | NoSuchAlgorithmException | IllegalBlockSizeException |

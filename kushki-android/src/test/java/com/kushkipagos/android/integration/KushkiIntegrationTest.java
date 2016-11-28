@@ -5,7 +5,6 @@ import com.kushkipagos.android.Kushki;
 import com.kushkipagos.android.KushkiEnvironment;
 import com.kushkipagos.android.Transaction;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
