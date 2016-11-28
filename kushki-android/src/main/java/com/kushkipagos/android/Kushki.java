@@ -31,4 +31,14 @@ public class Kushki {
             throw new KushkiException(e);
         }
     }
+
+    public Transaction requestSubscriptionToken(Card card) throws KushkiException {
+        String requestMessage = client.buildSubscriptionParameters(publicMerchantId, card);
+        try {
+            return client.post("/tokens", requestMessage);
+        } catch (NoSuchPaddingException | NoSuchAlgorithmException | IllegalBlockSizeException |
+                InvalidKeyException | InvalidKeySpecException | BadPaddingException e) {
+            throw new KushkiException(e);
+        }
+    }
 }

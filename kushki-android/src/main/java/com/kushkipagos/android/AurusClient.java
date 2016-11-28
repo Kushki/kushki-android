@@ -45,6 +45,21 @@ class AurusClient {
         }
     }
 
+    String buildSubscriptionParameters(String publicMerchantId, Card card) {
+        try {
+            return new JSONObject()
+                    .put("remember_me", "0")
+                    .put("deferred_payment", "0")
+                    .put("language_indicator", "es")
+                    .put("token_type", "subscription-token")
+                    .put("merchant_identifier", publicMerchantId)
+                    .put("card", card.toJsonObject())
+                    .toString();
+        } catch (JSONException jsonException) {
+            throw new IllegalArgumentException(jsonException);
+        }
+    }
+
     Transaction post(String endpoint, String requestBody) throws BadPaddingException, IllegalBlockSizeException,
             InvalidKeySpecException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, KushkiException {
         String encryptedRequestBody = aurusEncryption.encryptMessageChunk(requestBody);

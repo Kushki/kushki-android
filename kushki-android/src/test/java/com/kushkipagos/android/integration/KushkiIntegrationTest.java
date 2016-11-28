@@ -19,29 +19,43 @@ public class KushkiIntegrationTest {
     private static final String INVALID_CARD_CODE = "017";
     private static final String INVALID_CARD_MESSAGE = "Tarjeta no válida";
 
-    private Kushki kushki;
-
-    @Before
-    public void setUp() throws Exception {
-        kushki = new Kushki("10000001656015280078454110039965", "USD", KushkiEnvironment.TESTING);
-    }
+    private final Kushki kushki = new Kushki("10000001656015280078454110039965", "USD", KushkiEnvironment.TESTING);
+    private final Card validCard = new Card("Lisbeth Salander", "4017779991118888", "123", "12", "21");
+    private final Card invalidCard = new Card("Lisbeth Salander", "00000", "123", "12", "21");
+    private final Double totalAmount = 10.0;
 
     @Test
     public void shouldReturnTokenWhenCalledWithValidParams() throws Exception {
-        Card card = new Card("Lisbeth Salander", "4017779991118888", "123", "12", "21");
-        Double totalAmount = 10.0;
-        Transaction resultTransaction = kushki.requestToken(card, totalAmount);
+        Transaction resultTransaction = kushki.requestToken(validCard, totalAmount);
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldNotReturnTokenWhenCalledWithInvalidParams() throws Exception {
+        Transaction resultTransaction = kushki.requestToken(invalidCard, totalAmount);
+        assertInvalidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldReturnSubscriptionTokenWhenCalledWithValidParams() throws Exception {
+        Transaction resultTransaction = kushki.requestSubscriptionToken(validCard);
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldNotReturnSubscriptionTokenWhenCalledWithInvalidParams() throws Exception {
+        Transaction resultTransaction = kushki.requestSubscriptionToken(invalidCard);
+        assertInvalidTransaction(resultTransaction);
+    }
+
+    private void assertValidTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(true));
         assertThat(resultTransaction.getCode(), is(SUCCESSFUL_CODE));
         assertThat(resultTransaction.getMessage(), is(SUCCESSFUL_MESSAGE));
         assertThat(resultTransaction.getToken().length(), is(TOKEN_LENGTH));
     }
 
-    @Test
-    public void shouldNotReturnTokenWhenCalledWithInvalidParams() throws Exception {
-        Card card = new Card("Lisbeth Salander", "00000", "123", "12", "21");
-        Double totalAmount = 10.0;
-        Transaction resultTransaction = kushki.requestToken(card, totalAmount);
+    private void assertInvalidTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_CODE));
         assertThat(resultTransaction.getMessage(), is(INVALID_CARD_MESSAGE));

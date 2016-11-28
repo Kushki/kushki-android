@@ -35,6 +35,16 @@ public class AurusClientTest {
     }
 
     @Test
+    public void shouldConvertJSONExceptionToAnUncheckedExceptionForSubscriptions() throws JSONException {
+        Card evilCard = mock(Card.class);
+        JSONException jsonException = new JSONException("");
+        when(evilCard.toJsonObject()).thenThrow(jsonException);
+        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expectCause(is(jsonException));
+        aurusClient.buildSubscriptionParameters("", evilCard);
+    }
+
+    @Test
     public void shouldWrapIOExceptionWithKushkiException() throws Exception {
         expectedException.expect(KushkiException.class);
         expectedException.expectCause(CoreMatchers.<Throwable>instanceOf(IOException.class));
