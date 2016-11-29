@@ -30,44 +30,47 @@ class AurusClient {
     }
 
     String buildParameters(String publicMerchantId, Card card) {
-        try {
-            return buildDefaultJsonObject(publicMerchantId, card)
-                    .put("token_type", "subscription-token")
-                    .toString();
-        } catch (JSONException jsonException) {
-            throw new IllegalArgumentException(jsonException);
-        }
+        return buildJsonObject(publicMerchantId, card).toString();
     }
 
     String buildParameters(String publicMerchantId, Card card, double totalAmount) {
+        return buildJsonObject(publicMerchantId, card, totalAmount).toString();
+    }
+
+    Transaction post(String endpoint, String requestBody) throws KushkiException {
         try {
-            return buildDefaultJsonObject(publicMerchantId, card)
+            String encryptedRequestBody = aurusEncryption.encryptMessageChunk(requestBody);
+            HttpURLConnection connection = prepareConnection(endpoint, encryptedRequestBody);
+            return new Transaction(parseResponse(connection));
+        } catch (BadPaddingException | IllegalBlockSizeException | NoSuchAlgorithmException |
+                NoSuchPaddingException | InvalidKeyException | InvalidKeySpecException |
+                IOException e) {
+            throw new KushkiException(e);
+        }
+    }
+
+    private JSONObject buildJsonObject(String publicMerchantId, Card card, double totalAmount) {
+        try {
+            return buildJsonObject(publicMerchantId, card)
                     .put("token_type", "transaction-token")
-                    .put("amount", String.format(Locale.ENGLISH, "%.2f", totalAmount))
-                    .toString();
+                    .put("amount", String.format(Locale.ENGLISH, "%.2f", totalAmount));
         } catch (JSONException jsonException) {
             throw new IllegalArgumentException(jsonException);
         }
     }
 
-    Transaction post(String endpoint, String requestBody) throws BadPaddingException, IllegalBlockSizeException,
-            InvalidKeySpecException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, KushkiException {
-        String encryptedRequestBody = aurusEncryption.encryptMessageChunk(requestBody);
+    private JSONObject buildJsonObject(String publicMerchantId, Card card) {
         try {
-            HttpURLConnection connection = prepareConnection(endpoint, encryptedRequestBody);
-            return new Transaction(parseResponse(connection));
-        } catch (IOException ioException) {
-            throw new KushkiException(ioException);
+            return new JSONObject()
+                    .put("remember_me", "0")
+                    .put("deferred_payment", "0")
+                    .put("language_indicator", "es")
+                    .put("merchant_identifier", publicMerchantId)
+                    .put("card", card.toJsonObject())
+                    .put("token_type", "subscription-token");
+        } catch (JSONException jsonException) {
+            throw new IllegalArgumentException(jsonException);
         }
-    }
-
-    private JSONObject buildDefaultJsonObject(String publicMerchantId, Card card) throws JSONException {
-        return new JSONObject()
-                .put("remember_me", "0")
-                .put("deferred_payment", "0")
-                .put("language_indicator", "es")
-                .put("merchant_identifier", publicMerchantId)
-                .put("card", card.toJsonObject());
     }
 
     private HttpURLConnection prepareConnection(String endpoint, String requestBody) throws IOException {

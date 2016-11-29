@@ -1,15 +1,8 @@
 package com.kushkipagos.android;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
 public class Kushki {
 
+    private static final String TOKENS_PATH = "/tokens";
     private final String publicMerchantId;
     private final AurusClient client;
 
@@ -23,19 +16,10 @@ public class Kushki {
     }
 
     public Transaction requestToken(Card card, double totalAmount) throws KushkiException {
-        return request(client.buildParameters(publicMerchantId, card, totalAmount));
+        return client.post(TOKENS_PATH, client.buildParameters(publicMerchantId, card, totalAmount));
     }
 
     public Transaction requestSubscriptionToken(Card card) throws KushkiException {
-        return request(client.buildParameters(publicMerchantId, card));
-    }
-
-    private Transaction request(String requestMessage) throws KushkiException {
-        try {
-            return client.post("/tokens", requestMessage);
-        } catch (NoSuchPaddingException | NoSuchAlgorithmException | IllegalBlockSizeException |
-                InvalidKeyException | InvalidKeySpecException | BadPaddingException e) {
-            throw new KushkiException(e);
-        }
+        return client.post(TOKENS_PATH, client.buildParameters(publicMerchantId, card));
     }
 }
