@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
 
-echo Not ready yet
+./gradlew --no-search-upward --build-file kushki-android/build.gradle clean integrationTest

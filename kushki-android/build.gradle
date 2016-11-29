@@ -29,6 +29,16 @@ dependencies {
     }
 }
 
+task unitTest(type: Test) {
+    include 'com/kushkipagos/android/**'
+    exclude 'com/kushkipagos/android/integration/**'
+}
+
+task integrationTest(type: Test) {
+    include 'com/kushkipagos/android/integration/**'
+}
+
+
 ext {
     license = 'MIT'
     licenseUrl = 'https://github.com/Kushki/kushki-android/blob/master/LICENSE.txt'
