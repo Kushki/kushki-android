@@ -1,8 +1,5 @@
 package com.kushkipagos.android;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,7 +10,6 @@ import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Locale;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -29,14 +25,6 @@ class AurusClient {
         this.aurusEncryption = aurusEncryption;
     }
 
-    String buildParameters(String publicMerchantId, Card card) {
-        return buildJsonObject(publicMerchantId, card).toString();
-    }
-
-    String buildParameters(String publicMerchantId, Card card, double totalAmount) {
-        return buildJsonObject(publicMerchantId, card, totalAmount).toString();
-    }
-
     Transaction post(String endpoint, String requestBody) throws KushkiException {
         try {
             String encryptedRequestBody = aurusEncryption.encryptMessageChunk(requestBody);
@@ -46,30 +34,6 @@ class AurusClient {
                 NoSuchPaddingException | InvalidKeyException | InvalidKeySpecException |
                 IOException e) {
             throw new KushkiException(e);
-        }
-    }
-
-    private JSONObject buildJsonObject(String publicMerchantId, Card card, double totalAmount) {
-        try {
-            return buildJsonObject(publicMerchantId, card)
-                    .put("token_type", "transaction-token")
-                    .put("amount", String.format(Locale.ENGLISH, "%.2f", totalAmount));
-        } catch (JSONException jsonException) {
-            throw new IllegalArgumentException(jsonException);
-        }
-    }
-
-    private JSONObject buildJsonObject(String publicMerchantId, Card card) {
-        try {
-            return new JSONObject()
-                    .put("remember_me", "0")
-                    .put("deferred_payment", "0")
-                    .put("language_indicator", "es")
-                    .put("merchant_identifier", publicMerchantId)
-                    .put("card", card.toJsonObject())
-                    .put("token_type", "subscription-token");
-        } catch (JSONException jsonException) {
-            throw new IllegalArgumentException(jsonException);
         }
     }
 
