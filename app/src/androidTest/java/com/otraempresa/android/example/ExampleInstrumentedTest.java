@@ -1,4 +1,4 @@
-package com.kushkipagos.android.example;
+package com.otraempresa.android.example;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

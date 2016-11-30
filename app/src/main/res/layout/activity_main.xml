@@ -8,7 +8,7 @@
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="com.kushkipagos.android.example.com.otraempresa.android.example.MainActivity">
+                tools:context="com.otraempresa.android.example.MainActivity">
 
     <EditText
         android:layout_width="match_parent"
@@ -70,14 +70,26 @@
         android:hint="Expiry Month"/>
 
     <Button
-        android:text="Send"
-        android:layout_width="wrap_content"
+        android:text="Request Transaction Token"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:id="@+id/sendButton"
+        android:id="@+id/transactionButton"
         style="@style/Widget.AppCompat.Button"
         android:background="@color/accent_material_dark"
+        android:layout_marginTop="32dp"
         android:layout_below="@+id/cvvText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <Button
+        android:text="Request Subscription Token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:id="@+id/sendSubscriptionButton"
+        style="@style/Widget.AppCompat.Button"
+        android:background="@color/accent_material_dark"
+        android:layout_below="@+id/transactionButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 </RelativeLayout>

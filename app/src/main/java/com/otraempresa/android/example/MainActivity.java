@@ -13,21 +13,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(com.otraempresa.android.example.R.layout.activity_main);
-        Button button = (Button) findViewById(com.otraempresa.android.example.R.id.sendButton);
-
-        button.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_main);
+        Button transactionButton = (Button) findViewById(R.id.transactionButton);
+        transactionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText nameText = (EditText) findViewById(com.otraempresa.android.example.R.id.nameText);
-                EditText numberText = (EditText) findViewById(com.otraempresa.android.example.R.id.numberText);
-                EditText monthText = (EditText) findViewById(com.otraempresa.android.example.R.id.monthText);
-                EditText yearText = (EditText) findViewById(com.otraempresa.android.example.R.id.yearText);
-                EditText cvvText = (EditText) findViewById(com.otraempresa.android.example.R.id.cvvText);
-                Card card = new Card(nameText.getText().toString(), numberText.getText().toString(),
-                        cvvText.getText().toString(), monthText.getText().toString(), yearText.getText().toString());
-                ExampleAsyncTask exampleAsyncTask = new ExampleAsyncTask(getApplicationContext());
-                exampleAsyncTask.execute(card);
+                new RequestTransactionTokenAsyncTask(getApplicationContext()).execute(buildCard());
             }
         });
+
+        Button subscriptionButton = (Button) findViewById(R.id.sendSubscriptionButton);
+        subscriptionButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new RequestSubscriptionTokenAsyncTask(getApplicationContext()).execute(buildCard());
+            }
+        });
+    }
+
+    private Card buildCard() {
+        EditText nameText = (EditText) findViewById(R.id.nameText);
+        EditText numberText = (EditText) findViewById(R.id.numberText);
+        EditText monthText = (EditText) findViewById(R.id.monthText);
+        EditText yearText = (EditText) findViewById(R.id.yearText);
+        EditText cvvText = (EditText) findViewById(R.id.cvvText);
+        return new Card(nameText.getText().toString(), numberText.getText().toString(),
+                cvvText.getText().toString(), monthText.getText().toString(), yearText.getText().toString());
     }
 }
