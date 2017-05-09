@@ -21,7 +21,7 @@ apply plugin: 'maven'
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 group = 'com.kushkipagos'
-version '1.1.0'
+version '1.2.0'
 
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin'
@@ -78,9 +78,9 @@ install {
             }
             developers {
                 developer {
-                    id 'thoughtworks'
-                    name 'ThoughtWorks'
-                    email 'kushki@thoughtworks.com'
+                    id 'kushki'
+                    name 'kushki'
+                    email 'dev@kushkipagos.com'
                 }
             }
             licenses {

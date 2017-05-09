@@ -7,7 +7,7 @@ import org.junit.rules.ExpectedException
 
 import java.io.IOException
 
-class AurusClientTest {
+class KushkiClientTest {
 
     @Rule
     @JvmField
@@ -15,9 +15,9 @@ class AurusClientTest {
 
     @Test
     fun shouldWrapIOExceptionWithKushkiException() {
-        val aurusClient = AurusClient(TestEnvironment.INVALID, AurusEncryption())
+        val kushkiClient = KushkiClient(TestEnvironment.INVALID, "10000001656015280078454110039965")
         expectedException.expect(KushkiException::class.java)
         expectedException.expectCause(CoreMatchers.instanceOf<Throwable>(IOException::class.java))
-        aurusClient.post("/this-endpoint-does-not-exist", "")
+        kushkiClient.post("/this-endpoint-does-not-exist", "")
     }
 }

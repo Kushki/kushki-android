@@ -1,30 +1,28 @@
 package com.kushkipagos.android
 
 class Kushki internal constructor(private val publicMerchantId: String, currency: String,
-                                  environment: Environment, aurusEncryption: AurusEncryption) {
-    private val client: AurusClient
+                                  environment: Environment) {
+    private val kushkiClient: KushkiClient
     private val kushkiJsonBuilder: KushkiJsonBuilder
 
-    constructor(publicMerchantId: String, currency: String, environment: Environment) :
-            this(publicMerchantId, currency, environment, AurusEncryption())
-
     init {
-        this.client = AurusClient(environment, aurusEncryption)
+        this.kushkiClient = KushkiClient(environment, publicMerchantId)
         this.kushkiJsonBuilder = KushkiJsonBuilder()
     }
 
     @Throws(KushkiException::class)
     fun requestToken(card: Card, totalAmount: Double): Transaction {
-        return client.post(TOKENS_PATH, kushkiJsonBuilder.buildJson(publicMerchantId, card, totalAmount))
+        return kushkiClient.post(TOKENS_PATH, kushkiJsonBuilder.buildJson(card, totalAmount))
     }
 
     @Throws(KushkiException::class)
     fun requestSubscriptionToken(card: Card): Transaction {
-        return client.post(TOKENS_PATH, kushkiJsonBuilder.buildJson(publicMerchantId, card))
+        return kushkiClient.post(SUBSCRIPTION_TOKENS_PATH, kushkiJsonBuilder.buildJson(card))
     }
 
     companion object {
 
-        private const val TOKENS_PATH = "/tokens"
+        private const val TOKENS_PATH = "tokens"
+        private const val SUBSCRIPTION_TOKENS_PATH = "subscription-tokens"
     }
 }
