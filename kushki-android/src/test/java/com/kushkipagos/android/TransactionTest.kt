@@ -6,6 +6,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.json.JSONException
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -37,12 +38,6 @@ class TransactionTest {
         val expectedMessage = RandomStringUtils.randomAlphabetic(15)
         val responseBody = buildResponse("123", expectedMessage)
         val transaction = Transaction(responseBody)
-        System.out.println("-----1-------")
-        System.out.println(responseBody)
-        System.out.println("-----1-------")
-        System.out.println("-----2-------")
-        System.out.println(transaction.isSuccessful)
-        System.out.println("-----2-------")
         assertThat(transaction.message, equalTo(expectedMessage))
     }
 
@@ -60,17 +55,19 @@ class TransactionTest {
         assertThat(transaction.isSuccessful, equalTo(false))
     }
 
-//    @Test
-//    fun shouldThrowIllegalArgumentExceptionIfBuiltWithInvalidJson() {
-//        expectedException.expect(IllegalArgumentException::class.java)
-//        expectedException.expectCause(instanceOf<Throwable>(JSONException::class.java))
-//        Transaction("")
-//    }
-//
-//    @Test
-//    fun shouldThrowIllegalArgumentExceptionIfBuiltWithValidJSONWithMissingFields() {
-//        expectedException.expect(IllegalArgumentException::class.java)
-//        expectedException.expectCause(instanceOf<Throwable>(JSONException::class.java))
-//        Transaction("123")
-//    }
+    @Ignore
+    @Test
+    fun shouldThrowIllegalArgumentExceptionIfBuiltWithInvalidJson() {
+        expectedException.expect(IllegalArgumentException::class.java)
+        expectedException.expectCause(instanceOf<Throwable>(JSONException::class.java))
+        Transaction("")
+    }
+
+    @Ignore
+    @Test
+    fun shouldThrowIllegalArgumentExceptionIfBuiltWithValidJSONWithMissingFields() {
+        expectedException.expect(IllegalArgumentException::class.java)
+        expectedException.expectCause(instanceOf<Throwable>(JSONException::class.java))
+        Transaction("123")
+    }
 }
