@@ -23,7 +23,6 @@ class KushkiUnitTest {
     private val totalAmount = 10.0
     private val validCard = Card("John Doe", "4242424242424242", "123", "12", "21")
     private val invalidCard = Card("Invalid John Doe", "4242424242", "123", "12", "21")
-    private val aurusEncryption = mock(AurusEncryption::class.java)
     private val kushki = Kushki("10000001656015280078454110039965", "USD", TestEnvironment.LOCAL)
 
     @Test
@@ -100,25 +99,12 @@ class KushkiUnitTest {
     }
 
     private fun buildExpectedRequestBody(card: Card, totalAmount: Double): String {
-        val encryptedRequest = RandomStringUtils.randomAlphanumeric(50)
             val expectedRequestMessage = buildRequestMessage(card, totalAmount)
-        try {
-            `when`(aurusEncryption.encryptMessageChunk(expectedRequestMessage)).thenReturn(encryptedRequest)
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
-
         return expectedRequestMessage
     }
 
     private fun buildExpectedSubscriptionRequestBody(card: Card): String {
-        val encryptedRequest = RandomStringUtils.randomAlphanumeric(50)
         val expectedRequestMessage = buildSubscriptionRequestMessage("10000001436354684173102102", card)
-        try {
-            `when`(aurusEncryption.encryptMessageChunk(expectedRequestMessage)).thenReturn(encryptedRequest)
-        } catch (e: Exception) {
-            throw RuntimeException(e)
-        }
 
         return expectedRequestMessage
     }
