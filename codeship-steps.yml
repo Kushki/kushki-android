@@ -1,0 +1,15 @@
+- type: serial
+  steps:
+    - name: unit
+      tag: ^(feature+\/+KV+-+\d*)
+      service: app
+      command: ./pipeline/01-unit.sh
+    - name: integration
+      tag: ^(feature+\/+KV+-+\d*)
+      service: app
+      command: ./pipeline/02-integration.sh
+    - name: distribute
+      tag: master
+      service: app
+      command: ./pipeline/03-distribute.sh
+    

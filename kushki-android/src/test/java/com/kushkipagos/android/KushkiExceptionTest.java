@@ -31,7 +31,6 @@ public class KushkiExceptionTest {
     @Rule
     public final ExpectedException expectedException = ExpectedException.none();
     @Mock
-    private AurusEncryption aurusEncryption;
     private final Throwable expectedCause;
 
     public KushkiExceptionTest(Throwable expectedCause) {
@@ -61,7 +60,6 @@ public class KushkiExceptionTest {
         double totalAmount = 10.0;
         Card card = new Card("Invalid John Doe", "424242424242", "123", "12", "21");
         Kushki kushki = new Kushki("10000001436354684173102102", "USD", TestEnvironment.INVALID);
-        when(aurusEncryption.encryptMessageChunk(anyString())).thenThrow(expectedCause);
         expectedException.expect(KushkiException.class);
         expectedException.expectCause(is(expectedCause));
         kushki.requestToken(card, totalAmount);

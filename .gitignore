@@ -1,6 +1,8 @@
 *.iml
 .gradle
 /local.properties
+.env
+codeship.aes
 /.idea/workspace.xml
 /.idea/libraries
 /.idea/dictionaries
