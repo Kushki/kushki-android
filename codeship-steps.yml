@@ -1,11 +1,11 @@
 - type: serial
   steps:
     - name: unit
-      tag: ^(feature+\/+KV+-+\d*)
+      tag: ^(feature+\/+KV+-+\d*|develop|master)
       service: app
       command: ./pipeline/01-unit.sh
     - name: integration
-      tag: ^(feature+\/+KV+-+\d*)
+      tag: ^(feature+\/+KV+-+\d*|develop|master)
       service: app
       command: ./pipeline/02-integration.sh
     - name: distribute
