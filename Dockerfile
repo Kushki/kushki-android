@@ -8,5 +8,4 @@ ADD id_rsa /root/.ssh/id_rsa
 RUN chmod -R 600 /root/.ssh
 RUN ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
 RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
-RUN ssh -v git@github.com
 CMD ["echo", "1"]
