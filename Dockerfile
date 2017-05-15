@@ -3,9 +3,9 @@ COPY . /usr/src/myapp
 WORKDIR /usr/src/myapp
 RUN git config --global user.email "davidm@kushkipagos.com"
 RUN git config --global user.name "moransk8"
-RUN mkdir -p "$HOME/.ssh"
-RUN ssh-keyscan -t rsa github.com > $HOME/.ssh/known_hosts
-RUN echo "StrictHostKeyChecking no " > $HOME/.ssh/config
-RUN echo -e $PRIVATE_SSH_KEY >> $HOME/.ssh/id_rsa
-RUN chmod -R 700 $HOME/.ssh
+RUN mkdir -p "/root/.ssh"
+ADD id_rsa /root/.ssh/id_rsa
+RUN chmod -R 600 /root/.ssh
+RUN ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
+RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
 CMD ["echo", "1"]
