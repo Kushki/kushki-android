@@ -1,4 +1,5 @@
 FROM java:8
+ARG PRIVATE_SSH_KEY
 COPY . /usr/src/myapp
 WORKDIR /usr/src/myapp
 RUN git config --global user.email "davidm@kushkipagos.com"
