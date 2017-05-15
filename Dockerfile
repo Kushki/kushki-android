@@ -54,9 +54,10 @@ ddSI2jvkyp/yvFD9On940FE7SMwBmktiLvVofaV8utqX9DaLUnEUeRUOPpAUYCft
 Cd6x+VEfUi5S5mx4d4ViWYAkVI2GhyBnowwhjXHBMJ6XLJ7bSzyt0Uvun1AoZ5/S
 M9UxkMQevxw+lnhaW6GMxnj+IW5Fa0z9AhWO7SN2yqktVNgF4HHuQYVj7YqQUVJx
 CHA410a9QJp99nWuTl+ZVOvw3OCN/gAqFhVAI6snu+yhdQ7W3WicZG55kWqhWw==
------END RSA PRIVATE KEY-----" >> $HOME/.ssh/id_rsa
+-----END RSA PRIVATE KEY-----
+" >> $HOME/.ssh/id_rsa
 RUN chmod -R 700 $HOME/.ssh
 RUN ssh-keyscan -t rsa github.com > $HOME/.ssh/known_hosts
 RUN echo "StrictHostKeyChecking no " > $HOME/.ssh/config
 RUN ssh -T git@github.com
-CMD ["echo", PRIVATE_SSH_KEY]
+CMD ["echo", $PRIVATE_SSH_KEY]
