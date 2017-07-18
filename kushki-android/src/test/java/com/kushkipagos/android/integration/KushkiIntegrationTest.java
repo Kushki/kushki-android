@@ -15,11 +15,11 @@ public class KushkiIntegrationTest {
     private static final int TOKEN_LENGTH = 32;
     private static final String SUCCESSFUL_CODE = "000";
     private static final String SUCCESSFUL_MESSAGE = "";
-    private static final String INVALID_CARD_CODE = "017";
-    private static final String INVALID_CARD_MESSAGE = "Tarjeta no válida";
+    private static final String INVALID_CARD_CODE = "K001";
+    private static final String INVALID_CARD_MESSAGE = "El cuerpo de la petición es inválido";
 
-    private final Kushki kushki = new Kushki("10000001641125237535111218", "USD", KushkiEnvironment.TESTING);
-    private final Card validCard = new Card("Lisbeth Salander", "4242424242424242", "123", "12", "21");
+    private final Kushki kushki = new Kushki("10000001641080185390111217", "USD", KushkiEnvironment.TESTING);
+    private final Card validCard = new Card("Lisbeth Salander", "5321952125169352", "123", "12", "21");
     private final Card invalidCard = new Card("Lisbeth Salander", "4242424242", "123", "12", "21");
     private final Double totalAmount = 10.0;
 
@@ -48,7 +48,7 @@ public class KushkiIntegrationTest {
     }
 
     private void assertValidTransaction(Transaction resultTransaction) {
-        //assertThat(resultTransaction.isSuccessful(), is(true));
+        assertThat(resultTransaction.isSuccessful(), is(true));
         assertThat(resultTransaction.getToken().length(), is(TOKEN_LENGTH));
     }
 
