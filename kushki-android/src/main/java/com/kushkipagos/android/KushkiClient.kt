@@ -38,8 +38,8 @@ internal class KushkiClient(private val environment: Environment, private val pu
         connection.requestMethod = "POST"
         connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
         connection.setRequestProperty("public-merchant-id", publicMerchantId)
-        connection.readTimeout = 10000
-        connection.connectTimeout = 15000
+        connection.readTimeout = 25000
+        connection.connectTimeout = 30000
         connection.doOutput = true
         val dataOutputStream = DataOutputStream(connection.outputStream)
         dataOutputStream.writeBytes(requestBody)

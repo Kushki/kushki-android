@@ -3,8 +3,8 @@
 /local.properties
 .env
 codeship.aes
-.idea/
 .DS_Store
 /build
 /captures
 .externalNativeBuild
+/.idea
