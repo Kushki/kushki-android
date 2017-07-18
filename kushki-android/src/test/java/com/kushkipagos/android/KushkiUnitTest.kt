@@ -21,9 +21,9 @@ class KushkiUnitTest {
     @JvmField
     val wireMockRule = WireMockRule(8888)
     private val totalAmount = 10.0
-    private val validCard = Card("John Doe", "4242424242424242", "123", "12", "21")
+    private val validCard = Card("John Doe", "5321952125169352", "123", "12", "21")
     private val invalidCard = Card("Invalid John Doe", "4242424242", "123", "12", "21")
-    private val kushki = Kushki("10000001656015280078454110039965", "USD", TestEnvironment.LOCAL)
+    private val kushki = Kushki("10000002036955013614148494909956", "USD", TestEnvironment.LOCAL)
 
     @Test
     @Throws(KushkiException::class)
@@ -42,13 +42,13 @@ class KushkiUnitTest {
     @Throws(KushkiException::class)
     fun shouldReturnErrorMessageWhenCalledWithInvalidParams() {
         val errorCode = RandomStringUtils.randomNumeric(3)
-        val errorMessage = "Tarjeta no válida"
+        val errorMessage = "El cuerpo de la petición es inválido"
         val expectedRequestBody = buildExpectedRequestBody(invalidCard, totalAmount)
         val responseBody = buildResponse(errorCode, errorMessage)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
         val transaction = kushki.requestToken(invalidCard, totalAmount)
         assertThat(transaction.token, equalTo(""))
-//        assertThat(transaction.code, equalTo(errorCode))
+        assertThat(transaction.code, equalTo("K001"))
         assertThat(transaction.message, equalTo(errorMessage))
     }
 
@@ -67,12 +67,13 @@ class KushkiUnitTest {
     @Throws(KushkiException::class)
     fun shouldReturnErrorMessageWhenCalledWithInvalidSubscriptionParams() {
         val errorCode = RandomStringUtils.randomNumeric(3)
-        val errorMessage = "Tarjeta no válida"
+        val errorMessage = "El cuerpo de la petición es inválido"
         val expectedRequestBody = buildExpectedSubscriptionRequestBody(invalidCard)
         val responseBody = buildResponse(errorCode, errorMessage)
         stubSubscriptionTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
         val transaction = kushki.requestSubscriptionToken(invalidCard)
         assertThat(transaction.token, equalTo(""))
+        assertThat(transaction.code, equalTo("K001"))
         assertThat(transaction.message, equalTo(errorMessage))
     }
 
