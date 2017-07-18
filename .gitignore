@@ -8,3 +8,4 @@ codeship.aes
 /captures
 .externalNativeBuild
 /.idea
+/.idea/misc.xml
