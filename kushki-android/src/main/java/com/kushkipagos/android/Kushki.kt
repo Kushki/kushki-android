@@ -1,6 +1,6 @@
 package com.kushkipagos.android
 
-class Kushki internal constructor(private val publicMerchantId: String, currency: String,
+class Kushki public constructor(private val publicMerchantId: String, currency: String,
                                   environment: Environment) {
     private val kushkiClient: KushkiClient
     private val kushkiJsonBuilder: KushkiJsonBuilder
