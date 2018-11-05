@@ -1,12 +1,12 @@
 package com.kushkipagos.android
 
-class Kushki internal constructor(private val publicMerchantId: String, currency: String,
-                                  environment: Environment) {
+class Kushki internal constructor(publicMerchantId: String, currency: String,
+                                  environment: Environment  , regional:Boolean=false) {
     private val kushkiClient: KushkiClient
     private val kushkiJsonBuilder: KushkiJsonBuilder
 
     init {
-        this.kushkiClient = KushkiClient(environment, publicMerchantId)
+        this.kushkiClient = KushkiClient(environment, publicMerchantId, regional)
         this.kushkiJsonBuilder = KushkiJsonBuilder()
     }
 
