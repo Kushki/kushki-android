@@ -1,25 +1,27 @@
 package com.kushkipagos.android
 
 class Kushki internal constructor(publicMerchantId: String, currency: String,
-                                  environment: Environment) {
+                                  environment: Environment,regional:Boolean) {
     private val kushkiClient: KushkiClient
     private val kushkiJsonBuilder: KushkiJsonBuilder
 
+    constructor(publicMerchantId: String, currency: String,
+                environment: Environment) :
+            this(publicMerchantId, currency,environment, false)
+
     init {
-        this.kushkiClient = KushkiClient(environment, publicMerchantId)
+        this.kushkiClient = KushkiClient(environment, publicMerchantId,regional)
         this.kushkiJsonBuilder = KushkiJsonBuilder()
     }
 
     @Throws(KushkiException::class)
-    @JvmOverloads
-    fun requestToken(card: Card, totalAmount: Double,regional:Boolean = false): Transaction {
-        return kushkiClient.post(TOKENS_PATH, kushkiJsonBuilder.buildJson(card, totalAmount),regional)
+    fun requestToken(card: Card, totalAmount: Double): Transaction {
+        return kushkiClient.post(TOKENS_PATH, kushkiJsonBuilder.buildJson(card, totalAmount))
     }
 
-    @JvmOverloads
     @Throws(KushkiException::class)
-    fun requestSubscriptionToken(card: Card,regional:Boolean = false): Transaction {
-        return kushkiClient.post(SUBSCRIPTION_TOKENS_PATH, kushkiJsonBuilder.buildJson(card),regional)
+    fun requestSubscriptionToken(card: Card): Transaction {
+        return kushkiClient.post(SUBSCRIPTION_TOKENS_PATH, kushkiJsonBuilder.buildJson(card))
     }
 
     companion object {
