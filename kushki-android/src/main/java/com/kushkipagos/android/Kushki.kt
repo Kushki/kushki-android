@@ -1,6 +1,6 @@
 package com.kushkipagos.android
 
-class Kushki internal constructor(private val publicMerchantId: String, currency: String,
+class Kushki internal constructor(publicMerchantId: String, currency: String,
                                   environment: Environment) {
     private val kushkiClient: KushkiClient
     private val kushkiJsonBuilder: KushkiJsonBuilder
@@ -11,13 +11,15 @@ class Kushki internal constructor(private val publicMerchantId: String, currency
     }
 
     @Throws(KushkiException::class)
-    fun requestToken(card: Card, totalAmount: Double): Transaction {
-        return kushkiClient.post(TOKENS_PATH, kushkiJsonBuilder.buildJson(card, totalAmount))
+    @JvmOverloads
+    fun requestToken(card: Card, totalAmount: Double,regional:Boolean = false): Transaction {
+        return kushkiClient.post(TOKENS_PATH, kushkiJsonBuilder.buildJson(card, totalAmount),regional)
     }
 
+    @JvmOverloads
     @Throws(KushkiException::class)
-    fun requestSubscriptionToken(card: Card): Transaction {
-        return kushkiClient.post(SUBSCRIPTION_TOKENS_PATH, kushkiJsonBuilder.buildJson(card))
+    fun requestSubscriptionToken(card: Card,regional:Boolean = false): Transaction {
+        return kushkiClient.post(SUBSCRIPTION_TOKENS_PATH, kushkiJsonBuilder.buildJson(card),regional)
     }
 
     companion object {
