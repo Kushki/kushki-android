@@ -11,13 +11,14 @@ import javax.crypto.BadPaddingException
 import javax.crypto.IllegalBlockSizeException
 import javax.crypto.NoSuchPaddingException
 
+
 internal class KushkiClient(private val environment: Environment, private val publicMerchantId: String) {
 
     @Throws(KushkiException::class)
-    fun post(endpoint: String, requestBody: String): Transaction {
+    fun post(endpoint: String, requestBody: String , regional: Boolean): Transaction {
         System.out.println(requestBody)
         try {
-            val connection = prepareConnection(endpoint, requestBody)
+            val connection = prepareConnection(endpoint, requestBody,regional)
             return Transaction(parseResponse(connection))
         } catch (e: Exception) {
             when(e) {
@@ -32,8 +33,17 @@ internal class KushkiClient(private val environment: Environment, private val pu
     }
 
     @Throws(IOException::class)
-    private fun prepareConnection(endpoint: String, requestBody: String): HttpURLConnection {
-        val url = URL(environment.url + endpoint)
+    private fun prepareConnection(endpoint: String, requestBody: String, regional: Boolean): HttpURLConnection {
+        var urlDestination:String = environment.url
+
+        if(regional) {
+            if (environment == KushkiEnvironment.PRODUCTION)
+                urlDestination = KushkiEnvironment.PRODUCTION_REGIONAL.url
+            if (environment == KushkiEnvironment.TESTING)
+                urlDestination = KushkiEnvironment.UAT_REGIONAL.url
+        }
+
+        val url = URL(urlDestination + endpoint)
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
         connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
