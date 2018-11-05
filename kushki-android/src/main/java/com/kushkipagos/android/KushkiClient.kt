@@ -1,6 +1,5 @@
 package com.kushkipagos.android
 
-import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -12,14 +11,16 @@ import javax.crypto.IllegalBlockSizeException
 import javax.crypto.NoSuchPaddingException
 
 
-internal class KushkiClient(private val environment: Environment, private val publicMerchantId: String) {
+internal class KushkiClient(private val environment: Environment, private val publicMerchantId: String , private val regional: Boolean) {
+
+    constructor(environment: Environment, publicMerchantId: String) :
+            this(environment, publicMerchantId, false)
 
     @Throws(KushkiException::class)
-    @JvmOverloads
-    fun post(endpoint: String, requestBody: String , regional: Boolean): Transaction {
+    fun post(endpoint: String, requestBody: String): Transaction {
         System.out.println(requestBody)
         try {
-            val connection = prepareConnection(endpoint, requestBody,regional)
+            val connection = prepareConnection(endpoint, requestBody)
             return Transaction(parseResponse(connection))
         } catch (e: Exception) {
             when(e) {
@@ -34,8 +35,7 @@ internal class KushkiClient(private val environment: Environment, private val pu
     }
 
     @Throws(IOException::class)
-    @JvmOverloads
-    private fun prepareConnection(endpoint: String, requestBody: String, regional: Boolean): HttpURLConnection {
+    private fun prepareConnection(endpoint: String, requestBody: String): HttpURLConnection {
         var urlDestination:String = environment.url
 
         if(regional) {
@@ -46,6 +46,7 @@ internal class KushkiClient(private val environment: Environment, private val pu
         }
 
         val url = URL(urlDestination + endpoint)
+
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
         connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
