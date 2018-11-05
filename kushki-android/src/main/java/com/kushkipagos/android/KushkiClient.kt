@@ -15,6 +15,7 @@ import javax.crypto.NoSuchPaddingException
 internal class KushkiClient(private val environment: Environment, private val publicMerchantId: String) {
 
     @Throws(KushkiException::class)
+    @JvmOverloads
     fun post(endpoint: String, requestBody: String , regional: Boolean): Transaction {
         System.out.println(requestBody)
         try {
@@ -33,6 +34,7 @@ internal class KushkiClient(private val environment: Environment, private val pu
     }
 
     @Throws(IOException::class)
+    @JvmOverloads
     private fun prepareConnection(endpoint: String, requestBody: String, regional: Boolean): HttpURLConnection {
         var urlDestination:String = environment.url
 
