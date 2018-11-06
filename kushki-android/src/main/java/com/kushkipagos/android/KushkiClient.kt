@@ -39,10 +39,12 @@ internal class KushkiClient(private val environment: Environment, private val pu
         var urlDestination:String = environment.url
 
         if(regional) {
-            if (environment == KushkiEnvironment.PRODUCTION)
-                urlDestination = KushkiEnvironment.PRODUCTION_REGIONAL.url
-            if (environment == KushkiEnvironment.TESTING)
-                urlDestination = KushkiEnvironment.UAT_REGIONAL.url
+
+            when (environment)
+            {
+                KushkiEnvironment.PRODUCTION ->  urlDestination = KushkiEnvironment.PRODUCTION_REGIONAL.url
+                KushkiEnvironment.TESTING ->   urlDestination = KushkiEnvironment.UAT_REGIONAL.url
+            }
         }
 
         val url = URL(urlDestination + endpoint)
