@@ -58,6 +58,7 @@ class KushkiUnitTest {
     @Throws(KushkiException::class)
     fun shouldReturnOKMessageWhenCalledWithSingleIP() {
         val errorCode = RandomStringUtils.randomNumeric(3)
+        //TODO: Change when exist the URL directions to prove
         val errorMessage = "Unable to resolve host"
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = buildResponse(errorCode, errorMessage)
