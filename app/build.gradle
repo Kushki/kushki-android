@@ -29,7 +29,4 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile files('/Users/patricio/Documents/kushki/repositories/kushki-android/kushki-android/build/libs/kushki-android-1.2.0.jar')
-    compile files('/Users/patricio/Documents/kushki/repositories/kushki-android/kushki-android/build/libs/kushki-android-1.2.0-javadoc.jar')
-    compile files('/Users/patricio/Documents/kushki/repositories/kushki-android/kushki-android/build/libs/kushki-android-1.2.0-sources.jar')
 }
