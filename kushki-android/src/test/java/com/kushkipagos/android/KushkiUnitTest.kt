@@ -57,13 +57,14 @@ class KushkiUnitTest {
     @Test
     @Throws(KushkiException::class)
     fun shouldReturnOKMessageWhenCalledWithSingleIP() {
-        val errorCode = RandomStringUtils.randomNumeric(3)
-        //TODO: Change when exist the URL directions to prove
-        val errorMessage = "Unable to resolve host"
+        val token = RandomStringUtils.randomAlphanumeric(32)
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
-        val responseBody = buildResponse(errorCode, errorMessage)
-        stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
+        val responseBody = buildResponse("000", "", token)
+        stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
         val transaction = kushkiSingleIP.requestToken(validCard, totalAmount)
+        System.out.println(transaction.token)
+        System.out.println(token)
+        assertThat(transaction.message, equalTo(""))
         assertThat(transaction.token.length, equalTo(32))
     }
 
