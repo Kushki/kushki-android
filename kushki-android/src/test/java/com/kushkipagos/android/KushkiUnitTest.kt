@@ -5,6 +5,7 @@ import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.kushkipagos.android.Helpers.buildResponse
 import org.apache.commons.lang3.RandomStringUtils
 import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.CoreMatchers.startsWith
 import org.hamcrest.MatcherAssert.assertThat
 import org.json.JSONException
 import org.json.JSONObject
@@ -24,6 +25,7 @@ class KushkiUnitTest {
     private val validCard = Card("John Doe", "5321952125169352", "123", "12", "21")
     private val invalidCard = Card("Invalid John Doe", "4242424242", "123", "12", "21")
     private val kushki = Kushki("10000002036955013614148494909956", "USD", TestEnvironment.LOCAL)
+    private val kushkiSingleIP = Kushki("10000002036955013614148494909956", "USD", TestEnvironment.LOCAL,true)
 
     @Test
     @Throws(KushkiException::class)
@@ -42,7 +44,7 @@ class KushkiUnitTest {
     @Throws(KushkiException::class)
     fun shouldReturnErrorMessageWhenCalledWithInvalidParams() {
         val errorCode = RandomStringUtils.randomNumeric(3)
-        val errorMessage = "El cuerpo de la petición es inválido"
+        val errorMessage = "Cuerpo de la petición inválido."
         val expectedRequestBody = buildExpectedRequestBody(invalidCard, totalAmount)
         val responseBody = buildResponse(errorCode, errorMessage)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
@@ -50,6 +52,20 @@ class KushkiUnitTest {
         assertThat(transaction.token, equalTo(""))
         assertThat(transaction.code, equalTo("K001"))
         assertThat(transaction.message, equalTo(errorMessage))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnOKMessageWhenCalledWithSingleIP() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
+        val responseBody = buildResponse("000", "", token)
+        stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiSingleIP.requestToken(validCard, totalAmount)
+        System.out.println(transaction.token)
+        System.out.println(token)
+        assertThat(transaction.message, equalTo(""))
+        assertThat(transaction.token.length, equalTo(32))
     }
 
     @Test

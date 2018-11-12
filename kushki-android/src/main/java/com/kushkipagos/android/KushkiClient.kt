@@ -1,6 +1,5 @@
 package com.kushkipagos.android
 
-import org.json.JSONObject
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -11,7 +10,11 @@ import javax.crypto.BadPaddingException
 import javax.crypto.IllegalBlockSizeException
 import javax.crypto.NoSuchPaddingException
 
-internal class KushkiClient(private val environment: Environment, private val publicMerchantId: String) {
+
+internal class KushkiClient(private val environment: Environment, private val publicMerchantId: String , private val regional: Boolean) {
+
+    constructor(environment: Environment, publicMerchantId: String) :
+            this(environment, publicMerchantId, false)
 
     @Throws(KushkiException::class)
     fun post(endpoint: String, requestBody: String): Transaction {
@@ -33,7 +36,19 @@ internal class KushkiClient(private val environment: Environment, private val pu
 
     @Throws(IOException::class)
     private fun prepareConnection(endpoint: String, requestBody: String): HttpURLConnection {
-        val url = URL(environment.url + endpoint)
+        var urlDestination:String = environment.url
+
+        if(regional) {
+
+            when (environment)
+            {
+                KushkiEnvironment.PRODUCTION ->  urlDestination = KushkiEnvironment.PRODUCTION_REGIONAL.url
+                KushkiEnvironment.TESTING ->   urlDestination = KushkiEnvironment.UAT_REGIONAL.url
+            }
+        }
+
+        val url = URL(urlDestination + endpoint)
+
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "POST"
         connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")

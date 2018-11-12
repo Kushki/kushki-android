@@ -16,7 +16,7 @@ public class KushkiIntegrationTest {
     private static final String SUCCESSFUL_CODE = "000";
     private static final String SUCCESSFUL_MESSAGE = "";
     private static final String INVALID_CARD_CODE = "K001";
-    private static final String INVALID_CARD_MESSAGE = "El cuerpo de la petición es inválido";
+    private static final String INVALID_CARD_MESSAGE = "Cuerpo de la petición inválido.";
 
     private final Kushki kushki = new Kushki("10000001641080185390111217", "USD", KushkiEnvironment.TESTING);
     private final Card validCard = new Card("Lisbeth Salander", "5321952125169352", "123", "12", "21");
@@ -32,7 +32,7 @@ public class KushkiIntegrationTest {
     @Test
     public void shouldNotReturnTokenWhenCalledWithInvalidParams() throws Exception {
         Transaction resultTransaction = kushki.requestToken(invalidCard, totalAmount);
-        assertInvalidTransaction(resultTransaction);
+        assertInvalidTransactionCard(resultTransaction);
     }
 
     @Test
@@ -53,6 +53,11 @@ public class KushkiIntegrationTest {
     }
 
     private void assertInvalidTransaction(Transaction resultTransaction) {
+        assertThat(resultTransaction.isSuccessful(), is(false));
+        assertThat(resultTransaction.getCode(), is(INVALID_CARD_CODE));
+        assertThat(resultTransaction.getMessage(), is("El cuerpo de la petición es inválido"));
+    }
+    private void assertInvalidTransactionCard(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_CODE));
         assertThat(resultTransaction.getMessage(), is(INVALID_CARD_MESSAGE));
