@@ -56,10 +56,10 @@ internal class KushkiClient(private val environment: Environment, private val pu
         connection.readTimeout = 25000
         connection.connectTimeout = 30000
         connection.doOutput = true
-        val dataOutputStream = DataOutputStream(connection.outputStream)
-        dataOutputStream.writeBytes(requestBody)
-        dataOutputStream.flush()
-        dataOutputStream.close()
+        val bufferedWriter = BufferedWriter(OutputStreamWriter(connection.outputStream, "UTF-8"))
+        bufferedWriter.write(requestBody)
+        bufferedWriter.flush()
+        bufferedWriter.close()
         return connection
     }
 
