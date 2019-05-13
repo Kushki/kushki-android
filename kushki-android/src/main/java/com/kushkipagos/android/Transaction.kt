@@ -17,7 +17,7 @@ class Transaction(responseBody: String) {
             jsonResponse.getDouble("settlement")
         } catch (jsonException: JSONException) {
             0.0
-
+        }
         try {
             code = "000"
             message = ""
