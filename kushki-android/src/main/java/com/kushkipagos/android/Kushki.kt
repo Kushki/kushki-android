@@ -17,8 +17,8 @@ class Kushki public constructor(publicMerchantId: String, currency: String = "US
     }
 
     @Throws(KushkiException::class)
-    fun requestToken(card: Card, totalAmount: Double): Transaction {
-        return kushkiClient.post(TOKENS_PATH, kushkiJsonBuilder.buildJson(card, totalAmount, this.currency))
+    fun requestToken(card: Card, totalAmount: Double, months: Int=0): Transaction {
+        return kushkiClient.post(TOKENS_PATH, kushkiJsonBuilder.buildJson(card, totalAmount, this.currency,months))
     }
 
     @Throws(KushkiException::class)

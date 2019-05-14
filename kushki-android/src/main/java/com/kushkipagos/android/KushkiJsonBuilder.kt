@@ -9,13 +9,19 @@ internal class KushkiJsonBuilder {
         return buildJsonObject(card, currency).toString()
     }
 
-    fun buildJson(card: Card, totalAmount: Double, currency: String): String {
-        return buildJsonObject(card, totalAmount, currency).toString()
+    fun buildJson(card: Card, totalAmount: Double, currency: String, months: Int): String {
+        return buildJsonObject(card, totalAmount, currency, months).toString()
     }
 
-    private fun buildJsonObject(card: Card, totalAmount: Double, currency: String): JSONObject {
-        return buildJsonObject(card, currency)
-                .put("totalAmount", totalAmount)
+    private fun buildJsonObject(card: Card, totalAmount: Double, currency: String, months: Int): JSONObject {
+        var response =  buildJsonObject(card, currency)
+
+        if(month!== null && month>0) {
+            response..put("months", months)
+        }
+
+        return  response
+
     }
 
     private fun buildJsonObject(card: Card, currency: String): JSONObject {
