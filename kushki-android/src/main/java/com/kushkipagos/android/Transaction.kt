@@ -8,10 +8,16 @@ class Transaction(responseBody: String) {
     var code: String
     var message: String
     var token: String = ""
+    var settlement: Double = 0.0
     var isSuccessful: Boolean = false
     val jsonResponse: JSONObject = JSONObject(responseBody)
 
     init {
+        settlement = try {
+            jsonResponse.getDouble("settlement")
+        } catch (jsonException: JSONException) {
+            0.0
+        }
         try {
             code = "000"
             message = ""
