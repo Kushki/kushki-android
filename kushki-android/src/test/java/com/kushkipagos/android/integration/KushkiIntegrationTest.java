@@ -69,6 +69,12 @@ public class KushkiIntegrationTest {
     }
 
     @Test
+    public void shouldReturnCardAsyncTokenWhenCalledWithValidParamsButIncompletedOnlyemail() throws Exception {
+        Transaction resultTransaction = kushkiCardAsync.cardAsyncTokens(totalAmountCardAsync,returnUrl,"mati@kushkipagos.com");
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
     public void shouldNotReturnCardAsyncTokenWhenCalledWithInValidParams() throws Exception {
         Transaction resultTransaction = kushkiCardAsyncInvalid.cardAsyncTokens(totalAmountCardAsync,returnUrl);
         assertInvalidCardAsyncTransaction(resultTransaction);

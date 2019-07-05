@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final EditText emailText = (EditText) findViewById(R.id.emailText);
         Button transactionButton = (Button) findViewById(R.id.transactionButton);
         transactionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         Button cardAsyncButton = (Button) findViewById(R.id.sendCardAsyncButton);
         cardAsyncButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                new RequestCardAsyncTokenAsyncTask(getApplicationContext()).execute(buildCard());
+                new RequestCardAsyncTokenAsyncTask(getApplicationContext()).execute(emailText.getText().toString());
             }
         });
     }
