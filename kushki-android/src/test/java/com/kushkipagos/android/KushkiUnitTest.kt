@@ -128,6 +128,19 @@ class KushkiUnitTest {
 
     @Test
     @Throws(KushkiException::class)
+    fun shouldReturnCardAsyncTokenWhenCalledWithIncompleteParamsOnlyEmail() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildExpectedRequestCardAsyncBodyOnlyEmail(totalAmountCardAsync,returnUrl,email)
+        val responseBody = buildResponse("000", "", token)
+        stubCardAsyncTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiCardAsync.cardAsyncTokens(totalAmountCardAsync,returnUrl)
+        System.out.println(transaction.token)
+        System.out.println(token)
+        assertThat(transaction.token.length, equalTo(32))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
     fun shouldReturnErrorMessageWhenCalledWithInvalidMerchant() {
         val errorCode = RandomStringUtils.randomNumeric(3)
         val errorMessage = "ID de comercio o credencial no válido"
@@ -266,6 +279,25 @@ class KushkiUnitTest {
 
             requestTokenParams.put("totalAmount", totalAmount)
             requestTokenParams.put("returnUrl", returnUrl)
+
+            return requestTokenParams.toString()
+        } catch (e: JSONException) {
+            throw IllegalArgumentException(e)
+        }
+    }
+
+    private fun buildExpectedRequestCardAsyncBodyOnlyEmail(totalAmount: Double, returnUrl: String, email: String ): String {
+        val expectedRequestMessage = buildRequestCardAsyncMessageWithIncompleteOnlyEmail(totalAmount, returnUrl, email)
+        return expectedRequestMessage
+    }
+
+    private fun buildRequestCardAsyncMessageWithIncompleteOnlyEmail(totalAmount: Double, returnUrl: String, email: String): String {
+        try {
+            val requestTokenParams = JSONObject()
+
+            requestTokenParams.put("totalAmount", totalAmount)
+            requestTokenParams.put("returnUrl", returnUrl)
+            requestTokenParams.put("email", email)
 
             return requestTokenParams.toString()
         } catch (e: JSONException) {

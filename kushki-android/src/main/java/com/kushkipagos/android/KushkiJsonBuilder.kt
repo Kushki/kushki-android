@@ -46,12 +46,12 @@ internal class KushkiJsonBuilder {
                 .put("email", email)
     }
 
-    private fun buildJsonObject(totalAmount: Double, currency: String, returnUrl: String, description: String): JSONObject {
+    private fun buildJsonObject(totalAmount: Double, currency: String, returnUrl: String, email: String): JSONObject {
         return JSONObject()
                 .put("totalAmount", totalAmount)
                 .put("currency", currency)
                 .put("returnUrl", returnUrl)
-                .put("description", description)
+                .put("email", email)
     }
     private fun buildJsonObject(totalAmount: Double, currency: String, returnUrl: String): JSONObject {
         return JSONObject()

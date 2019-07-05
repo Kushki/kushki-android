@@ -38,12 +38,12 @@ class Kushki public constructor(publicMerchantId: String, currency: String = "US
     }
 
     @Throws(KushkiException::class)
-    fun cardAsyncTokens(totalAmount: Double, remoteUrl: String, description: String): Transaction{
+    fun cardAsyncTokens(totalAmount: Double, remoteUrl: String, email: String): Transaction{
         return kushkiClient.post(CARD_ASYNC_TOKENS_PATH,kushkiJsonBuilder.buildJson(
                 totalAmount
                 ,this.currency
                 ,remoteUrl
-                ,description
+                ,email
                 )
         )
     }

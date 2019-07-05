@@ -10,20 +10,20 @@ import com.kushkipagos.android.KushkiEnvironment;
 import com.kushkipagos.android.KushkiException;
 import com.kushkipagos.android.Transaction;
 
-abstract class AbstractRequestTokenAsyncTask extends AsyncTask<Card, Void, Transaction> {
+abstract class AbstractRequestCadTokenAsyncTask extends AsyncTask<String, Void, Transaction> {
 
-    protected final Kushki kushki;
+    protected final Kushki kushkiCardAsync;
     private final Context context;
 
-    AbstractRequestTokenAsyncTask(Context context) {
+    AbstractRequestCadTokenAsyncTask(Context context) {
         this.context = context;
-        kushki = new Kushki("10000001656015280078454110039965", "USD", KushkiEnvironment.TESTING);
+        kushkiCardAsync = new Kushki("20000000103098876000", "CLP", KushkiEnvironment.QA);
     }
 
     @Override
-    protected Transaction doInBackground(Card... args) {
+    protected Transaction doInBackground(String... params) {
         try {
-            return requestToken(args[0]);
+            return requestCardAsyncToken(params[0]);
         } catch (KushkiException kushkiException) {
             throw new RuntimeException(kushkiException);
         }
@@ -38,7 +38,7 @@ abstract class AbstractRequestTokenAsyncTask extends AsyncTask<Card, Void, Trans
         }
     }
 
-    protected abstract Transaction requestToken(Card card) throws KushkiException;
+    protected abstract Transaction requestCardAsyncToken(String params) throws KushkiException;
 
     private void showToast(String text) {
         Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
