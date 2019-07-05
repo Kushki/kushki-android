@@ -13,15 +13,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class KushkiIntegrationTest {
 
     private static final int TOKEN_LENGTH = 32;
-    private static final String SUCCESSFUL_CODE = "000";
-    private static final String SUCCESSFUL_MESSAGE = "";
     private static final String INVALID_CARD_CODE = "K001";
+    private static final String INVALID_CARD_ASYNC_CODE = "CAS001";
+    private static final String INVALID_CARD_ASYNC_CODE_MERCHANT = "CAS004";
     private static final String INVALID_CARD_MESSAGE = "Cuerpo de la petición inválido.";
 
     private final Kushki kushki = new Kushki("10000001641080185390111217", "USD", KushkiEnvironment.TESTING);
+    private final Kushki kushkiCardAsync = new Kushki("20000000103098876000", "CLP", KushkiEnvironment.QA);
+    private final Kushki kushkiCardAsyncInvalid = new Kushki("20000000103098876000", "CPL", KushkiEnvironment.QA);
+    private final Kushki kushkiCardAsyncInvalidMerchant = new Kushki("2000000010309", "CLP", KushkiEnvironment.QA);
     private final Card validCard = new Card("Lisbeth Salander", "5321952125169352", "123", "12", "21");
     private final Card invalidCard = new Card("Lisbeth Salander", "4242424242", "123", "12", "21");
     private final Double totalAmount = 10.0;
+    private final Double totalAmountCardAsync = 1000.00;
+    private final String returnUrl = "https://return.url";
 
     @Test
     public void shouldReturnTokenWhenCalledWithValidParams() throws Exception {
@@ -47,6 +52,34 @@ public class KushkiIntegrationTest {
         assertInvalidTransaction(resultTransaction);
     }
 
+    @Test
+    public void shouldReturnCardAsyncTokenWhenCalledWithValidParams() throws Exception {
+        Transaction resultTransaction = kushkiCardAsync.cardAsyncTokens(
+                totalAmountCardAsync,
+                returnUrl,
+                "Description of the payment send from android library.",
+                "mati@kushkipagos.com");
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldReturnCardAsyncTokenWhenCalledWithValidParamsButIncompleted() throws Exception {
+        Transaction resultTransaction = kushkiCardAsync.cardAsyncTokens(totalAmountCardAsync,returnUrl);
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldNotReturnCardAsyncTokenWhenCalledWithInValidParams() throws Exception {
+        Transaction resultTransaction = kushkiCardAsyncInvalid.cardAsyncTokens(totalAmountCardAsync,returnUrl);
+        assertInvalidCardAsyncTransaction(resultTransaction);
+    }
+    @Test
+    public void shouldNotReturnCardAsyncTokenWhenCalledWithInValidMerchant() throws Exception {
+        Transaction resultTransaction = kushkiCardAsyncInvalidMerchant.cardAsyncTokens(totalAmountCardAsync,returnUrl);
+        assertInvalidCardAsyncMerchant(resultTransaction);
+    }
+
+
     private void assertValidTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(true));
         assertThat(resultTransaction.getToken().length(), is(TOKEN_LENGTH));
@@ -55,11 +88,23 @@ public class KushkiIntegrationTest {
     private void assertInvalidTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_CODE));
-        assertThat(resultTransaction.getMessage(), is("El cuerpo de la petición es inválido"));
+        assertThat(resultTransaction.getMessage(), is("Cuerpo de la petición inválido."));
     }
+
     private void assertInvalidTransactionCard(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_CODE));
         assertThat(resultTransaction.getMessage(), is(INVALID_CARD_MESSAGE));
+    }
+
+    private void assertInvalidCardAsyncTransaction(Transaction resultTransaction) {
+        assertThat(resultTransaction.isSuccessful(), is(false));
+        assertThat(resultTransaction.getCode(), is(INVALID_CARD_ASYNC_CODE));
+        assertThat(resultTransaction.getMessage(), is("Cuerpo de la petición inválido."));
+    }
+    private void assertInvalidCardAsyncMerchant(Transaction resultTransaction) {
+        assertThat(resultTransaction.isSuccessful(), is(false));
+        assertThat(resultTransaction.getCode(), is(INVALID_CARD_ASYNC_CODE_MERCHANT));
+        assertThat(resultTransaction.getMessage(), is("ID de comercio o credencial no válido"));
     }
 }
