@@ -26,9 +26,43 @@ class Kushki public constructor(publicMerchantId: String, currency: String = "US
         return kushkiClient.post(SUBSCRIPTION_TOKENS_PATH, kushkiJsonBuilder.buildJson(card, this.currency))
     }
 
+    @Throws(KushkiException::class)
+    fun cardAsyncTokens(totalAmount: Double, remoteUrl: String, description: String, email: String): Transaction{
+        return kushkiClient.post(CARD_ASYNC_TOKENS_PATH,kushkiJsonBuilder.buildJson(
+                totalAmount
+                ,this.currency
+                ,remoteUrl
+                ,description
+                ,email)
+        )
+    }
+
+    @Throws(KushkiException::class)
+    fun cardAsyncTokens(totalAmount: Double, remoteUrl: String, description: String): Transaction{
+        return kushkiClient.post(CARD_ASYNC_TOKENS_PATH,kushkiJsonBuilder.buildJson(
+                totalAmount
+                ,this.currency
+                ,remoteUrl
+                ,description
+                )
+        )
+    }
+
+    @Throws(KushkiException::class)
+    fun cardAsyncTokens(totalAmount: Double, remoteUrl: String): Transaction{
+        return kushkiClient.post(CARD_ASYNC_TOKENS_PATH,kushkiJsonBuilder.buildJson(
+                totalAmount
+                ,this.currency
+                ,remoteUrl
+        )
+        )
+    }
+
     companion object {
 
-        private const val TOKENS_PATH = "tokens"
-        private const val SUBSCRIPTION_TOKENS_PATH = "subscription-tokens"
+        private const val TOKENS_PATH = "v1/tokens"
+        private const val SUBSCRIPTION_TOKENS_PATH = "v1/subscription-tokens"
+        private const val CARD_ASYNC_TOKENS_PATH = "card-async/v1/tokens"
+
     }
 }

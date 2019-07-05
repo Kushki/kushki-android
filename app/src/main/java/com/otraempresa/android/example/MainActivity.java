@@ -1,5 +1,6 @@
 package com.otraempresa.android.example;
 
+import org.json.JSONObject;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -25,6 +26,13 @@ public class MainActivity extends AppCompatActivity {
         subscriptionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 new RequestSubscriptionTokenAsyncTask(getApplicationContext()).execute(buildCard());
+            }
+        });
+
+        Button cardAsyncButton = (Button) findViewById(R.id.sendCardAsyncButton);
+        cardAsyncButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new RequestCardAsyncTokenAsyncTask(getApplicationContext()).execute(buildCard());
             }
         });
     }

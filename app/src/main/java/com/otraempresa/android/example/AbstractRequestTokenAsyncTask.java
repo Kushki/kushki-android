@@ -13,11 +13,13 @@ import com.kushkipagos.android.Transaction;
 abstract class AbstractRequestTokenAsyncTask extends AsyncTask<Card, Void, Transaction> {
 
     protected final Kushki kushki;
+    protected final Kushki kushkiCardAsync;
     private final Context context;
 
     AbstractRequestTokenAsyncTask(Context context) {
         this.context = context;
         kushki = new Kushki("10000001656015280078454110039965", "USD", KushkiEnvironment.TESTING);
+        kushkiCardAsync = new Kushki("20000000103098876000", "CLP", KushkiEnvironment.QA);
     }
 
     @Override
