@@ -26,6 +26,13 @@ class KushkiUnitTest {
     private val invalidCard = Card("Invalid John Doe", "4242424242", "123", "12", "21")
     private val kushki = Kushki("10000002036955013614148494909956", "USD", TestEnvironment.LOCAL)
     private val kushkiSingleIP = Kushki("10000002036955013614148494909956", "USD", TestEnvironment.LOCAL,true)
+    private val kushkiCardAsync = Kushki("20000000103098876000", "CLP", TestEnvironment.LOCAL_QA)
+    private val kushkiCardAsyncErrorMerchant = Kushki("20000000", "CLP", TestEnvironment.LOCAL_QA)
+    private val kushkiCardAsyncErrorCurrency = Kushki("20000000103098876000", "CCC", TestEnvironment.LOCAL_QA)
+    private val totalAmountCardAsync = 1000.00
+    private val returnUrl = "https://return.url"
+    private val description = "Description test"
+    private val email = "email@test.com"
 
     @Test
     @Throws(KushkiException::class)
@@ -83,7 +90,7 @@ class KushkiUnitTest {
     @Throws(KushkiException::class)
     fun shouldReturnErrorMessageWhenCalledWithInvalidSubscriptionParams() {
         val errorCode = RandomStringUtils.randomNumeric(3)
-        val errorMessage = "El cuerpo de la petición es inválido"
+        val errorMessage = "Cuerpo de la petición inválido."
         val expectedRequestBody = buildExpectedSubscriptionRequestBody(invalidCard)
         val responseBody = buildResponse(errorCode, errorMessage)
         stubSubscriptionTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
@@ -93,10 +100,77 @@ class KushkiUnitTest {
         assertThat(transaction.message, equalTo(errorMessage))
     }
 
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnCardAsyncTokenWhenCalledWithValidParams() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildExpectedRequestCardAsyncBody(totalAmountCardAsync,returnUrl, description, email)
+        val responseBody = buildResponse("000", "", token)
+        stubCardAsyncTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiCardAsync.cardAsyncTokens(totalAmountCardAsync,returnUrl, description,email)
+        System.out.println(transaction.token)
+        System.out.println(token)
+        assertThat(transaction.token.length, equalTo(32))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnCardAsyncTokenWhenCalledWithIncompleteParams() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildExpectedRequestCardAsyncBodyIncomplete(totalAmountCardAsync,returnUrl)
+        val responseBody = buildResponse("000", "", token)
+        stubCardAsyncTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiCardAsync.cardAsyncTokens(totalAmountCardAsync,returnUrl)
+        System.out.println(transaction.token)
+        System.out.println(token)
+        assertThat(transaction.token.length, equalTo(32))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnCardAsyncTokenWhenCalledWithIncompleteParamsOnlyEmail() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildExpectedRequestCardAsyncBodyOnlyEmail(totalAmountCardAsync,returnUrl,email)
+        val responseBody = buildResponse("000", "", token)
+        stubCardAsyncTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiCardAsync.cardAsyncTokens(totalAmountCardAsync,returnUrl)
+        System.out.println(transaction.token)
+        System.out.println(token)
+        assertThat(transaction.token.length, equalTo(32))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnErrorMessageWhenCalledWithInvalidMerchant() {
+        val errorCode = RandomStringUtils.randomNumeric(3)
+        val errorMessage = "ID de comercio o credencial no válido"
+        val expectedRequestBody = buildExpectedRequestCardAsyncBody(totalAmountCardAsync, returnUrl, description, email)
+        val responseBody = buildResponse(errorCode, errorMessage)
+        stubCardAsyncTokenApiErrorMerchant(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
+        val transaction = kushkiCardAsyncErrorMerchant.cardAsyncTokens(totalAmountCardAsync, returnUrl, description, email)
+        assertThat(transaction.token, equalTo(""))
+        assertThat(transaction.code, equalTo("CAS004"))
+        assertThat(transaction.message, equalTo(errorMessage))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnErrorMessageWhenCalledWithInvalidCurrency() {
+        val errorCode = RandomStringUtils.randomNumeric(3)
+        val errorMessage = "Cuerpo de la petición inválido."
+        val expectedRequestBody = buildExpectedRequestCardAsyncBody(totalAmountCardAsync, returnUrl, description, email)
+        val responseBody = buildResponse(errorCode, errorMessage)
+        stubCardAsyncTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
+        val transaction = kushkiCardAsyncErrorCurrency.cardAsyncTokens(totalAmountCardAsync, returnUrl, description, email)
+        assertThat(transaction.token, equalTo(""))
+        assertThat(transaction.code, equalTo("CAS001"))
+        assertThat(transaction.message, equalTo(errorMessage))
+    }
+
     private fun stubTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
         System.out.println("response---body")
         System.out.println(responseBody)
-        wireMockRule.stubFor(post(urlEqualTo("/tokens"))
+        wireMockRule.stubFor(post(urlEqualTo("v1/tokens"))
                 .withRequestBody(equalToJson(expectedRequestBody))
                 .willReturn(aResponse()
                         .withStatus(status)
@@ -106,12 +180,36 @@ class KushkiUnitTest {
     }
 
     private fun stubSubscriptionTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
-        wireMockRule.stubFor(post(urlEqualTo("/subscription-tokens"))
+        wireMockRule.stubFor(post(urlEqualTo("v1/subscription-tokens"))
                 .withRequestBody(equalToJson(expectedRequestBody))
                 .willReturn(aResponse()
                         .withStatus(status)
                         .withHeader("Content-Type", "application/json")
                         .withHeader("Public-Merchant-Id", "10000001656015280078454110039965")
+                        .withBody(responseBody)))
+    }
+
+    private fun stubCardAsyncTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
+        System.out.println("response---body")
+        System.out.println(responseBody)
+        wireMockRule.stubFor(post(urlEqualTo("card-async/v1/tokens"))
+                .withRequestBody(equalToJson(expectedRequestBody))
+                .willReturn(aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Public-Merchant-Id", "20000000103098876000")
+                        .withBody(responseBody)))
+    }
+
+    private fun stubCardAsyncTokenApiErrorMerchant(expectedRequestBody: String, responseBody: String, status: Int) {
+        System.out.println("response---body")
+        System.out.println(responseBody)
+        wireMockRule.stubFor(post(urlEqualTo("card-async/v1/tokens"))
+                .withRequestBody(equalToJson(expectedRequestBody))
+                .willReturn(aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Public-Merchant-Id", "200000001030988")
                         .withBody(responseBody)))
     }
 
@@ -148,6 +246,62 @@ class KushkiUnitTest {
         } catch (e: JSONException) {
             throw IllegalArgumentException(e)
         }
+    }
 
+    private fun buildExpectedRequestCardAsyncBody(totalAmount: Double, returnUrl: String, description: String, email: String ): String {
+        val expectedRequestMessage = buildRequestCardAsyncMessage(totalAmount, returnUrl, description, email)
+        return expectedRequestMessage
+    }
+
+    private fun buildRequestCardAsyncMessage(totalAmount: Double, returnUrl: String, description: String, email: String): String {
+        try {
+            val requestTokenParams = JSONObject()
+
+            requestTokenParams.put("totalAmount", totalAmount)
+            requestTokenParams.put("returnUrl", returnUrl)
+            requestTokenParams.put("description", description)
+            requestTokenParams.put("email", email)
+
+            return requestTokenParams.toString()
+        } catch (e: JSONException) {
+            throw IllegalArgumentException(e)
+        }
+    }
+
+    private fun buildExpectedRequestCardAsyncBodyIncomplete(totalAmount: Double, returnUrl: String ): String {
+        val expectedRequestMessage = buildRequestCardAsyncMessageWithIncompleteParameters(totalAmount, returnUrl)
+        return expectedRequestMessage
+    }
+
+    private fun buildRequestCardAsyncMessageWithIncompleteParameters(totalAmount: Double, returnUrl: String): String {
+        try {
+            val requestTokenParams = JSONObject()
+
+            requestTokenParams.put("totalAmount", totalAmount)
+            requestTokenParams.put("returnUrl", returnUrl)
+
+            return requestTokenParams.toString()
+        } catch (e: JSONException) {
+            throw IllegalArgumentException(e)
+        }
+    }
+
+    private fun buildExpectedRequestCardAsyncBodyOnlyEmail(totalAmount: Double, returnUrl: String, email: String ): String {
+        val expectedRequestMessage = buildRequestCardAsyncMessageWithIncompleteOnlyEmail(totalAmount, returnUrl, email)
+        return expectedRequestMessage
+    }
+
+    private fun buildRequestCardAsyncMessageWithIncompleteOnlyEmail(totalAmount: Double, returnUrl: String, email: String): String {
+        try {
+            val requestTokenParams = JSONObject()
+
+            requestTokenParams.put("totalAmount", totalAmount)
+            requestTokenParams.put("returnUrl", returnUrl)
+            requestTokenParams.put("email", email)
+
+            return requestTokenParams.toString()
+        } catch (e: JSONException) {
+            throw IllegalArgumentException(e)
+        }
     }
 }
