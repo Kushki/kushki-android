@@ -33,6 +33,13 @@ class KushkiUnitTest {
     private val returnUrl = "https://return.url"
     private val description = "Description test"
     private val email = "email@test.com"
+    private val amount = Amount(10.0,0.0,1.2)
+    private val callbackUrl = "www.kushkipagos.com"
+    private val userType = "0"
+    private val documentType = "NIT"
+    private val documentNumber = "12312312313"
+    private val currency = "CLP"
+    private val paymentDescription = "Test JD"
 
     @Test
     @Throws(KushkiException::class)
@@ -167,6 +174,49 @@ class KushkiUnitTest {
         assertThat(transaction.message, equalTo(errorMessage))
     }
 
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnTransferTokenWhenCalledWithValidParams() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildExpectedRequestTransferBody()
+        val responseBody = buildResponse("000", "", token)
+        stubTransferTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushki.transferTokens(amount, callbackUrl, userType, documentType,
+                documentNumber,email,currency)
+        System.out.println(transaction.token)
+        System.out.println(token)
+        assertThat(transaction.token.length, equalTo(32))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnTransferTokenWhenCalledWithValidCompletedParams() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildExpectedRequestTransferBody(paymentDescription)
+        val responseBody = buildResponse("000", "", token)
+        stubTransferTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushki.transferTokens(amount, callbackUrl, userType, documentType,
+                documentNumber,email,currency)
+        System.out.println(transaction.token)
+        System.out.println(token)
+        assertThat(transaction.token.length, equalTo(32))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnTransferTokenWhenCalledWithInvalidParams() {
+        val errorCode = RandomStringUtils.randomNumeric(3)
+        val errorMessage = "Cuerpo de la petición inválido."
+        val expectedRequestBody = buildExpectedRequestTransferBody(paymentDescription,"test")
+        val responseBody = buildResponse(errorCode, errorMessage)
+        stubTransferTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
+        val transaction = kushki.transferTokens(amount, callbackUrl, "test", documentType,
+                documentNumber,email,currency)
+        assertThat(transaction.token, equalTo(""))
+        assertThat(transaction.code, equalTo("T001"))
+        assertThat(transaction.message, equalTo(errorMessage))
+    }
+
     private fun stubTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
         System.out.println("response---body")
         System.out.println(responseBody)
@@ -186,6 +236,16 @@ class KushkiUnitTest {
                         .withStatus(status)
                         .withHeader("Content-Type", "application/json")
                         .withHeader("Public-Merchant-Id", "10000001656015280078454110039965")
+                        .withBody(responseBody)))
+    }
+
+    private fun stubTransferTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
+        wireMockRule.stubFor(post(urlEqualTo("transfer/v1/tokens"))
+                .withRequestBody(equalToJson(expectedRequestBody))
+                .willReturn(aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Public-Merchant-Id", "200000001030988")
                         .withBody(responseBody)))
     }
 
@@ -246,6 +306,55 @@ class KushkiUnitTest {
         } catch (e: JSONException) {
             throw IllegalArgumentException(e)
         }
+    }
+
+    private fun buildExpectedRequestTransferBody():String{
+        val expectedRequestMessage = buildRequestTransferMessage(amount, callbackUrl, userType, documentType,
+                documentNumber,email,currency
+        )
+        return expectedRequestMessage
+    }
+
+    private fun buildExpectedRequestTransferBody(paymentDescription:String,documentTypeAux: String="CC"):String{
+        val expectedRequestMessage = buildRequestTransferMessage(amount, callbackUrl, userType, documentTypeAux,
+                documentNumber,email,currency,paymentDescription
+        )
+        return expectedRequestMessage
+    }
+    private fun buildRequestTransferMessage(amount: Amount, callbackUrl: String, userType: String, documentType:String,documentNumber:String,
+                                            email:String,currency:String): String {
+        try {
+            val requestTokenParams = JSONObject()
+            requestTokenParams.put("amount", amount.toJsonObject())
+            requestTokenParams.put("callbackUrl", callbackUrl)
+            requestTokenParams.put("userType", userType)
+            requestTokenParams.put("documentType", documentType)
+            requestTokenParams.put("documentNumber", documentNumber)
+            requestTokenParams.put("email", email)
+            requestTokenParams.put("currency", currency)
+            return requestTokenParams.toString()
+        } catch (e: JSONException) {
+            throw IllegalArgumentException(e)
+        }
+
+    }
+    private fun buildRequestTransferMessage(amount: Amount, callbackUrl: String, userType: String, documentType:String,documentNumber:String,
+                                            email:String,currency:String,paymentDescription:String): String {
+        try {
+            val requestTokenParams = JSONObject()
+            requestTokenParams.put("amount", amount.toJsonObject())
+            requestTokenParams.put("callbackUrl", callbackUrl)
+            requestTokenParams.put("userType", userType)
+            requestTokenParams.put("documentType", documentType)
+            requestTokenParams.put("documentNumber", documentNumber)
+            requestTokenParams.put("email", email)
+            requestTokenParams.put("currency", currency)
+            requestTokenParams.put("paymentDescription", paymentDescription)
+            return requestTokenParams.toString()
+        } catch (e: JSONException) {
+            throw IllegalArgumentException(e)
+        }
+
     }
 
     private fun buildExpectedRequestCardAsyncBody(totalAmount: Double, returnUrl: String, description: String, email: String ): String {

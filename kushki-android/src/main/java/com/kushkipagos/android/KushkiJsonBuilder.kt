@@ -25,6 +25,17 @@ internal class KushkiJsonBuilder {
         return buildJsonObject(totalAmount, currency, returnUrl).toString()
     }
 
+    fun buildJson(amount: Amount, callbackUrl: String, userType: String, documentType:String,documentNumber:String,
+                  email:String,currency:String) : String {
+        return buildJsonObject(amount, callbackUrl, userType,documentType,documentNumber,email,currency).toString()
+    }
+
+    fun buildJson(amount: Amount, callbackUrl: String, userType: String, documentType:String,documentNumber:String,
+                  email:String,currency:String, paymentDescription: String) : String {
+        return buildJsonObject(amount, callbackUrl, userType,documentType,documentNumber,email,currency,
+                paymentDescription).toString()
+    }
+
 
     private fun buildJsonObject(card: Card, totalAmount: Double, currency: String): JSONObject {
         return buildJsonObject(card, currency)
@@ -58,5 +69,28 @@ internal class KushkiJsonBuilder {
                 .put("totalAmount", totalAmount)
                 .put("currency", currency)
                 .put("returnUrl", returnUrl)
+    }
+    private fun buildJsonObject(amount: Amount, callbackUrl: String, userType: String, documentType:String,documentNumber:String,
+                                email:String,currency:String): JSONObject {
+        return JSONObject()
+                .put("amount", amount.toJsonObject())
+                .put("callbackUrl", callbackUrl)
+                .put("userType", userType)
+                .put("documentType", documentType)
+                .put("documentNumber", documentNumber)
+                .put("email", email)
+                .put("currency", currency)
+    }
+    private fun buildJsonObject(amount: Amount, callbackUrl: String, userType: String, documentType:String,documentNumber:String,
+                                email:String,currency:String, paymentDescription: String): JSONObject {
+        return JSONObject()
+                .put("amount", amount.toJsonObject())
+                .put("callbackUrl", callbackUrl)
+                .put("userType", userType)
+                .put("documentType", documentType)
+                .put("documentNumber", documentNumber)
+                .put("email", email)
+                .put("currency", currency)
+                .put("paymentDescription", paymentDescription)
     }
 }
