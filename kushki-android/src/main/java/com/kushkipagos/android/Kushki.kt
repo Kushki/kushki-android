@@ -67,6 +67,15 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         )
     }
 
+    @Throws(KushkiException::class)
+    fun transferTokens(amount: Amount, callbackUrl: String, userType: String, documentType: String,
+                       documentNumber: String, email: String, currency: String, paymentDescription:String): Transaction {
+        return kushkiClient.post(TRANSFER_TOKENS_PATH, kushkiJsonBuilder.buildJson(
+                amount, callbackUrl, userType, documentType, documentNumber, email, currency,paymentDescription
+        )
+        )
+    }
+
     companion object {
 
         private const val TOKENS_PATH = "v1/tokens"

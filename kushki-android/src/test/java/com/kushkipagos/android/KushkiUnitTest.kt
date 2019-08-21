@@ -196,7 +196,7 @@ class KushkiUnitTest {
         val responseBody = buildResponse("000", "", token)
         stubTransferTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
         val transaction = kushki.transferTokens(amount, callbackUrl, userType, documentType,
-                documentNumber,email,currency)
+                documentNumber,email,currency,paymentDescription)
         System.out.println(transaction.token)
         System.out.println(token)
         assertThat(transaction.token.length, equalTo(32))
