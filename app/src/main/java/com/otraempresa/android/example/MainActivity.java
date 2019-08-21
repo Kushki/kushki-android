@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 new RequestTransferTokenAsyncTask(getApplicationContext()).execute(
                         new Transfer(new Amount(12.2,0.0,1.2),"www.kushki.com",
                                 mapUser(userType.getSelectedItem().toString()),documentType.getSelectedItem().toString(),
-                                reference.getText().toString(),email.getText().toString(),"CLP")
+                                reference.getText().toString(),email.getText().toString(),"CLP",description.getText().toString())
                 );
             }
         });
