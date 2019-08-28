@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Kushki Android Example</string>
+    <string-array name="user_type_array">
+        <item>Natural</item>
+        <item>Jurídica</item>
+    </string-array>
+    <string-array name="document_type_array">
+        <item>CC</item>
+        <item>NIT</item>
+        <item>CE</item>
+        <item>TI</item>
+        <item>PP</item>
+        <item>RUT</item>
+    </string-array>
 </resources>

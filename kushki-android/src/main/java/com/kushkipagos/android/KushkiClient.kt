@@ -34,6 +34,25 @@ internal class KushkiClient(private val environment: Environment, private val pu
         }
     }
 
+    @Throws(KushkiException::class)
+    fun get (endpoint: String):BankList{
+        try {
+            val connection = prepareGetConnection(endpoint)
+            return BankList(parseResponse(connection))
+        } catch (e: Exception) {
+            when(e) {
+                is BadPaddingException, is IllegalBlockSizeException, is NoSuchAlgorithmException,
+                is NoSuchPaddingException, is InvalidKeyException, is InvalidKeySpecException,
+                is IOException -> {
+                    throw KushkiException(e)
+                }
+                else -> throw e
+            }
+        }
+
+    }
+
+
     @Throws(IOException::class)
     private fun prepareConnection(endpoint: String, requestBody: String): HttpURLConnection {
         var urlDestination:String = environment.url
@@ -60,6 +79,30 @@ internal class KushkiClient(private val environment: Environment, private val pu
         dataOutputStream.writeBytes(requestBody)
         dataOutputStream.flush()
         dataOutputStream.close()
+        return connection
+    }
+
+    @Throws(IOException::class)
+    private fun prepareGetConnection(endpoint: String):HttpURLConnection{
+        var urlDestination:String = environment.url
+
+        if(regional) {
+
+            when (environment)
+            {
+                KushkiEnvironment.PRODUCTION ->  urlDestination = KushkiEnvironment.PRODUCTION_REGIONAL.url
+                KushkiEnvironment.TESTING ->   urlDestination = KushkiEnvironment.UAT_REGIONAL.url
+            }
+        }
+
+        val url = URL(urlDestination + endpoint)
+
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+        connection.setRequestProperty("Public-Merchant-Id", publicMerchantId)
+        connection.readTimeout = 25000
+        connection.connectTimeout = 30000
         return connection
     }
 
