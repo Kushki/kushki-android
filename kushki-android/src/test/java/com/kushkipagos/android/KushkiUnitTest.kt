@@ -2,19 +2,17 @@ package com.kushkipagos.android
 
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.junit.WireMockRule
+import com.kushkipagos.android.Helpers.buildBankListResponse
 import com.kushkipagos.android.Helpers.buildResponse
 import org.apache.commons.lang3.RandomStringUtils
 import org.hamcrest.CoreMatchers.equalTo
-import org.hamcrest.CoreMatchers.startsWith
+import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.json.JSONException
 import org.json.JSONObject
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import java.net.HttpURLConnection
-import java.util.*
 
 class KushkiUnitTest {
 
@@ -29,6 +27,7 @@ class KushkiUnitTest {
     private val kushkiCardAsync = Kushki("20000000103098876000", "CLP", TestEnvironment.LOCAL_QA)
     private val kushkiCardAsyncErrorMerchant = Kushki("20000000", "CLP", TestEnvironment.LOCAL_QA)
     private val kushkiCardAsyncErrorCurrency = Kushki("20000000103098876000", "CCC", TestEnvironment.LOCAL_QA)
+    private val kushkiBankList = Kushki("20000000100323955000","COP",TestEnvironment.LOCAL_QA)
     private val totalAmountCardAsync = 1000.00
     private val returnUrl = "https://return.url"
     private val description = "Description test"
@@ -40,6 +39,8 @@ class KushkiUnitTest {
     private val documentNumber = "12312312313"
     private val currency = "CLP"
     private val paymentDescription = "Test JD"
+
+
 
     @Test
     @Throws(KushkiException::class)
@@ -53,6 +54,8 @@ class KushkiUnitTest {
         System.out.println(token)
         assertThat(transaction.token.length, equalTo(32))
     }
+
+
 
     @Test
     @Throws(KushkiException::class)
@@ -217,6 +220,20 @@ class KushkiUnitTest {
         assertThat(transaction.message, equalTo(errorMessage))
     }
 
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnBankListWhenCalledWithValidResponse() {
+        val responseBody = buildBankListResponse()
+        stubBankListApi(responseBody, HttpURLConnection.HTTP_OK)
+        val banklist = kushkiBankList.bankListSubscriptionTransfer()
+        System.out.println(banklist.banks)
+        System.out.println(banklist.banks[3])
+        assertThat(banklist.banks, notNullValue())
+
+
+    }
+
+
     private fun stubTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
         System.out.println("response---body")
         System.out.println(responseBody)
@@ -270,6 +287,17 @@ class KushkiUnitTest {
                         .withStatus(status)
                         .withHeader("Content-Type", "application/json")
                         .withHeader("Public-Merchant-Id", "200000001030988")
+                        .withBody(responseBody)))
+    }
+
+    private fun stubBankListApi(responseBody: String, status: Int) {
+        System.out.println("response---body")
+        System.out.println(responseBody)
+        wireMockRule.stubFor(get(urlEqualTo("transfer-subscriptions/v1/bankList"))
+                .willReturn(aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Public-Merchant-Id", "20000000100323955000")
                         .withBody(responseBody)))
     }
 
