@@ -76,12 +76,19 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         )
     }
 
+    @Throws(KushkiException::class)
+    fun bankListSubscriptionTransfer():BankList{
+        return kushkiClient.get(SUBSCRIPTION_TRANSFER_BANKLIST)
+    }
+
     companion object {
 
         private const val TOKENS_PATH = "v1/tokens"
         private const val SUBSCRIPTION_TOKENS_PATH = "v1/subscription-tokens"
         private const val CARD_ASYNC_TOKENS_PATH = "card-async/v1/tokens"
         private const val TRANSFER_TOKENS_PATH = "transfer/v1/tokens"
+        private const val SUBSCRIPTION_TRANSFER_BANKLIST = "transfer-subscriptions/v1/bankList"
+
 
     }
 }

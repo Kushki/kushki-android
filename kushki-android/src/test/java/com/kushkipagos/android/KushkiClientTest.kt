@@ -19,5 +19,9 @@ class KushkiClientTest {
         expectedException.expect(KushkiException::class.java)
         expectedException.expectCause(CoreMatchers.instanceOf<Throwable>(IOException::class.java))
         kushkiClient.post("/this-endpoint-does-not-exist", "")
+        kushkiClient.get("/this-endpoint-does-not-exist")
     }
+
+
+
 }

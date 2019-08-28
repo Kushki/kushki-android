@@ -1,5 +1,6 @@
 package com.kushkipagos.android.integration;
 
+import com.kushkipagos.android.BankList;
 import com.kushkipagos.android.Card;
 import com.kushkipagos.android.Kushki;
 import com.kushkipagos.android.KushkiEnvironment;
@@ -8,6 +9,7 @@ import com.kushkipagos.android.Transaction;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class KushkiIntegrationTest {
@@ -22,6 +24,7 @@ public class KushkiIntegrationTest {
     private final Kushki kushkiCardAsync = new Kushki("20000000103098876000", "CLP", KushkiEnvironment.QA);
     private final Kushki kushkiCardAsyncInvalid = new Kushki("20000000103098876000", "CPL", KushkiEnvironment.QA);
     private final Kushki kushkiCardAsyncInvalidMerchant = new Kushki("2000000010309", "CLP", KushkiEnvironment.QA);
+    private final Kushki kushkiBankList = new Kushki("20000000100323955000","COP",KushkiEnvironment.QA);
     private final Card validCard = new Card("Lisbeth Salander", "5321952125169352", "123", "12", "21");
     private final Card invalidCard = new Card("Lisbeth Salander", "4242424242", "123", "12", "21");
     private final Double totalAmount = 10.0;
@@ -85,6 +88,12 @@ public class KushkiIntegrationTest {
         assertInvalidCardAsyncMerchant(resultTransaction);
     }
 
+    @Test
+    public void shouldNReturnBankListWhenCalledValidResponse() throws Exception {
+        BankList resultBankList = kushkiBankList.bankListSubscriptionTransfer();
+        assertValidBankList(resultBankList);
+    }
+
 
     private void assertValidTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(true));
@@ -113,4 +122,10 @@ public class KushkiIntegrationTest {
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_ASYNC_CODE_MERCHANT));
         assertThat(resultTransaction.getMessage(), is("ID de comercio o credencial no válido"));
     }
+    private void assertValidBankList(BankList resultBankList) {
+        assertThat(resultBankList.getBanks().length(), notNullValue());
+
+    }
+
+
 }
