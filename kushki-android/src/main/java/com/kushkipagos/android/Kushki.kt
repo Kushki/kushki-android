@@ -81,14 +81,20 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         return kushkiClient.get(SUBSCRIPTION_TRANSFER_BANKLIST)
     }
 
-    companion object {
+    @Throws(KushkiException::class)
+    fun transferSubscriptionTokens(transferSubscriptions: TransferSubscriptions): Transaction{
+        return kushkiClient.post(TRANSFER_SUBSCRIPTION_TOKENS_PATH,kushkiJsonBuilder.buildJson(
+                transferSubscriptions
+        )
+        )
+    }
 
+    companion object {
         private const val TOKENS_PATH = "v1/tokens"
         private const val SUBSCRIPTION_TOKENS_PATH = "v1/subscription-tokens"
         private const val CARD_ASYNC_TOKENS_PATH = "card-async/v1/tokens"
         private const val TRANSFER_TOKENS_PATH = "transfer/v1/tokens"
+        private const val TRANSFER_SUBSCRIPTION_TOKENS_PATH = "transfer-subscriptions/v1/tokens"
         private const val SUBSCRIPTION_TRANSFER_BANKLIST = "transfer-subscriptions/v1/bankList"
-
-
     }
 }

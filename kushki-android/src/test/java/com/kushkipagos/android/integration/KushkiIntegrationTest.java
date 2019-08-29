@@ -5,6 +5,7 @@ import com.kushkipagos.android.Card;
 import com.kushkipagos.android.Kushki;
 import com.kushkipagos.android.KushkiEnvironment;
 import com.kushkipagos.android.Transaction;
+import com.kushkipagos.android.TransferSubscriptions;
 
 import org.junit.Test;
 
@@ -27,6 +28,9 @@ public class KushkiIntegrationTest {
     private final Kushki kushkiBankList = new Kushki("20000000100323955000","COP",KushkiEnvironment.QA);
     private final Card validCard = new Card("Lisbeth Salander", "5321952125169352", "123", "12", "21");
     private final Card invalidCard = new Card("Lisbeth Salander", "4242424242", "123", "12", "21");
+    private final TransferSubscriptions kushkiSubscriptionTransfer = new TransferSubscriptions("12312321","COD123","jose","davis",
+            "asd123","dsa321","31232131231","02/12/2010","2133123","CC","0",12,
+            "12");
     private final Double totalAmount = 10.0;
     private final Double totalAmountCardAsync = 1000.00;
     private final String returnUrl = "https://return.url";
@@ -78,6 +82,12 @@ public class KushkiIntegrationTest {
     }
 
     @Test
+    public void shouldReturnSubscriptionTransferTokenWhenCalledWithValidParams() throws Exception {
+        Transaction resultTransaction = kushki.transferSubscriptionTokens(kushkiSubscriptionTransfer);
+        assertValidTransactionSubscriptionTransfer(resultTransaction);
+    }
+
+    @Test
     public void shouldNotReturnCardAsyncTokenWhenCalledWithInValidParams() throws Exception {
         Transaction resultTransaction = kushkiCardAsyncInvalid.cardAsyncTokens(totalAmountCardAsync,returnUrl);
         assertInvalidCardAsyncTransaction(resultTransaction);
@@ -98,6 +108,12 @@ public class KushkiIntegrationTest {
     private void assertValidTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(true));
         assertThat(resultTransaction.getToken().length(), is(TOKEN_LENGTH));
+    }
+
+    private void assertValidTransactionSubscriptionTransfer(Transaction resultTransaction) {
+        assertThat(resultTransaction.isSuccessful(), is(true));
+        assertThat(resultTransaction.getToken().length(), is(TOKEN_LENGTH));
+        assertThat(resultTransaction.getQuestions().length(), is(3));
     }
 
     private void assertInvalidTransaction(Transaction resultTransaction) {
