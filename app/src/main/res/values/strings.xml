@@ -12,4 +12,8 @@
         <item>PP</item>
         <item>RUT</item>
     </string-array>
+    <string-array name="document_type_2_array">
+        <item>CC</item>
+        <item>CE</item>
+    </string-array>
 </resources>
