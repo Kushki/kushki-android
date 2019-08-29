@@ -13,6 +13,16 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 tools:context="com.otraempresa.android.example.MainActivity">
 
+    <Button
+        android:id="@+id/sendTransferSubscriptionTokenButton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="372dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/expeditionDocumentDate"
+        android:layout_marginTop="20dp"
+        android:background="@color/accent_material_dark"
+        android:text="Request Transfer Subscriiption Token" />
+
     <Spinner
         android:id="@+id/user_type"
         android:layout_width="182dp"
@@ -212,6 +222,77 @@
         style="@style/Widget.AppCompat.Button"
         android:background="@color/accent_material_dark"
         android:text="Request Transfer Token" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sendTransferTokenButton"
+        android:layout_marginTop="31dp"
+        android:text="Transfer Subscription Token"
+        android:textSize="30sp" />
+
+    <Spinner
+        android:id="@+id/document_type2"
+        android:layout_width="139dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_marginTop="20dp"
+        android:entries="@array/document_type_2_array" />
+
+    <EditText
+        android:id="@+id/documentNumber_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView3"
+        android:layout_marginStart="33dp"
+        android:layout_marginLeft="33dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/document_type2"
+        android:layout_toRightOf="@+id/document_type2"
+        android:ems="10"
+        android:hint="Document Number"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/firstName"
+        android:layout_width="385dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/documentNumber_2"
+        android:layout_marginTop="21dp"
+        android:ems="10"
+        android:hint="First name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/lastName"
+        android:layout_width="385dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/firstName"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/accountNumber"
+        android:layout_width="373dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lastName"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Account Number"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/expeditionDocumentDate"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accountNumber"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Expedition Document Date"
+        android:inputType="textPersonName" />
 
 </RelativeLayout>
 </ScrollView>
