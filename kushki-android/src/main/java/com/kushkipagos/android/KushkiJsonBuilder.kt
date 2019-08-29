@@ -36,6 +36,10 @@ internal class KushkiJsonBuilder {
                 paymentDescription).toString()
     }
 
+    fun buildJson(transferSubscriptions: TransferSubscriptions) : String {
+        return transferSubscriptions.toJsonObject().toString()
+    }
+
 
     private fun buildJsonObject(card: Card, totalAmount: Double, currency: String): JSONObject {
         return buildJsonObject(card, currency)
@@ -92,5 +96,9 @@ internal class KushkiJsonBuilder {
                 .put("email", email)
                 .put("currency", currency)
                 .put("paymentDescription", paymentDescription)
+    }
+
+    private fun buildJsonObject(transferSubscriptions: TransferSubscriptions): JSONObject {
+        return JSONObject(transferSubscriptions.toJsonObject())
     }
 }

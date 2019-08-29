@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import com.kushkipagos.android.Amount;
 import com.kushkipagos.android.Card;
 import com.kushkipagos.android.Transfer;
+import com.kushkipagos.android.TransferSubscriptions;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,9 +22,17 @@ public class MainActivity extends AppCompatActivity {
         final EditText emailText = (EditText) findViewById(R.id.emailText);
         final Spinner userType = (Spinner) findViewById(R.id.user_type);
         final Spinner documentType = (Spinner) findViewById(R.id.document_type);
+        final Spinner documentType2 = (Spinner) findViewById(R.id.document_type2);
         final EditText reference = (EditText) findViewById(R.id.reference);
         final EditText email = (EditText) findViewById(R.id.email);
         final EditText description = (EditText) findViewById(R.id.description);
+        final EditText documentNumber_2 = (EditText) findViewById(R.id.documentNumber_2);
+        final EditText firstName = (EditText) findViewById(R.id.firstName);
+        final EditText lastName = (EditText) findViewById(R.id.lastName);
+        final EditText accountNumber = (EditText) findViewById(R.id.accountNumber);
+        final EditText expeditionDocumentDate = (EditText) findViewById(R.id.expeditionDocumentDate);
+
+
 
 
         Button transactionButton = (Button) findViewById(R.id.transactionButton);
@@ -53,6 +62,19 @@ public class MainActivity extends AppCompatActivity {
                         new Transfer(new Amount(12.2,0.0,1.2),"www.kushki.com",
                                 mapUser(userType.getSelectedItem().toString()),documentType.getSelectedItem().toString(),
                                 reference.getText().toString(),email.getText().toString(),"CLP",description.getText().toString())
+                );
+            }
+        });
+        Button transferSubscriptionButton = (Button)  findViewById(R.id.sendTransferSubscriptionTokenButton);
+        transferSubscriptionButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new RequestTransferSubscriptionTokenAsyncTask(getApplicationContext()).execute(
+                       new TransferSubscriptions(documentNumber_2.getText().toString(),
+                                "C1",firstName.getText().toString(),lastName.getText().toString(),
+                                "CE3","DE4",accountNumber.getText().toString(),
+                                expeditionDocumentDate.getText().toString(),"21312312312",
+                                documentType2.getSelectedItem().toString(),"0",12,"CO2"
+                        )
                 );
             }
         });

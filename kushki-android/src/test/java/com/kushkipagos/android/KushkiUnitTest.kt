@@ -23,12 +23,16 @@ class KushkiUnitTest {
     private val validCard = Card("John Doe", "5321952125169352", "123", "12", "21")
     private val invalidCard = Card("Invalid John Doe", "4242424242", "123", "12", "21")
     private val kushki = Kushki("10000002036955013614148494909956", "USD", TestEnvironment.LOCAL)
+    private val kushkiTransferSubscription = Kushki("20000000107468104000", "COP", TestEnvironment.LOCAL_CI)
     private val kushkiSingleIP = Kushki("10000002036955013614148494909956", "USD", TestEnvironment.LOCAL,true)
     private val kushkiCardAsync = Kushki("20000000103098876000", "CLP", TestEnvironment.LOCAL_QA)
     private val kushkiCardAsyncErrorMerchant = Kushki("20000000", "CLP", TestEnvironment.LOCAL_QA)
     private val kushkiCardAsyncErrorCurrency = Kushki("20000000103098876000", "CCC", TestEnvironment.LOCAL_QA)
     private val kushkiBankList = Kushki("20000000100323955000","COP",TestEnvironment.LOCAL_QA)
     private val totalAmountCardAsync = 1000.00
+    private val kushkiSubscriptionTransfer = TransferSubscriptions("12312321","COD123","jose","davis",
+            "asd123","dsa321","31232131231","02/12/2010","2133123","CC","01",12,
+            "12")
     private val returnUrl = "https://return.url"
     private val description = "Description test"
     private val email = "email@test.com"
@@ -146,6 +150,20 @@ class KushkiUnitTest {
         val transaction = kushkiCardAsync.cardAsyncTokens(totalAmountCardAsync,returnUrl)
         System.out.println(transaction.token)
         System.out.println(token)
+        assertThat(transaction.token.length, equalTo(32))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnTransferSubscriptionTokenWhenCalledWithCompleteParamsOnlyEmail() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
+        val responseBody = buildResponse("000", "", token)
+        stubTransferSubscriptionTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiTransferSubscription.transferSubscriptionTokens(kushkiSubscriptionTransfer)
+        System.out.println(transaction.token)
+        System.out.println(token)
+        System.out.println(transaction.questions)
         assertThat(transaction.token.length, equalTo(32))
     }
 
@@ -278,6 +296,18 @@ class KushkiUnitTest {
                         .withBody(responseBody)))
     }
 
+    private fun stubTransferSubscriptionTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
+        System.out.println("response---body")
+        System.out.println(responseBody)
+        wireMockRule.stubFor(post(urlEqualTo("v1/transfer-subscription-tokens"))
+                .withRequestBody(equalToJson(expectedRequestBody))
+                .willReturn(aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Public-Merchant-Id", "20000000103098876000")
+                        .withBody(responseBody)))
+    }
+
     private fun stubCardAsyncTokenApiErrorMerchant(expectedRequestBody: String, responseBody: String, status: Int) {
         System.out.println("response---body")
         System.out.println(responseBody)
@@ -398,6 +428,16 @@ class KushkiUnitTest {
             requestTokenParams.put("returnUrl", returnUrl)
             requestTokenParams.put("description", description)
             requestTokenParams.put("email", email)
+
+            return requestTokenParams.toString()
+        } catch (e: JSONException) {
+            throw IllegalArgumentException(e)
+        }
+    }
+
+    private fun buildRequestTransferSubscriptionMessage(transferSubscriptions: TransferSubscriptions): String {
+        try {
+            val requestTokenParams = transferSubscriptions.toJsonObject()
 
             return requestTokenParams.toString()
         } catch (e: JSONException) {
