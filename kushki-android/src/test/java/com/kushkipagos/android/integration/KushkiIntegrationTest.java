@@ -30,7 +30,7 @@ public class KushkiIntegrationTest {
     private final Card invalidCard = new Card("Lisbeth Salander", "4242424242", "123", "12", "21");
     private final TransferSubscriptions kushkiSubscriptionTransfer = new TransferSubscriptions("12312321","COD123","jose","davis",
             "asd123","dsa321","31232131231","02/12/2010","2133123","CC","0",12,
-            "12");
+            "12","jose.gonzalez@kushkipagos.comn","CLP");
     private final Double totalAmount = 10.0;
     private final Double totalAmountCardAsync = 1000.00;
     private final String returnUrl = "https://return.url";

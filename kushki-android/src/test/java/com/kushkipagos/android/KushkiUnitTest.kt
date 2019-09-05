@@ -32,7 +32,7 @@ class KushkiUnitTest {
     private val totalAmountCardAsync = 1000.00
     private val kushkiSubscriptionTransfer = TransferSubscriptions("12312321","COD123","jose","davis",
             "asd123","dsa321","31232131231","02/12/2010","2133123","CC","01",12,
-            "12")
+            "12","jose.gonzalez@kushkipagos.com","CLP")
     private val returnUrl = "https://return.url"
     private val description = "Description test"
     private val email = "email@test.com"
