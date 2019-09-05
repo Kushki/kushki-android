@@ -73,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
                                 "C1",firstName.getText().toString(),lastName.getText().toString(),
                                 "CE3","DE4",accountNumber.getText().toString(),
                                 expeditionDocumentDate.getText().toString(),"21312312312",
-                                documentType2.getSelectedItem().toString(),"0",12,"CO2"
+                                documentType2.getSelectedItem().toString(),"0",12,"CO2",email.getText().toString(),
+                               "CLP"
                         )
                 );
             }
