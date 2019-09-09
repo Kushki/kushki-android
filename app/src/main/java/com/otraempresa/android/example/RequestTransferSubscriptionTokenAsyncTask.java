@@ -20,7 +20,8 @@ public class RequestTransferSubscriptionTokenAsyncTask extends AbstractRequestTr
                 "C1",transferSubscriptions.toJsonObject().optString("name"),transferSubscriptions.toJsonObject().optString("lastName"),
                 "CE3","DE4",transferSubscriptions.toJsonObject().optString("accountNumber"),
                         transferSubscriptions.toJsonObject().optString("expeditionDate"),"21312312312",
-                        transferSubscriptions.toJsonObject().optString("documentType"),"01",12,"CO2"
+                        transferSubscriptions.toJsonObject().optString("documentType"),"01",12,"CO2","jose.gonzalez@kushkipagos.com",
+                        "CLP"
                         ));
     }
 }
