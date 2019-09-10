@@ -56,9 +56,10 @@ import groovy.json.JsonSlurper;
       }
     }
 }
+}
 
 String determineRepoName() {
     return "${env.JOB_NAME}".tokenize('/')[1]
 }
 
-}
+
