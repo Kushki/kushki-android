@@ -1,4 +1,7 @@
-
+pipeline {
+  agent { 
+    node { label 'node' }                     
+  }
   stages {                                       
     stage('Lint & Unit Test') {
       parallel {                                 
@@ -31,4 +34,5 @@
     }
 }
 
+}
 }
