@@ -26,13 +26,7 @@ import groovy.json.JsonSlurper;
              sh "git rev-parse HEAD > .git/commit-id"
              commit_id = readFile('.git/commit-id')
              commit_id = commit_id.split("\n")[0]
-             sh "aws ssm get-parameters --names /${ENVIRONMENT}/${projectName}/RUNSCOPE_SUITE_TEST --region us-east-1 --query \"Parameters[0].Value\" > .tmp"
-             RUNSCOPE_SUITE_TEST  = readFile('.tmp')
-             RUNSCOPE_SUITE_TEST = RUNSCOPE_SUITE_TEST.split("\n")[0]
              sh "rm -f .tmp || true"
-             sh "aws ssm get-parameters --names /${ENVIRONMENT}/${projectName}/RUNSCOPE_ENV --region us-east-1 --query \"Parameters[0].Value\" > .tmp"
-             RUNSCOPE_ENV  = readFile('.tmp')
-             RUNSCOPE_ENV = RUNSCOPE_ENV.split("\n")[0]
              sh "git show --format='%ae' $commit_id  > .git/commit-author"
              GIT_AUTHOR_EMAIL  = readFile('.git/commit-author')
              GIT_AUTHOR_EMAIL = GIT_AUTHOR_EMAIL.split("\n")[0]
@@ -59,7 +53,7 @@ import groovy.json.JsonSlurper;
 }
 
 String determineRepoName() {
-    return "${env.JOB_NAME}".tokenize('/')[1]
+    return "${env.JOB_NAME}".tokenize('/')[0]
 }
 
 
