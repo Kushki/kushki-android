@@ -1,8 +1,9 @@
-pipeline {
-  agent { 
-    node {  }                     
-  }
-  stages {                                       
+  node {
+  
+   stage('Pull') {
+              sh "echo hola"
+             
+        }
     stage('Lint & Unit Test') {
       parallel {                                 
         stage('checkStyle') {
@@ -34,5 +35,4 @@ pipeline {
     }
 }
 
-}
 }
