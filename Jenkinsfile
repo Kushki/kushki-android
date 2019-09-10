@@ -1,7 +1,4 @@
-pipeline {
-  agent { 
-    node { label 'android' }                     
-  }
+node {                    
   stages {                                       
     stage('Lint & Unit Test') {
       parallel {                                 
