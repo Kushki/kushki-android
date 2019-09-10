@@ -33,12 +33,5 @@ pipeline {
       }
     }
 }
-  post {                                           
-    always {
-      archiveArtifacts(allowEmptyArchive: true, artifacts: 'app/build/outputs/apk/production/release/*.apk')
-      // And kill the emulator?
-      sh 'adb emu kill'
-    }
-  }
 }
 }
