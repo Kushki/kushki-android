@@ -1,6 +1,6 @@
 pipeline {
   agent { 
-    node { label 'node' }                     
+    node {  }                     
   }
   stages {                                       
     stage('Lint & Unit Test') {
