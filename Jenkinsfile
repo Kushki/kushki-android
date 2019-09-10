@@ -1,4 +1,4 @@
-pipeline {
+
   stages {                                       
     stage('Lint & Unit Test') {
       parallel {                                 
@@ -31,5 +31,4 @@ pipeline {
     }
 }
 
-}
 }
