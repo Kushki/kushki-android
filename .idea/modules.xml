@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/josegonzalez-kushki-android.iml" filepath="$PROJECT_DIR$/josegonzalez-kushki-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kushki-android/josegonzalez-kushki-android-kushki-android.iml" filepath="$PROJECT_DIR$/kushki-android/josegonzalez-kushki-android-kushki-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/kushki-android.iml" filepath="$PROJECT_DIR$/.idea/kushki-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/kushki-android-app.iml" filepath="$PROJECT_DIR$/app/kushki-android-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/kushki-android/kushki-android-kushki-android.iml" filepath="$PROJECT_DIR$/kushki-android/kushki-android-kushki-android.iml" />
     </modules>
   </component>
