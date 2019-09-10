@@ -1,6 +1,6 @@
 pipeline {
   agent { 
-    node { label 'maven' }                     
+    node { label 'android' }                     
   }
   stages {                                       
     stage('Lint & Unit Test') {
@@ -8,7 +8,7 @@ pipeline {
         stage('checkStyle') {
           steps {
             // We use checkstyle gradle plugin to perform this
-            sh './gradlew checkStyle'
+            sh './gradlew --no-search-upward --build-file kushki-android/build.gradle clean unitTest'
           }
         }
 
