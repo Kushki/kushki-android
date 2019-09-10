@@ -7,10 +7,8 @@
     stage('Lint & Unit Test') {
       parallel {                                 
         stage('checkStyle') {
-          steps {
             // We use checkstyle gradle plugin to perform this
             sh './gradlew --no-search-upward --build-file kushki-android/build.gradle clean unitTest'
-          }
         }
 
         stage('Unit Test') {
