@@ -15,22 +15,7 @@ pipeline {
         stage('Unit Test') {
           steps {
             // Execute your Unit Test
-            sh './gradlew testStagingDebug'
-          }
-        }
-      }
-    }
-    stage('UI Testing') {
-      steps {
-        script {                                                       
-          if (currentBuild.result == null         
-              || currentBuild.result == 'SUCCESS') {  
-          // Start your emulator, testing tools
-          sh 'emulator @Nexus_Emulator_API_24
-          sh 'appium &'  
-     
-          // You're set to go, now execute your UI test
-          sh 'rspec spec -fd'
+            sh './gradlew --no-search-upward --build-file kushki-android/build.gradle clean integrationTest'
           }
         }
       }
