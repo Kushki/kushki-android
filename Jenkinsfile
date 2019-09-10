@@ -5,7 +5,7 @@
              
         }
     stage('Lint & Unit Test') {
-      sh './gradlew --no-search-upward --build-file kushki-android/build.gradle clean unitTest'
+      sh './gradlew --debug --stacktrace build'
     }
     stage('Deploy') {
       steps {
