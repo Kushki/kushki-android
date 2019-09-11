@@ -32,23 +32,29 @@ import groovy.json.JsonSlurper;
              GIT_AUTHOR_EMAIL = GIT_AUTHOR_EMAIL.split("\n")[0]
              
         }
-    stage('Lint & Unit Test') {
-      withCredentials([ string(credentialsId: 'awsUser', variable: 'awsUser')]) {
+    stage('Build & Unit Test & Integration Test') {
+        parallel(
+          createCIArtifact:{
+          if ("${CHANGE_TARGET}".contains("release")) {
+                withCredentials([ string(credentialsId: 'awsUser', variable: 'awsUser')]) {
           awsCodeBuild artifactLocationOverride: 'artifact-build', artifactNameOverride: "${commit_id}.zip", artifactNamespaceOverride: "NONE", artifactPackagingOverride: 'ZIP', artifactPathOverride: "ci/${projectName}/PR${PULL_REQUEST}/", artifactTypeOverride: 'S3',  awsAccessKey: 'awsUser', awsSecretKey: "$awsUser", buildSpecFile: '', buildTimeoutOverride: '45', credentialsId: 'awsCodeBuildCredentialOK', credentialsType: 'jenkins',  envVariables: "[ { USRV_STAGE, ci }, {USRV_COMMIT, $commit_id}, {USRV_BRANCH,$CHANGE_BRANCH} ]", gitCloneDepthOverride: '', projectName: 'usrv_back_android_build', proxyHost: '', proxyPort: '', region: 'us-east-1', sourceControlType: 'jenkins', sourceVersion: '', sseAlgorithm: 'AES256'
+          }}},
+          createSTGArtifact:{
+          if ("${CHANGE_TARGET}".contains("master")) {
+                withCredentials([ string(credentialsId: 'awsUser', variable: 'awsUser')]) {
+          awsCodeBuild artifactLocationOverride: 'artifact-build', artifactNameOverride: "${commit_id}.zip", artifactNamespaceOverride: "NONE", artifactPackagingOverride: 'ZIP', artifactPathOverride: "ci/${projectName}/PR${PULL_REQUEST}/", artifactTypeOverride: 'S3',  awsAccessKey: 'awsUser', awsSecretKey: "$awsUser", buildSpecFile: '', buildTimeoutOverride: '45', credentialsId: 'awsCodeBuildCredentialOK', credentialsType: 'jenkins',  envVariables: "[ { USRV_STAGE, ci }, {USRV_COMMIT, $commit_id}, {USRV_BRANCH,$CHANGE_BRANCH} ]", gitCloneDepthOverride: '', projectName: 'usrv_back_android_build', proxyHost: '', proxyPort: '', region: 'us-east-1', sourceControlType: 'jenkins', sourceVersion: '', sseAlgorithm: 'AES256'
+          } }
+          },
+          createQAArtifact:{
+          if ("${CHANGE_TARGET}".contains("master")) {
+                withCredentials([ string(credentialsId: 'awsUser', variable: 'awsUser')]) {
+          awsCodeBuild artifactLocationOverride: 'artifact-build', artifactNameOverride: "${commit_id}.zip", artifactNamespaceOverride: "NONE", artifactPackagingOverride: 'ZIP', artifactPathOverride: "ci/${projectName}/PR${PULL_REQUEST}/", artifactTypeOverride: 'S3',  awsAccessKey: 'awsUser', awsSecretKey: "$awsUser", buildSpecFile: '', buildTimeoutOverride: '45', credentialsId: 'awsCodeBuildCredentialOK', credentialsType: 'jenkins',  envVariables: "[ { USRV_STAGE, ci }, {USRV_COMMIT, $commit_id}, {USRV_BRANCH,$CHANGE_BRANCH} ]", gitCloneDepthOverride: '', projectName: 'usrv_back_android_build', proxyHost: '', proxyPort: '', region: 'us-east-1', sourceControlType: 'jenkins', sourceVersion: '', sseAlgorithm: 'AES256'
+          } }
           }
+          )
     }
-    stage('Deploy') {
-      steps {
-        script {                                                        
-          if (currentBuild.result == null         
-              || currentBuild.result == 'SUCCESS') {  
-             if(env.BRANCH_NAME ==~ /master/) {
-               // Deploy when the committed branch is master (we use fastlane to complete this)     
-               sh 'fastlane app_deploy'
-          }
-        }
-      }
-    }
+    stage('Notify Rollbar') {
+      notifyRollbar(ENVIRONMENT,projectName, commit_id, GIT_AUTHOR_EMAIL)
 }
 }
 
@@ -56,4 +62,22 @@ String determineRepoName() {
     return "${env.JOB_NAME}".tokenize('/')[0]
 }
 
+def notifyRollbar(String environment, String projectName, String commit_id, String GIT_AUTHOR_EMAIL ){
+
+             sh "aws ssm get-parameters --names /${environment}/${projectName}/ROLLBAR_TOKEN --region us-east-1 --query \"Parameters[0].Value\" > .tmp"
+             def ROLLBAR_TOKEN  = readFile('.tmp')
+             ROLLBAR_TOKEN = ROLLBAR_TOKEN.split("\n")[0]
+             stage('Notify Rollbar') {
+             withCredentials([ string(credentialsId: 'awsUser', variable: 'awsUser')]) {
+       sh """
+                curl --fail -X POST https://api.rollbar.com/api/1/deploy/ \
+                   -F access_token=$ROLLBAR_TOKEN \
+                   -F environment=$environment \
+                   -F revision=$commit_id \
+                   -F local_username=$GIT_AUTHOR_EMAIL
+            """
+        }
+        }
+
+}
 
