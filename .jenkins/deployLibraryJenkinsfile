@@ -34,25 +34,21 @@ import groovy.json.JsonSlurper;
         }
     stage('Build & Unit Test & Integration Test') {
         parallel(
-          createCIArtifact:{
-          if ("${CHANGE_TARGET}".contains("release")) {
-                withCredentials([ string(credentialsId: 'awsUser', variable: 'awsUser')]) {
+          createUATArtifact:{
+          withCredentials([ string(credentialsId: 'awsUser', variable: 'awsUser')]) {
           awsCodeBuild artifactLocationOverride: 'artifact-build', artifactNameOverride: "${commit_id}.zip", artifactNamespaceOverride: "NONE", artifactPackagingOverride: 'ZIP', artifactPathOverride: "ci/${projectName}/PR${PULL_REQUEST}/", artifactTypeOverride: 'S3',  awsAccessKey: 'awsUser', awsSecretKey: "$awsUser", buildSpecFile: '', buildTimeoutOverride: '45', credentialsId: 'awsCodeBuildCredentialOK', credentialsType: 'jenkins',  envVariables: "[ { USRV_STAGE, ci }, {USRV_COMMIT, $commit_id}, {USRV_BRANCH,$CHANGE_BRANCH} ]", gitCloneDepthOverride: '', projectName: 'usrv_back_android_build', proxyHost: '', proxyPort: '', region: 'us-east-1', sourceControlType: 'jenkins', sourceVersion: '', sseAlgorithm: 'AES256'
-          }}},
-          createSTGArtifact:{
-          if ("${CHANGE_TARGET}".contains("master")) {
-                withCredentials([ string(credentialsId: 'awsUser', variable: 'awsUser')]) {
-          awsCodeBuild artifactLocationOverride: 'artifact-build', artifactNameOverride: "${commit_id}.zip", artifactNamespaceOverride: "NONE", artifactPackagingOverride: 'ZIP', artifactPathOverride: "ci/${projectName}/PR${PULL_REQUEST}/", artifactTypeOverride: 'S3',  awsAccessKey: 'awsUser', awsSecretKey: "$awsUser", buildSpecFile: '', buildTimeoutOverride: '45', credentialsId: 'awsCodeBuildCredentialOK', credentialsType: 'jenkins',  envVariables: "[ { USRV_STAGE, ci }, {USRV_COMMIT, $commit_id}, {USRV_BRANCH,$CHANGE_BRANCH} ]", gitCloneDepthOverride: '', projectName: 'usrv_back_android_build', proxyHost: '', proxyPort: '', region: 'us-east-1', sourceControlType: 'jenkins', sourceVersion: '', sseAlgorithm: 'AES256'
-          } }
-          },
-          createQAArtifact:{
-          if ("${CHANGE_TARGET}".contains("master")) {
-                withCredentials([ string(credentialsId: 'awsUser', variable: 'awsUser')]) {
-          awsCodeBuild artifactLocationOverride: 'artifact-build', artifactNameOverride: "${commit_id}.zip", artifactNamespaceOverride: "NONE", artifactPackagingOverride: 'ZIP', artifactPathOverride: "ci/${projectName}/PR${PULL_REQUEST}/", artifactTypeOverride: 'S3',  awsAccessKey: 'awsUser', awsSecretKey: "$awsUser", buildSpecFile: '', buildTimeoutOverride: '45', credentialsId: 'awsCodeBuildCredentialOK', credentialsType: 'jenkins',  envVariables: "[ { USRV_STAGE, ci }, {USRV_COMMIT, $commit_id}, {USRV_BRANCH,$CHANGE_BRANCH} ]", gitCloneDepthOverride: '', projectName: 'usrv_back_android_build', proxyHost: '', proxyPort: '', region: 'us-east-1', sourceControlType: 'jenkins', sourceVersion: '', sseAlgorithm: 'AES256'
-          } }
-          }
+          }},
+          createPrimaryArtifact:{
+                   withCredentials([ string(credentialsId: 'awsUser', variable: 'awsUser')]) {
+                   awsCodeBuild artifactLocationOverride: 'artifact-build', artifactNameOverride: "${commit_id}.zip", artifactNamespaceOverride: "NONE", artifactPackagingOverride: 'ZIP', artifactPathOverride: "ci/${projectName}/PR${PULL_REQUEST}/", artifactTypeOverride: 'S3',  awsAccessKey: 'awsUser', awsSecretKey: "$awsUser", buildSpecFile: '', buildTimeoutOverride: '45', credentialsId: 'awsCodeBuildCredentialOK', credentialsType: 'jenkins',  envVariables: "[ { USRV_STAGE, ci }, {USRV_COMMIT, $commit_id}, {USRV_BRANCH,$CHANGE_BRANCH} ]", gitCloneDepthOverride: '', projectName: 'usrv_back_android_build', proxyHost: '', proxyPort: '', region: 'us-east-1', sourceControlType: 'jenkins', sourceVersion: '', sseAlgorithm: 'AES256'
+                   }},
           )
     }
+     stage('deploy $ENVIRONMENT') {
+            withCredentials([ string(credentialsId: 'awsUser', variable: 'awsUser')]) {
+                     awsCodeBuild artifactLocationOverride: 'artifact-build', artifactNameOverride: "${commit_id}.zip", artifactNamespaceOverride: "NONE", artifactPackagingOverride: 'ZIP', artifactPathOverride: "ci/${projectName}/PR${PULL_REQUEST}/", artifactTypeOverride: 'S3',  awsAccessKey: 'awsUser', awsSecretKey: "$awsUser", buildSpecFile: '', buildTimeoutOverride: '45', credentialsId: 'awsCodeBuildCredentialOK', credentialsType: 'jenkins',  envVariables: "[ { USRV_STAGE, primary }, {USRV_COMMIT, $commit_id}, {USRV_BRANCH,$CHANGE_BRANCH} ]", gitCloneDepthOverride: '', projectName: 'usrv_back_android_deploy', proxyHost: '', proxyPort: '', region: 'us-east-1', sourceControlType: 'jenkins', sourceVersion: '', sseAlgorithm: 'AES256'
+                     }
+        }
     stage('Notify Rollbar') {
       notifyRollbar(ENVIRONMENT,projectName, commit_id, GIT_AUTHOR_EMAIL)
 }
