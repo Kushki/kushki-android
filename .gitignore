@@ -7,5 +7,5 @@ codeship.aes
 /build
 /captures
 .externalNativeBuild
-/.idea
+.idea
 /.idea/misc.xml
