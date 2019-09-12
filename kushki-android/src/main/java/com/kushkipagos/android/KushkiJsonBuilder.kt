@@ -1,7 +1,7 @@
 package com.kushkipagos.android
 
+import org.json.JSONArray
 import org.json.JSONObject
-import java.util.*
 
 internal class KushkiJsonBuilder {
 
@@ -36,6 +36,16 @@ internal class KushkiJsonBuilder {
                 paymentDescription).toString()
     }
 
+    fun buildJson(transferSubscriptions: TransferSubscriptions) : String {
+        return transferSubscriptions.toJsonObject().toString()
+    }
+
+    fun buildJson(askQuestionnaire: AskQuestionnaire): String {
+        return askQuestionnaire.toJsonObject().toString()
+    }
+    fun buildJson(validateAnswers: ValidateAnswers): String {
+        return validateAnswers.toJsonObject().toString()
+    }
 
     private fun buildJsonObject(card: Card, totalAmount: Double, currency: String): JSONObject {
         return buildJsonObject(card, currency)
@@ -92,5 +102,9 @@ internal class KushkiJsonBuilder {
                 .put("email", email)
                 .put("currency", currency)
                 .put("paymentDescription", paymentDescription)
+    }
+
+    private fun buildJsonObject(transferSubscriptions: TransferSubscriptions): JSONObject {
+        return JSONObject(transferSubscriptions.toJsonObject())
     }
 }
