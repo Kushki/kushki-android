@@ -4,10 +4,12 @@ import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.kushkipagos.android.Helpers.buildBankListResponse
 import com.kushkipagos.android.Helpers.buildResponse
+import com.kushkipagos.android.Helpers.buildSecureValidationResponse
 import org.apache.commons.lang3.RandomStringUtils
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import org.junit.Rule
@@ -23,16 +25,15 @@ class KushkiUnitTest {
     private val validCard = Card("John Doe", "5321952125169352", "123", "12", "21")
     private val invalidCard = Card("Invalid John Doe", "4242424242", "123", "12", "21")
     private val kushki = Kushki("10000002036955013614148494909956", "USD", TestEnvironment.LOCAL)
-    private val kushkiTransferSubscription = Kushki("20000000107468104000", "COP", TestEnvironment.LOCAL_CI)
+    private val kushkiTransferSubscription = Kushki("20000000102183993000", "COP", TestEnvironment.LOCAL_QA)
     private val kushkiSingleIP = Kushki("10000002036955013614148494909956", "USD", TestEnvironment.LOCAL,true)
     private val kushkiCardAsync = Kushki("20000000103098876000", "CLP", TestEnvironment.LOCAL_QA)
     private val kushkiCardAsyncErrorMerchant = Kushki("20000000", "CLP", TestEnvironment.LOCAL_QA)
     private val kushkiCardAsyncErrorCurrency = Kushki("20000000103098876000", "CCC", TestEnvironment.LOCAL_QA)
     private val kushkiBankList = Kushki("20000000100323955000","COP",TestEnvironment.LOCAL_QA)
     private val totalAmountCardAsync = 1000.00
-    private val kushkiSubscriptionTransfer = TransferSubscriptions("12312321","COD123","jose","davis",
-            "asd123","dsa321","31232131231","02/12/2010","2133123","CC","01",12,
-            "12","jose.gonzalez@kushkipagos.com","CLP")
+    private val kushkiSubscriptionTransfer = TransferSubscriptions("12312312","1","jose","gonzalez",
+            "123123123","CC","01",12,"tes@kushkipagos.com","USD")
     private val returnUrl = "https://return.url"
     private val description = "Description test"
     private val email = "email@test.com"
@@ -43,7 +44,42 @@ class KushkiUnitTest {
     private val documentNumber = "12312312313"
     private val currency = "CLP"
     private val paymentDescription = "Test JD"
-
+    private val cityCode = "01"
+    private val stateCode = "02"
+    private val phone = "00987654321"
+    private val expeditionDate = "2017-05-09"
+    private val answers = JSONArray("""
+        [
+            {
+                "id": "id",
+                "answer": "1"
+            },
+            {
+                "id": "id",
+                "answer": "2"
+            },
+            {
+                "id": "id",
+                "answer": "3"
+            }
+        ]
+    """)
+    private val answersInvalid = JSONArray("""
+        [
+            {
+                "id": "id",
+                "answer": "1"
+            },
+            {
+                "id": "id",
+                "answer": "1"
+            },
+            {
+                "id": "id",
+                "answer": "1"
+            }
+        ]
+    """)
 
 
     @Test
@@ -163,7 +199,6 @@ class KushkiUnitTest {
         val transaction = kushkiTransferSubscription.transferSubscriptionTokens(kushkiSubscriptionTransfer)
         System.out.println(transaction.token)
         System.out.println(token)
-        System.out.println(transaction.questions)
         assertThat(transaction.token.length, equalTo(32))
     }
 
@@ -247,10 +282,80 @@ class KushkiUnitTest {
         System.out.println(banklist.banks)
         System.out.println(banklist.banks[3])
         assertThat(banklist.banks, notNullValue())
-
-
     }
 
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnAskQuestionnaireWhenCalledWithCompleteParams() {
+        val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
+        val responseBody = buildSecureValidationResponse("000","", "02")
+        stubSecureValidationApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiTransferSubscription.transferSubscriptionTokens(kushkiSubscriptionTransfer)
+        val secureInfo = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
+        val secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(secureInfo)
+        assertThat(secureValidation.questions.length(), equalTo(3))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnOTPExpiradoMessageWhenCalledWithInvalidSucureServiceId() {
+        val errorCode = "OTP300"
+        val errorMessage = "OTP expirado"
+        val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
+        val responseBody = buildSecureValidationResponse(errorCode,errorMessage, "")
+        stubSecureValidationApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val askQuestionnaire = AskQuestionnaire("InvalidId","confronta",cityCode,stateCode,phone,expeditionDate)
+        val secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(askQuestionnaire)
+        assertThat(secureValidation.questions.length(), equalTo(0))
+        assertThat(secureValidation.code, equalTo("OTP300"))
+        assertThat(secureValidation.message, equalTo("OTP expirado"))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnErrorMessageWhenCalledWithInvalidConfrontaBiometrics() {
+        val errorCode = "TR006"
+        val errorMessage = "Cuerpo de petición inválido"
+        val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
+        val responseBody = buildSecureValidationResponse(errorCode,errorMessage, "")
+        stubSecureValidationApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiTransferSubscription.transferSubscriptionTokens(kushkiSubscriptionTransfer)
+        val askQuestionnaire = AskQuestionnaire(transaction.secureId,transaction.secureService,"","","","")
+        val secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(askQuestionnaire)
+        assertThat(secureValidation.questions.length(), equalTo(0))
+        assertThat(secureValidation.code, equalTo("TR006"))
+        assertThat(secureValidation.message, equalTo("Cuerpo de petición inválido"))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnOkMessageWhenCalledWithValidAnswers() {
+        val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
+        val responseBody = buildSecureValidationResponse("000","", "02")
+        stubSecureValidationApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiTransferSubscription.transferSubscriptionTokens(kushkiSubscriptionTransfer)
+        val askQuestionnaire = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
+        var secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(askQuestionnaire)
+        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,secureValidation.questionnaireCode,answers)
+        secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(validateAnswers)
+        assertThat(secureValidation.message, equalTo("ok"))
+        assertThat(secureValidation.code, equalTo("BIO000"))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnInvalidUserMessageWhenCalledWithInvalidAnswers() {
+        val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
+        val responseBody = buildSecureValidationResponse("000","", "02")
+        stubSecureValidationApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiTransferSubscription.transferSubscriptionTokens(kushkiSubscriptionTransfer)
+        val askQuestionnaire = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
+        var secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(askQuestionnaire)
+        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,secureValidation.questionnaireCode,answersInvalid)
+        secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(validateAnswers)
+        assertThat(secureValidation.message, equalTo("Invalid user"))
+        assertThat(secureValidation.code, equalTo("BIO100"))
+    }
 
     private fun stubTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
         System.out.println("response---body")
@@ -328,6 +433,18 @@ class KushkiUnitTest {
                         .withStatus(status)
                         .withHeader("Content-Type", "application/json")
                         .withHeader("Public-Merchant-Id", "20000000100323955000")
+                        .withBody(responseBody)))
+    }
+
+    private fun stubSecureValidationApi(expectedRequestBody: String, responseBody: String, status: Int) {
+        System.out.println("response---body")
+        System.out.println(responseBody)
+        wireMockRule.stubFor(post(urlEqualTo("rules/v1/secureValidation"))
+                .withRequestBody(equalToJson(expectedRequestBody))
+                .willReturn(aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Public-Merchant-Id", "20000000102183993000")
                         .withBody(responseBody)))
     }
 
@@ -444,6 +561,7 @@ class KushkiUnitTest {
             throw IllegalArgumentException(e)
         }
     }
+
 
     private fun buildExpectedRequestCardAsyncBodyIncomplete(totalAmount: Double, returnUrl: String ): String {
         val expectedRequestMessage = buildRequestCardAsyncMessageWithIncompleteParameters(totalAmount, returnUrl)

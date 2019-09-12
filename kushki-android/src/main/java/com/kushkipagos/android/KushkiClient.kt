@@ -18,6 +18,7 @@ internal class KushkiClient(private val environment: Environment, private val pu
 
     @Throws(KushkiException::class)
     fun post(endpoint: String, requestBody: String): Transaction {
+        System.out.println("request--Body")
         System.out.println(requestBody)
         try {
             val connection = prepareConnection(endpoint, requestBody)
@@ -33,6 +34,26 @@ internal class KushkiClient(private val environment: Environment, private val pu
             }
         }
     }
+
+    @Throws(KushkiException::class)
+    fun post_secure(endpoint: String, requestBody: String): SecureValidation {
+        System.out.println("request--Body")
+        System.out.println(requestBody)
+        try {
+            val connection = prepareConnection(endpoint, requestBody)
+            return SecureValidation(parseResponse(connection))
+        } catch (e: Exception) {
+            when(e) {
+                is BadPaddingException, is IllegalBlockSizeException, is NoSuchAlgorithmException,
+                is NoSuchPaddingException, is InvalidKeyException, is InvalidKeySpecException,
+                is IOException -> {
+                    throw KushkiException(e)
+                }
+                else -> throw e
+            }
+        }
+    }
+
 
     @Throws(KushkiException::class)
     fun get (endpoint: String):BankList{
