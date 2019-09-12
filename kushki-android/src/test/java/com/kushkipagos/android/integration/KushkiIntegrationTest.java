@@ -1,9 +1,11 @@
 package com.kushkipagos.android.integration;
 
+import com.kushkipagos.android.AskQuestionnaire;
 import com.kushkipagos.android.BankList;
 import com.kushkipagos.android.Card;
 import com.kushkipagos.android.Kushki;
 import com.kushkipagos.android.KushkiEnvironment;
+import com.kushkipagos.android.SecureValidation;
 import com.kushkipagos.android.Transaction;
 import com.kushkipagos.android.TransferSubscriptions;
 
@@ -16,10 +18,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class KushkiIntegrationTest {
 
     private static final int TOKEN_LENGTH = 32;
+    private static final int QUESTIONS_LENGTH = 3;
     private static final String INVALID_CARD_CODE = "K001";
     private static final String INVALID_CARD_ASYNC_CODE = "CAS001";
     private static final String INVALID_CARD_ASYNC_CODE_MERCHANT = "CAS004";
     private static final String INVALID_CARD_MESSAGE = "Cuerpo de la petición inválido.";
+    private static final String INVALID_SECURY_ID_MESSAGE = "OTP300";
+
 
     private final Kushki kushki = new Kushki("10000001641080185390111217", "USD", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsync = new Kushki("20000000103098876000", "CLP", KushkiEnvironment.QA);
@@ -104,10 +109,37 @@ public class KushkiIntegrationTest {
         assertValidBankList(resultBankList);
     }
 
+    @Test
+    public void shouldNotReturnAskQuestionnarieWhenCalledWithValidParams() throws Exception {
+        AskQuestionnaire askQuestionnaire = new AskQuestionnaire("234","234",
+                "Quito","01","092840456","12/12/2019");
+        SecureValidation resultAskQuestionnarie = kushkiTransferSubscription.transferSubscriptionSecure(askQuestionnaire);
+        assertInvalidAskQuestionnarie(resultAskQuestionnarie);
+    }
+
+    @Test
+    public void shouldReturnAskQuestionnarieWhenCalledWithInvalidParams() throws Exception {
+        Transaction resultTransaction = kushkiTransferSubscription.transferSubscriptionTokens(kushkiSubscriptionTransfer);
+        AskQuestionnaire askQuestionnaire = new AskQuestionnaire(resultTransaction.getSecureId(),resultTransaction.getSecureService()
+                ,"Quito","01","092840456","12/12/2019");
+        SecureValidation resultAskQuestionnarie = kushkiTransferSubscription.transferSubscriptionSecure(askQuestionnaire);
+        assertValidAskQuestionnarie(resultAskQuestionnarie);
+    }
 
     private void assertValidTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(true));
         assertThat(resultTransaction.getToken().length(), is(TOKEN_LENGTH));
+    }
+
+    private void assertValidAskQuestionnarie(SecureValidation resultAskQuestionnarie) {
+        assertThat(resultAskQuestionnarie.isSuccessful(), is(true));
+        assertThat(resultAskQuestionnarie.getQuestions().length(), is(QUESTIONS_LENGTH));
+    }
+
+    private void assertInvalidAskQuestionnarie(SecureValidation resultAskQuestionnarie) {
+        assertThat(resultAskQuestionnarie.isSuccessful(), is(false));
+        assertThat(resultAskQuestionnarie.getCode(), is(INVALID_SECURY_ID_MESSAGE));
+        assertThat(resultAskQuestionnarie.getMessage(), is("OTP expirado"));
     }
 
     private void assertValidTransactionSubscriptionTransfer(Transaction resultTransaction) {
