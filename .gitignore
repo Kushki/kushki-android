@@ -9,3 +9,4 @@ codeship.aes
 .externalNativeBuild
 /.idea
 /.idea/misc.xml
+/.idea/modules.xml
