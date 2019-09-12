@@ -1,6 +1,5 @@
 package com.kushkipagos.android
 
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -12,8 +11,6 @@ class Transaction(responseBody: String) {
     var settlement: Double = 0.0
     var secureId: String
     var secureService: String
-    var biometricInfo: JSONObject
-    var questions:JSONArray
     var isSuccessful: Boolean = false
     val jsonResponse: JSONObject = JSONObject(responseBody)
 
@@ -32,16 +29,6 @@ class Transaction(responseBody: String) {
             jsonResponse.getString("secureService")
         } catch (jsonException: JSONException) {
             ""
-        }
-        biometricInfo = try {
-            jsonResponse.getJSONObject("biometricInfo")
-        } catch (jsonException: JSONException) {
-            JSONObject()
-        }
-        questions = try {
-            biometricInfo.getJSONArray("questions")
-        } catch (jsonException: JSONException) {
-            JSONArray()
         }
         try {
             code = "000"
