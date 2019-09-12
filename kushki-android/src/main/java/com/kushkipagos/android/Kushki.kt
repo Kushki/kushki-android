@@ -89,6 +89,24 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         )
     }
 
+    @Throws(KushkiException::class)
+    fun transferSubscriptionSecure(askQuestionnaire: AskQuestionnaire): SecureValidation{
+        return kushkiClient.post_secure(TRANSFER_SUBSCRIPTION_SECURE_PATH,kushkiJsonBuilder.buildJson(
+                askQuestionnaire
+        )
+        )
+    }
+    @Throws(KushkiException::class)
+    fun transferSubscriptionSecure(validateAnswers: ValidateAnswers): SecureValidation{
+        return kushkiClient.post_secure(TRANSFER_SUBSCRIPTION_SECURE_PATH,kushkiJsonBuilder.buildJson(
+                validateAnswers
+        )
+        )
+    }
+
+
+
+
     companion object {
         private const val TOKENS_PATH = "v1/tokens"
         private const val SUBSCRIPTION_TOKENS_PATH = "v1/subscription-tokens"
@@ -96,5 +114,6 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         private const val TRANSFER_TOKENS_PATH = "transfer/v1/tokens"
         private const val TRANSFER_SUBSCRIPTION_TOKENS_PATH = "transfer-subscriptions/v1/tokens"
         private const val SUBSCRIPTION_TRANSFER_BANKLIST = "transfer-subscriptions/v1/bankList"
+        private const val TRANSFER_SUBSCRIPTION_SECURE_PATH = "rules/v1/secureValidation"
     }
 }

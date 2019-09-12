@@ -25,12 +25,12 @@ public class KushkiIntegrationTest {
     private final Kushki kushkiCardAsync = new Kushki("20000000103098876000", "CLP", KushkiEnvironment.QA);
     private final Kushki kushkiCardAsyncInvalid = new Kushki("20000000103098876000", "CPL", KushkiEnvironment.QA);
     private final Kushki kushkiCardAsyncInvalidMerchant = new Kushki("2000000010309", "CLP", KushkiEnvironment.QA);
+    private final Kushki kushkiTransferSubscription = new Kushki("20000000102183993000", "COP", KushkiEnvironment.QA);
     private final Kushki kushkiBankList = new Kushki("20000000100323955000","COP",KushkiEnvironment.QA);
     private final Card validCard = new Card("Lisbeth Salander", "5321952125169352", "123", "12", "21");
     private final Card invalidCard = new Card("Lisbeth Salander", "4242424242", "123", "12", "21");
-    private final TransferSubscriptions kushkiSubscriptionTransfer = new TransferSubscriptions("12312321","COD123","jose","davis",
-            "asd123","dsa321","31232131231","02/12/2010","2133123","CC","0",12,
-            "12","jose.gonzalez@kushkipagos.comn","CLP");
+    private final TransferSubscriptions kushkiSubscriptionTransfer = new TransferSubscriptions("12312312","1","jose","gonzalez",
+            "123123123","CC","01",12,"tes@kushkipagos.com","USD");
     private final Double totalAmount = 10.0;
     private final Double totalAmountCardAsync = 1000.00;
     private final String returnUrl = "https://return.url";
@@ -83,7 +83,7 @@ public class KushkiIntegrationTest {
 
     @Test
     public void shouldReturnSubscriptionTransferTokenWhenCalledWithValidParams() throws Exception {
-        Transaction resultTransaction = kushki.transferSubscriptionTokens(kushkiSubscriptionTransfer);
+        Transaction resultTransaction = kushkiTransferSubscription.transferSubscriptionTokens(kushkiSubscriptionTransfer);
         assertValidTransactionSubscriptionTransfer(resultTransaction);
     }
 
@@ -113,7 +113,6 @@ public class KushkiIntegrationTest {
     private void assertValidTransactionSubscriptionTransfer(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(true));
         assertThat(resultTransaction.getToken().length(), is(TOKEN_LENGTH));
-        assertThat(resultTransaction.getQuestions().length(), is(3));
     }
 
     private void assertInvalidTransaction(Transaction resultTransaction) {

@@ -1,6 +1,5 @@
 package com.otraempresa.android.example;
 
-import org.json.JSONObject;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,6 +11,10 @@ import com.kushkipagos.android.Amount;
 import com.kushkipagos.android.Card;
 import com.kushkipagos.android.Transfer;
 import com.kushkipagos.android.TransferSubscriptions;
+import com.kushkipagos.android.AskQuestionnaire;
+
+import java.lang.InterruptedException;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,8 +33,7 @@ public class MainActivity extends AppCompatActivity {
         final EditText firstName = (EditText) findViewById(R.id.firstName);
         final EditText lastName = (EditText) findViewById(R.id.lastName);
         final EditText accountNumber = (EditText) findViewById(R.id.accountNumber);
-        final EditText expeditionDocumentDate = (EditText) findViewById(R.id.expeditionDocumentDate);
-
+        final EditText expeditionDocumentDateS = (EditText) findViewById (R.id.expeditionDocumentDateS);
 
 
 
@@ -66,19 +68,68 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         Button transferSubscriptionButton = (Button)  findViewById(R.id.sendTransferSubscriptionTokenButton);
-        transferSubscriptionButton.setOnClickListener(new View.OnClickListener() {
+        transferSubscriptionButton.setOnClickListener(
+                new View.OnClickListener() {
             public void onClick(View v) {
                 new RequestTransferSubscriptionTokenAsyncTask(getApplicationContext()).execute(
                        new TransferSubscriptions(documentNumber_2.getText().toString(),
-                                "C1",firstName.getText().toString(),lastName.getText().toString(),
-                                "CE3","DE4",accountNumber.getText().toString(),
-                                expeditionDocumentDate.getText().toString(),"21312312312",
-                                documentType2.getSelectedItem().toString(),"0",12,"CO2",email.getText().toString(),
+                                "1",firstName.getText().toString(),lastName.getText().toString(),accountNumber.getText().toString(),
+                                documentType2.getSelectedItem().toString(),"123",12,email.getText().toString(),
                                "CLP"
-                        )
+                       )
                 );
             }
         });
+
+        Button SecureValidationInfoButton = (Button)  findViewById(R.id.sendSecureValidationButton);
+        SecureValidationInfoButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        try{
+                            new RequestSecureValidationInfoAsyncTask(getApplicationContext()).execute(
+                                    buildRequestSecure()
+                            );
+                        }
+                        catch (InterruptedException | ExecutionException e){
+                            System.out.println(e);
+                        }
+                    }
+                }
+        );
+
+
+
+    }
+
+    private  AskQuestionnaire buildRequestSecure() throws InterruptedException, ExecutionException {
+        Spinner documentType2 = (Spinner) findViewById(R.id.document_type2);
+        EditText documentNumber_2 = (EditText) findViewById(R.id.documentNumber_2);
+        EditText firstName = (EditText) findViewById(R.id.firstName);
+        EditText lastName = (EditText) findViewById(R.id.lastName);
+        EditText accountNumber = (EditText) findViewById(R.id.accountNumber);
+        EditText email = (EditText) findViewById(R.id.email);
+        EditText expeditionDocumentDate = (EditText) findViewById(R.id.expeditionDocumentDate);
+        EditText cityCode = (EditText) findViewById (R.id.cityCode);
+        EditText stateCode = (EditText) findViewById (R.id.stateCode);
+        EditText phone = (EditText) findViewById (R.id.phone);
+
+        RequestTransferSubscriptionTokenAsyncTask transferSubscription = new RequestTransferSubscriptionTokenAsyncTask(getApplicationContext());
+
+         transferSubscription.execute(
+                new TransferSubscriptions(documentNumber_2.getText().toString(),
+                        "1",firstName.getText().toString(),lastName.getText().toString(),accountNumber.getText().toString(),
+                        documentType2.getSelectedItem().toString(),"01",12,email.getText().toString(),
+                        "CLP"
+                )
+        );
+
+        String secureService = transferSubscription.get().getSecureService();
+        String secureId = transferSubscription.get().getSecureId();
+
+        return new AskQuestionnaire(secureId,secureService,"Quito",stateCode.getText().toString(),
+                phone.getText().toString(),expeditionDocumentDate.getText().toString());
+
     }
 
     private Card buildCard() {
@@ -90,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
         return new Card(nameText.getText().toString(), numberText.getText().toString(),
                 cvvText.getText().toString(), monthText.getText().toString(), yearText.getText().toString());
     }
+
+
 
 
     private String mapUser(String usertType){
