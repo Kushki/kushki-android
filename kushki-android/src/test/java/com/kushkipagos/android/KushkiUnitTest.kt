@@ -64,6 +64,22 @@ class KushkiUnitTest {
             }
         ]
     """)
+    private val answersInvalid = JSONArray("""
+        [
+            {
+                "id": "id",
+                "answer": "1"
+            },
+            {
+                "id": "id",
+                "answer": "1"
+            },
+            {
+                "id": "id",
+                "answer": "1"
+            }
+        ]
+    """)
 
 
     @Test
@@ -282,22 +298,38 @@ class KushkiUnitTest {
 
     @Test
     @Throws(KushkiException::class)
-    fun shouldReturnOTPExpiradoMessageWhenCalledWithInvalidParams() {
+    fun shouldReturnOTPExpiradoMessageWhenCalledWithInvalidSucureServiceId() {
         val errorCode = "OTP300"
-        val errorMessage = "OTP Expirado"
+        val errorMessage = "OTP expirado"
         val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
         val responseBody = buildSecureValidationResponse(errorCode,errorMessage, "")
         stubSecureValidationApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushkiTransferSubscription.transferSubscriptionTokens(kushkiSubscriptionTransfer)
-        val askQuestionnaire = AskQuestionnaire("InvalidId",transaction.secureService,cityCode,stateCode,phone,expeditionDate)
+        val askQuestionnaire = AskQuestionnaire("InvalidId","confronta",cityCode,stateCode,phone,expeditionDate)
         val secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(askQuestionnaire)
         assertThat(secureValidation.questions.length(), equalTo(0))
         assertThat(secureValidation.code, equalTo("OTP300"))
+        assertThat(secureValidation.message, equalTo("OTP expirado"))
     }
 
     @Test
     @Throws(KushkiException::class)
-    fun shouldReturnOkMessageWhenCalledWithAnswersValidate() {
+    fun shouldReturnErrorMessageWhenCalledWithInvalidConfrontaBiometrics() {
+        val errorCode = "TR006"
+        val errorMessage = "Cuerpo de petición inválido"
+        val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
+        val responseBody = buildSecureValidationResponse(errorCode,errorMessage, "")
+        stubSecureValidationApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiTransferSubscription.transferSubscriptionTokens(kushkiSubscriptionTransfer)
+        val askQuestionnaire = AskQuestionnaire(transaction.secureId,transaction.secureService,"","","","")
+        val secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(askQuestionnaire)
+        assertThat(secureValidation.questions.length(), equalTo(0))
+        assertThat(secureValidation.code, equalTo("TR006"))
+        assertThat(secureValidation.message, equalTo("Cuerpo de petición inválido"))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnOkMessageWhenCalledWithValidAnswers() {
         val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
         val responseBody = buildSecureValidationResponse("000","", "02")
         stubSecureValidationApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
@@ -308,7 +340,21 @@ class KushkiUnitTest {
         secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(validateAnswers)
         assertThat(secureValidation.message, equalTo("ok"))
         assertThat(secureValidation.code, equalTo("BIO000"))
+    }
 
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnInvalidUserMessageWhenCalledWithInvalidAnswers() {
+        val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
+        val responseBody = buildSecureValidationResponse("000","", "02")
+        stubSecureValidationApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiTransferSubscription.transferSubscriptionTokens(kushkiSubscriptionTransfer)
+        val askQuestionnaire = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
+        var secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(askQuestionnaire)
+        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,secureValidation.questionnaireCode,answersInvalid)
+        secureValidation = kushkiTransferSubscription.transferSubscriptionSecure(validateAnswers)
+        assertThat(secureValidation.message, equalTo("Invalid user"))
+        assertThat(secureValidation.code, equalTo("BIO100"))
     }
 
     private fun stubTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {

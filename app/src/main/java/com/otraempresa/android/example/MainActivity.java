@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         final EditText firstName = (EditText) findViewById(R.id.firstName);
         final EditText lastName = (EditText) findViewById(R.id.lastName);
         final EditText accountNumber = (EditText) findViewById(R.id.accountNumber);
-        final EditText expeditionDocumentDateS = (EditText) findViewById (R.id.expeditionDocumentDateS);
 
 
 
@@ -98,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-
-
     }
 
     private  AskQuestionnaire buildRequestSecure() throws InterruptedException, ExecutionException {
@@ -127,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         String secureService = transferSubscription.get().getSecureService();
         String secureId = transferSubscription.get().getSecureId();
 
-        return new AskQuestionnaire(secureId,secureService,"Quito",stateCode.getText().toString(),
+        return new AskQuestionnaire(secureId,secureService,cityCode.getText().toString(),stateCode.getText().toString(),
                 phone.getText().toString(),expeditionDocumentDate.getText().toString());
 
     }
