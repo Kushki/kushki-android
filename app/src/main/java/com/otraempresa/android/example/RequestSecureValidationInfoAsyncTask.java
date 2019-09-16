@@ -17,7 +17,7 @@ class RequestSecureValidationInfoAsyncTask extends AbstractRequestSecureValidati
     @Override
     protected SecureValidation requestAskQuestionnaire(AskQuestionnaire askQuestionnaire) throws KushkiException {
 
-        return kushki.transferSubscriptionSecure(new AskQuestionnaire(askQuestionnaire.toJsonObject().optString("secureServiceId"),
+        return kushki.requestSecureValidation(new AskQuestionnaire(askQuestionnaire.toJsonObject().optString("secureServiceId"),
                 askQuestionnaire.toJsonObject().optString("secureService"),
                 askQuestionnaire.toJsonObject().optJSONObject("confrontaInfo").optJSONObject("confrontaBiometrics").optString("cytyCode"),
                 askQuestionnaire.toJsonObject().optJSONObject("confrontaInfo").optJSONObject("confrontaBiometrics").optString("stateCode"),

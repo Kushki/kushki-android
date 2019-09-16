@@ -13,7 +13,7 @@ public class RequestCardAsyncTokenAsyncTask extends AbstractRequestCadTokenAsync
 
     @Override
     protected Transaction requestCardAsyncToken(String email) throws KushkiException {
-        return kushkiCardAsync.cardAsyncTokens(1000,
+        return kushkiCardAsync.requestCardAsyncToken(1000,
                 "https://return.url",email);
     }
 

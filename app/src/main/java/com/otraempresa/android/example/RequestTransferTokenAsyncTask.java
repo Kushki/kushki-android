@@ -15,7 +15,7 @@ public class RequestTransferTokenAsyncTask extends AbstractRequestTransferTokenA
 
     @Override
     protected Transaction requestTransferToken(Transfer token) throws KushkiException {
-        return kushki.transferTokens(new Amount(12.2,0.0,1.2),"www.kushki.com",
+        return kushki.requestTransferToken(new Amount(12.2,0.0,1.2),"www.kushki.com",
                 token.toJsonObject().optString("userType"),token.toJsonObject().optString("documentType"),
                 token.toJsonObject().optString("documentNumber"),token.toJsonObject().optString("email"),
                 "CLP");

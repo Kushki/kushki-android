@@ -17,7 +17,7 @@ abstract class AbstractRequestSecureValidationInfoAsyncTask extends AsyncTask<As
 
     AbstractRequestSecureValidationInfoAsyncTask(Context context) {
         this.context = context;
-        kushki = new Kushki("20000000102183993000", "COP", KushkiEnvironment.QA);
+        kushki = new Kushki("20000000107415376000", "COP", KushkiEnvironment.TESTING);
     }
 
     protected SecureValidation doInBackground(AskQuestionnaire... args) {
@@ -28,11 +28,12 @@ abstract class AbstractRequestSecureValidationInfoAsyncTask extends AsyncTask<As
         }
     }
 
-    protected void onPostExecute(SecureValidation securevalidation) {
-        if (securevalidation.isSuccessful()) {
-            showToast("QuestionnaireCode " + securevalidation.getQuestionnaireCode());
+    protected void onPostExecute(SecureValidation secureValidation) {
+        if (secureValidation.isSuccessful()) {
+            showToast("QuestionnaireCode " + secureValidation.getQuestionnaireCode());
+            System.out.println(secureValidation.getQuestions());
         } else {
-            showToast("ERROR: " + securevalidation.getCode() + " " + securevalidation.getMessage());
+            showToast("ERROR: " + secureValidation.getCode() + " " + secureValidation.getMessage());
         }
     }
 
