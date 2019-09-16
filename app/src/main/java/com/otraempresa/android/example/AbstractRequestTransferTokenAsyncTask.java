@@ -18,7 +18,7 @@ abstract class AbstractRequestTransferTokenAsyncTask extends AsyncTask<Transfer,
 
     AbstractRequestTransferTokenAsyncTask(Context context) {
         this.context = context;
-        kushki = new Kushki("10000001656015280078454110039965", "USD", KushkiEnvironment.TESTING);
+        kushki = new Kushki("10000002036955013614148494909956", "USD", KushkiEnvironment.TESTING);
     }
 
     @Override

@@ -8,7 +8,6 @@ import com.kushkipagos.android.Kushki;
 import com.kushkipagos.android.KushkiEnvironment;
 import com.kushkipagos.android.KushkiException;
 import com.kushkipagos.android.Transaction;
-import com.kushkipagos.android.Transfer;
 import com.kushkipagos.android.TransferSubscriptions;
 
 abstract class AbstractRequestTransferSubscriptionTokenAsyncTask extends AsyncTask<TransferSubscriptions, Void, Transaction> {
@@ -18,7 +17,7 @@ abstract class AbstractRequestTransferSubscriptionTokenAsyncTask extends AsyncTa
 
     AbstractRequestTransferSubscriptionTokenAsyncTask(Context context) {
         this.context = context;
-        kushki = new Kushki("20000000102183993000", "COP", KushkiEnvironment.QA);
+        kushki = new Kushki("20000000107415376000", "COP", KushkiEnvironment.TESTING);
     }
 
     @Override

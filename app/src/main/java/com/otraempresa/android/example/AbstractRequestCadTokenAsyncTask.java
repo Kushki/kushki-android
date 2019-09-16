@@ -17,7 +17,7 @@ abstract class AbstractRequestCadTokenAsyncTask extends AsyncTask<String, Void, 
 
     AbstractRequestCadTokenAsyncTask(Context context) {
         this.context = context;
-        kushkiCardAsync = new Kushki("20000000103098876000", "CLP", KushkiEnvironment.QA);
+        kushkiCardAsync = new Kushki("10000002667885476032150186346335", "CLP", KushkiEnvironment.TESTING);
     }
 
     @Override
