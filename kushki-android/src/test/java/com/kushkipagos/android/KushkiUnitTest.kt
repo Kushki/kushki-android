@@ -278,7 +278,7 @@ class KushkiUnitTest {
     fun shouldReturnBankListWhenCalledWithValidResponse() {
         val responseBody = buildBankListResponse()
         stubBankListApi(responseBody, HttpURLConnection.HTTP_OK)
-        val banklist = kushkiBankList.getBankListTransferSubscription()
+        val banklist = kushkiBankList.getBankList()
         System.out.println(banklist.banks)
         System.out.println(banklist.banks[3])
         assertThat(banklist.banks, notNullValue())
