@@ -105,7 +105,7 @@ public class KushkiIntegrationTest {
 
     @Test
     public void shouldNReturnBankListWhenCalledValidResponse() throws Exception {
-        BankList resultBankList = kushkiBankList.getBankListTransferSubscription();
+        BankList resultBankList = kushkiBankList.getBankList();
         assertValidBankList(resultBankList);
     }
 

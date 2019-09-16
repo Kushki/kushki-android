@@ -77,7 +77,7 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
     }
 
     @Throws(KushkiException::class)
-    fun getBankListTransferSubscription():BankList{
+    fun getBankList():BankList{
         return kushkiClient.get(TRANSFER_SUBSCRIPTION_BANKLIST_PATH)
     }
 
