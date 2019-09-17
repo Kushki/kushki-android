@@ -294,7 +294,11 @@ class KushkiUnitTest {
         val secureInfo = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
         val secureValidation = kushkiTransferSubscription.requestSecureValidation(secureInfo)
         assertThat(secureValidation.questions.length(), equalTo(3))
-        System.out.println(secureValidation.questions.getJSONObject(1))
+        System.out.println(secureValidation.questions.
+                getJSONObject(0).
+                getJSONArray("options").
+                getJSONObject(0).
+                get("text"))
     }
 
     @Test
