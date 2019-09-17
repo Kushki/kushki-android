@@ -1,6 +1,5 @@
 package com.kushkipagos.android
 
-import org.json.JSONArray
 import org.json.JSONObject
 
 internal class KushkiJsonBuilder {
