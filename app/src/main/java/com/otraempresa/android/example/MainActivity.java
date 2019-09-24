@@ -124,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
         String secureService = transferSubscription.get().getSecureService();
         String secureId = transferSubscription.get().getSecureId();
 
-        return new AskQuestionnaire(secureId,secureService,cityCode.getText().toString(),stateCode.getText().toString(),
-                phone.getText().toString(),expeditionDocumentDate.getText().toString());
+        return new AskQuestionnaire(secureId,secureService,"1",stateCode.getText().toString(),
+                phone.getText().toString(),"15/12/1958");
 
     }
 
