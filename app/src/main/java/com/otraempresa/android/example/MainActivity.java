@@ -33,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
         final EditText firstName = (EditText) findViewById(R.id.firstName);
         final EditText lastName = (EditText) findViewById(R.id.lastName);
         final EditText accountNumber = (EditText) findViewById(R.id.accountNumber);
+        final EditText name = (EditText) findViewById(R.id.name);
+        final EditText lastNameCash = (EditText) findViewById(R.id.lastNameCash);
+        final EditText identification = (EditText) findViewById(R.id.identification);
+
+
 
 
 
@@ -56,6 +61,15 @@ public class MainActivity extends AppCompatActivity {
                 new RequestCardAsyncTokenAsyncTask(getApplicationContext()).execute(emailText.getText().toString());
             }
         });
+
+        Button cashButton = (Button) findViewById(R.id.sendCashButton);
+        cashButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new RequestCashAsyncTokenAsyncTask(getApplicationContext()).execute(
+                        name.getText().toString(),lastNameCash.getText().toString(),identification.getText().toString());
+            }
+        });
+
         Button transferButton = (Button) findViewById(R.id.sendTransferTokenButton);
         transferButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
