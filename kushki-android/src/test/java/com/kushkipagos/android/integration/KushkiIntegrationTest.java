@@ -24,9 +24,16 @@ public class KushkiIntegrationTest {
     private static final String INVALID_CARD_ASYNC_CODE_MERCHANT = "CAS004";
     private static final String INVALID_CARD_MESSAGE = "Cuerpo de la petición inválido.";
     private static final String INVALID_SECURY_ID_MESSAGE = "OTP300";
+    private static final String INVALID_CASH_CODE = "C001";
+    private static final String INVALID_CASH_CODE_MERCHANT = "K004";
+
+
 
 
     private final Kushki kushki = new Kushki("10000001641080185390111217", "USD", KushkiEnvironment.TESTING);
+    private final Kushki kushkiCash= new Kushki("6000000000154083361249085016881", "USD", KushkiEnvironment.TESTING);
+    private final Kushki kushkiCashInvalid= new Kushki("6000000000154083361249085016881", "CCC", KushkiEnvironment.TESTING);
+    private final Kushki kushkiCashInvalidMerchant= new Kushki("60000000001540", "USD", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsync = new Kushki("10000002667885476032150186346335", "CLP", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsyncInvalid = new Kushki("10000002667885476032150186346335", "CPL", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsyncInvalidMerchant = new Kushki("2000000010309", "CLP", KushkiEnvironment.TESTING);
@@ -39,6 +46,11 @@ public class KushkiIntegrationTest {
     private final Double totalAmount = 10.0;
     private final Double totalAmountCardAsync = 1000.00;
     private final String returnUrl = "https://return.url";
+    private final String name = "Alex";
+    private final String lastName = "SG";
+    private final String documentType = "NIT";
+    private final String identification = "17219439565";
+    private final String currency = "USD";
 
     @Test
     public void shouldReturnTokenWhenCalledWithValidParams() throws Exception {
@@ -87,9 +99,71 @@ public class KushkiIntegrationTest {
     }
 
     @Test
+    public void shouldReturnCashTokenWhenCalledWithValidParams() throws Exception {
+        Transaction resultTransaction = kushkiCash.requestCashToken(
+                name,
+                lastName,
+                identification,
+                documentType,
+                "test@test.com",
+                totalAmount,
+                currency,
+                "Description of the payment send from android library");
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldReturnCashTokenWhenCalledWithValidParamsButIncompleted() throws Exception {
+        Transaction resultTransaction = kushkiCash.requestCashToken(
+                name,
+                lastName,
+                identification,
+                documentType,
+                totalAmount,
+                currency);
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldReturnCashTokenWhenCalledWithValidParamsButIncompletedOnlyEmail() throws Exception {
+        Transaction resultTransaction = kushkiCash.requestCashToken(
+                name,
+                lastName,
+                identification,
+                documentType,
+                "test@test.com",
+                totalAmount,
+                currency);
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
     public void shouldReturnSubscriptionTransferTokenWhenCalledWithValidParams() throws Exception {
         Transaction resultTransaction = kushkiTransferSubscription.requestTransferSubscriptionToken(kushkiSubscriptionTransfer);
         assertValidTransactionSubscriptionTransfer(resultTransaction);
+    }
+
+    @Test
+    public void shouldNotReturnCashTokenWhenCalledWithInValidParams() throws Exception {
+        Transaction resultTransaction = kushkiCashInvalid.requestCashToken(
+                name,
+                lastName,
+                identification,
+                documentType,
+                totalAmount,
+                "CCC");
+        assertInvalidCashTransaction(resultTransaction);
+    }
+    @Test
+    public void shouldNotReturnCashTokenWhenCalledWithInValidMerchant() throws Exception {
+        Transaction resultTransaction = kushkiCashInvalidMerchant.requestCashToken(
+                name,
+                lastName,
+                identification,
+                documentType,
+                totalAmount,
+                currency);
+        assertInvalidCashMerchant(resultTransaction);
     }
 
     @Test
@@ -159,6 +233,16 @@ public class KushkiIntegrationTest {
         assertThat(resultTransaction.getMessage(), is(INVALID_CARD_MESSAGE));
     }
 
+    private void assertInvalidCashTransaction(Transaction resultTransaction) {
+        assertThat(resultTransaction.isSuccessful(), is(false));
+        assertThat(resultTransaction.getCode(), is(INVALID_CASH_CODE));
+        assertThat(resultTransaction.getMessage(), is("Cuerpo de la petición inválido."));
+    }
+    private void assertInvalidCashMerchant(Transaction resultTransaction) {
+        assertThat(resultTransaction.isSuccessful(), is(false));
+        assertThat(resultTransaction.getCode(), is(INVALID_CASH_CODE_MERCHANT));
+        assertThat(resultTransaction.getMessage(), is("ID de comercio o credencial no válido"));
+    }
     private void assertInvalidCardAsyncTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_ASYNC_CODE));
