@@ -59,6 +59,52 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
     }
 
     @Throws(KushkiException::class)
+    fun requestCashToken(name: String, lastName: String, identification: String, documentType: String,
+                         email: String,totalAmount: Double, currency: String, description: String): Transaction {
+        return kushkiClient.post(CASH_TOKENS_PATH, kushkiJsonBuilder.buildJson(
+                name,
+                lastName,
+                identification,
+                documentType,
+                email,
+                totalAmount,
+                currency,
+                description
+        )
+        )
+    }
+
+    @Throws(KushkiException::class)
+    fun requestCashToken(name: String, lastName: String, identification: String, documentType: String,
+                         email: String,totalAmount: Double, currency: String): Transaction {
+        return kushkiClient.post(CASH_TOKENS_PATH, kushkiJsonBuilder.buildJson(
+                name,
+                lastName,
+                identification,
+                documentType,
+                email,
+                totalAmount,
+                currency
+        )
+        )
+    }
+
+    @Throws(KushkiException::class)
+    fun requestCashToken(name: String, lastName: String, identification: String, documentType: String,
+                         totalAmount: Double, currency: String): Transaction {
+        return kushkiClient.post(CASH_TOKENS_PATH, kushkiJsonBuilder.buildJson(
+                name,
+                lastName,
+                identification,
+                documentType,
+                totalAmount,
+                currency
+        )
+        )
+    }
+
+
+    @Throws(KushkiException::class)
     fun requestTransferToken(amount: Amount, callbackUrl: String, userType: String, documentType: String,
                              documentNumber: String, email: String, currency: String): Transaction {
         return kushkiClient.post(TRANSFER_TOKENS_PATH, kushkiJsonBuilder.buildJson(
@@ -109,6 +155,7 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         private const val TOKENS_PATH = "v1/tokens"
         private const val SUBSCRIPTION_TOKENS_PATH = "v1/subscription-tokens"
         private const val CARD_ASYNC_TOKENS_PATH = "card-async/v1/tokens"
+        private const val CASH_TOKENS_PATH = "cash/v1/tokens"
         private const val TRANSFER_TOKENS_PATH = "transfer/v1/tokens"
         private const val TRANSFER_SUBSCRIPTION_TOKENS_PATH = "transfer-subscriptions/v1/tokens"
         private const val TRANSFER_SUBSCRIPTION_BANKLIST_PATH = "transfer-subscriptions/v1/bankList"

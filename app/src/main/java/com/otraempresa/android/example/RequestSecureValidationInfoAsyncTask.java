@@ -19,7 +19,7 @@ class RequestSecureValidationInfoAsyncTask extends AbstractRequestSecureValidati
 
         return kushki.requestSecureValidation(new AskQuestionnaire(askQuestionnaire.toJsonObject().optString("secureServiceId"),
                 askQuestionnaire.toJsonObject().optString("secureService"),
-                askQuestionnaire.toJsonObject().optJSONObject("confrontaInfo").optJSONObject("confrontaBiometrics").optString("cytyCode"),
+                askQuestionnaire.toJsonObject().optJSONObject("confrontaInfo").optJSONObject("confrontaBiometrics").optString("cityCode"),
                 askQuestionnaire.toJsonObject().optJSONObject("confrontaInfo").optJSONObject("confrontaBiometrics").optString("stateCode"),
                 askQuestionnaire.toJsonObject().optJSONObject("confrontaInfo").optJSONObject("confrontaBiometrics").optString("phone"),
                 askQuestionnaire.toJsonObject().optJSONObject("confrontaInfo").optJSONObject("confrontaBiometrics").optString("expeditionDate")
