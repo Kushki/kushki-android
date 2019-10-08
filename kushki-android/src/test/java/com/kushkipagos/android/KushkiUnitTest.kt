@@ -3,6 +3,7 @@ package com.kushkipagos.android
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.kushkipagos.android.Helpers.buildBankListResponse
+import com.kushkipagos.android.Helpers.buildBinInfoResponse
 import com.kushkipagos.android.Helpers.buildResponse
 import com.kushkipagos.android.Helpers.buildSecureValidationResponse
 import org.apache.commons.lang3.RandomStringUtils
@@ -31,6 +32,7 @@ class KushkiUnitTest {
     private val kushkiCardAsyncErrorMerchant = Kushki("20000000", "CLP", TestEnvironment.LOCAL)
     private val kushkiCardAsyncErrorCurrency = Kushki("10000002667885476032150186346335", "CCC", TestEnvironment.LOCAL)
     private val kushkiBankList = Kushki("20000000107415376000","COP",TestEnvironment.LOCAL)
+    private val kushkiBinInfo = Kushki("10000002036955013614148494909956","USD",TestEnvironment.LOCAL)
     private val totalAmountCardAsync = 1000.00
     private val kushkiSubscriptionTransfer = TransferSubscriptions("12312312","1","jose","gonzalez",
             "123123123","CC","01",12,"tes@kushkipagos.com","USD")
@@ -286,6 +288,18 @@ class KushkiUnitTest {
 
     @Test
     @Throws(KushkiException::class)
+    fun shouldReturnBinInfoWhenCalledWithValidResponse() {
+        val responseBody = buildBinInfoResponse()
+        stubBinInfoApi(responseBody, HttpURLConnection.HTTP_OK)
+        val binInfo = kushkiBinInfo.getBinInfo("465775")
+        System.out.println(binInfo.bank)
+        System.out.println(binInfo.brand)
+        System.out.println(binInfo.cardType)
+        assertThat(binInfo.bank, notNullValue())
+    }
+
+    @Test
+    @Throws(KushkiException::class)
     fun shouldReturnAskQuestionnaireWhenCalledWithCompleteParams() {
         val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
         val responseBody = buildSecureValidationResponse("000","", "02")
@@ -434,6 +448,17 @@ class KushkiUnitTest {
         System.out.println("response---body")
         System.out.println(responseBody)
         wireMockRule.stubFor(get(urlEqualTo("transfer-subscriptions/v1/bankList"))
+                .willReturn(aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Public-Merchant-Id", "20000000100323955000")
+                        .withBody(responseBody)))
+    }
+
+    private fun stubBinInfoApi(responseBody: String, status: Int) {
+        System.out.println("response---body")
+        System.out.println(responseBody)
+        wireMockRule.stubFor(get(urlEqualTo("card/v1/bin"))
                 .willReturn(aResponse()
                         .withStatus(status)
                         .withHeader("Content-Type", "application/json")
