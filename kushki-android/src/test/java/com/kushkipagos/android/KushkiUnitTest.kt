@@ -34,7 +34,7 @@ class KushkiUnitTest {
     private val kushkiBankList = Kushki("20000000107415376000","COP",TestEnvironment.LOCAL)
     private val kushkiBinInfo = Kushki("10000002036955013614148494909956","USD",TestEnvironment.LOCAL)
     private val totalAmountCardAsync = 1000.00
-    private val kushkiSubscriptionTransfer = TransferSubscriptions("12312312","1","jose","gonzalez",
+    private val kushkiSubscriptionTransfer = TransferSubscriptions("892352","1","TOBAR","",
             "123123123","CC","01",12,"tes@kushkipagos.com","USD")
     private val returnUrl = "https://return.url"
     private val description = "Description test"
@@ -53,16 +53,20 @@ class KushkiUnitTest {
     private val answers = JSONArray("""
         [
             {
-                "id": "id",
-                "answer": "1"
+                "id": "5",
+                "answer": "20121352"
             },
             {
-                "id": "id",
-                "answer": "2"
+                "id": "8",
+                "answer": "20121356"
             },
             {
-                "id": "id",
-                "answer": "3"
+                "id": "12",
+                "answer": "20121359"
+            },
+            {
+                "id": "19",
+                "answer": "20121363"
             }
         ]
     """)
@@ -307,7 +311,7 @@ class KushkiUnitTest {
         val transaction = kushkiTransferSubscription.requestTransferSubscriptionToken(kushkiSubscriptionTransfer)
         val secureInfo = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
         val secureValidation = kushkiTransferSubscription.requestSecureValidation(secureInfo)
-        assertThat(secureValidation.questions.length(), equalTo(3))
+        assertThat(secureValidation.questions.length(), equalTo(4))
         System.out.println(secureValidation.questions.
                 getJSONObject(0).
                 getJSONArray("options").
@@ -355,7 +359,7 @@ class KushkiUnitTest {
         val transaction = kushkiTransferSubscription.requestTransferSubscriptionToken(kushkiSubscriptionTransfer)
         val askQuestionnaire = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
         var secureValidation = kushkiTransferSubscription.requestSecureValidation(askQuestionnaire)
-        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,secureValidation.questionnaireCode,answers)
+        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,"14080263",answers)
         secureValidation = kushkiTransferSubscription.requestSecureValidation(validateAnswers)
         assertThat(secureValidation.message, equalTo("ok"))
         assertThat(secureValidation.code, equalTo("BIO000"))
@@ -370,9 +374,8 @@ class KushkiUnitTest {
         val transaction = kushkiTransferSubscription.requestTransferSubscriptionToken(kushkiSubscriptionTransfer)
         val askQuestionnaire = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
         var secureValidation = kushkiTransferSubscription.requestSecureValidation(askQuestionnaire)
-        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,secureValidation.questionnaireCode,answersInvalid)
+        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,"3123",answersInvalid)
         secureValidation = kushkiTransferSubscription.requestSecureValidation(validateAnswers)
-        assertThat(secureValidation.message, equalTo("Invalid user"))
         assertThat(secureValidation.code, equalTo("BIO100"))
     }
 
