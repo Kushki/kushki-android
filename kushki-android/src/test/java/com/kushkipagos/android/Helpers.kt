@@ -26,6 +26,14 @@ internal object Helpers {
         return response.toString()
     }
 
+    fun buildBinInfoResponse():String {
+        return JSONObject()
+                .put("bank", "BANCO INTERNACIONAL S.A.")
+                .put("brand", "VISA")
+                .put("cardType", "credit")
+                .toString()
+    }
+
     fun buildSecureValidationResponse(code: String, message: String, questionnaireCode: String = ""):String{
 
         var questions = JSONArray()

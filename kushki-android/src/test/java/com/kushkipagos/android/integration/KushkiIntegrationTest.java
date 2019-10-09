@@ -2,6 +2,7 @@ package com.kushkipagos.android.integration;
 
 import com.kushkipagos.android.AskQuestionnaire;
 import com.kushkipagos.android.BankList;
+import com.kushkipagos.android.BinInfo;
 import com.kushkipagos.android.Card;
 import com.kushkipagos.android.Kushki;
 import com.kushkipagos.android.KushkiEnvironment;
@@ -18,7 +19,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class KushkiIntegrationTest {
 
     private static final int TOKEN_LENGTH = 32;
-    private static final int QUESTIONS_LENGTH = 3;
+    private static final int QUESTIONS_LENGTH = 4;
     private static final String INVALID_CARD_CODE = "K001";
     private static final String INVALID_CARD_ASYNC_CODE = "CAS001";
     private static final String INVALID_CARD_ASYNC_CODE_MERCHANT = "CAS004";
@@ -32,9 +33,10 @@ public class KushkiIntegrationTest {
     private final Kushki kushkiCardAsyncInvalidMerchant = new Kushki("2000000010309", "CLP", KushkiEnvironment.TESTING);
     private final Kushki kushkiTransferSubscription = new Kushki("20000000107415376000", "COP", KushkiEnvironment.TESTING);
     private final Kushki kushkiBankList = new Kushki("20000000107415376000","COP",KushkiEnvironment.TESTING);
+    private final Kushki kushkiBinInfo = new Kushki("10000002036955013614148494909956","USD",KushkiEnvironment.QA);
     private final Card validCard = new Card("Lisbeth Salander", "5321952125169352", "123", "12", "21");
     private final Card invalidCard = new Card("Lisbeth Salander", "4242424242", "123", "12", "21");
-    private final TransferSubscriptions kushkiSubscriptionTransfer = new TransferSubscriptions("12312312","1","jose","gonzalez",
+    private final TransferSubscriptions kushkiSubscriptionTransfer = new TransferSubscriptions("892352","1","TOBAR","",
             "123123123","CC","01",12,"tes@kushkipagos.com","USD");
     private final Double totalAmount = 10.0;
     private final Double totalAmountCardAsync = 1000.00;
@@ -108,6 +110,11 @@ public class KushkiIntegrationTest {
         BankList resultBankList = kushkiBankList.getBankList();
         assertValidBankList(resultBankList);
     }
+    @Test
+    public void shouldNReturnBinInfoWhenCalledValidResponse() throws Exception {
+        BinInfo resultBinInfo = kushkiBinInfo.getBinInfo("465775");
+        assertValidBinInfo(resultBinInfo);
+    }
 
     @Test
     public void shouldNotReturnAskQuestionnarieWhenCalledWithValidParams() throws Exception {
@@ -121,7 +128,7 @@ public class KushkiIntegrationTest {
     public void shouldReturnAskQuestionnarieWhenCalledWithInvalidParams() throws Exception {
         Transaction resultTransaction = kushkiTransferSubscription.requestTransferSubscriptionToken(kushkiSubscriptionTransfer);
         AskQuestionnaire askQuestionnaire = new AskQuestionnaire(resultTransaction.getSecureId(),resultTransaction.getSecureService()
-                ,"Quito","01","092840456","12/12/2019");
+                ,"02","01","092840456","12/12/2019");
         SecureValidation resultAskQuestionnarie = kushkiTransferSubscription.requestSecureValidation(askQuestionnaire);
         assertValidAskQuestionnarie(resultAskQuestionnarie);
     }
@@ -171,7 +178,9 @@ public class KushkiIntegrationTest {
     }
     private void assertValidBankList(BankList resultBankList) {
         assertThat(resultBankList.getBanks().length(), notNullValue());
-
+    }
+    private void assertValidBinInfo(BinInfo resultBinInfo) {
+        assertThat(resultBinInfo.getBank().length(), notNullValue());
     }
 
 
