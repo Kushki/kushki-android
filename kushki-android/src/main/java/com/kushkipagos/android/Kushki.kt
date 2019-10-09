@@ -104,6 +104,11 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         )
     }
 
+    @Throws(KushkiException::class)
+    fun getBinInfo(bin:String):BinInfo{
+        return kushkiClient.get_bin(CARD_BIN_PATH+bin)
+    }
+
 
     companion object {
         private const val TOKENS_PATH = "v1/tokens"
@@ -113,5 +118,6 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         private const val TRANSFER_SUBSCRIPTION_TOKENS_PATH = "transfer-subscriptions/v1/tokens"
         private const val TRANSFER_SUBSCRIPTION_BANKLIST_PATH = "transfer-subscriptions/v1/bankList"
         private const val TRANSFER_SUBSCRIPTION_SECURE_PATH = "rules/v1/secureValidation"
+        private const val CARD_BIN_PATH = "card/v1/bin/"
     }
 }

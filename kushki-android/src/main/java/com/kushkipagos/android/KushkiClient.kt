@@ -73,6 +73,24 @@ internal class KushkiClient(private val environment: Environment, private val pu
 
     }
 
+    @Throws(KushkiException::class)
+    fun get_bin (endpoint: String):BinInfo{
+        try {
+            val connection = prepareGetConnection(endpoint)
+            return BinInfo(parseResponse(connection))
+        } catch (e: Exception) {
+            when(e) {
+                is BadPaddingException, is IllegalBlockSizeException, is NoSuchAlgorithmException,
+                is NoSuchPaddingException, is InvalidKeyException, is InvalidKeySpecException,
+                is IOException -> {
+                    throw KushkiException(e)
+                }
+                else -> throw e
+            }
+        }
+
+    }
+
 
     @Throws(IOException::class)
     private fun prepareConnection(endpoint: String, requestBody: String): HttpURLConnection {

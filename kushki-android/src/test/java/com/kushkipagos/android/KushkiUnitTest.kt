@@ -3,6 +3,7 @@ package com.kushkipagos.android
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.kushkipagos.android.Helpers.buildBankListResponse
+import com.kushkipagos.android.Helpers.buildBinInfoResponse
 import com.kushkipagos.android.Helpers.buildResponse
 import com.kushkipagos.android.Helpers.buildSecureValidationResponse
 import org.apache.commons.lang3.RandomStringUtils
@@ -31,8 +32,9 @@ class KushkiUnitTest {
     private val kushkiCardAsyncErrorMerchant = Kushki("20000000", "CLP", TestEnvironment.LOCAL)
     private val kushkiCardAsyncErrorCurrency = Kushki("10000002667885476032150186346335", "CCC", TestEnvironment.LOCAL)
     private val kushkiBankList = Kushki("20000000107415376000","COP",TestEnvironment.LOCAL)
+    private val kushkiBinInfo = Kushki("10000002036955013614148494909956","USD",TestEnvironment.LOCAL)
     private val totalAmountCardAsync = 1000.00
-    private val kushkiSubscriptionTransfer = TransferSubscriptions("12312312","1","jose","gonzalez",
+    private val kushkiSubscriptionTransfer = TransferSubscriptions("892352","1","TOBAR","",
             "123123123","CC","01",12,"tes@kushkipagos.com","USD")
     private val returnUrl = "https://return.url"
     private val description = "Description test"
@@ -51,16 +53,20 @@ class KushkiUnitTest {
     private val answers = JSONArray("""
         [
             {
-                "id": "id",
-                "answer": "1"
+                "id": "5",
+                "answer": "20121352"
             },
             {
-                "id": "id",
-                "answer": "2"
+                "id": "8",
+                "answer": "20121356"
             },
             {
-                "id": "id",
-                "answer": "3"
+                "id": "12",
+                "answer": "20121359"
+            },
+            {
+                "id": "19",
+                "answer": "20121363"
             }
         ]
     """)
@@ -286,6 +292,18 @@ class KushkiUnitTest {
 
     @Test
     @Throws(KushkiException::class)
+    fun shouldReturnBinInfoWhenCalledWithValidResponse() {
+        val responseBody = buildBinInfoResponse()
+        stubBinInfoApi(responseBody, HttpURLConnection.HTTP_OK)
+        val binInfo = kushkiBinInfo.getBinInfo("465775")
+        System.out.println(binInfo.bank)
+        System.out.println(binInfo.brand)
+        System.out.println(binInfo.cardType)
+        assertThat(binInfo.bank, notNullValue())
+    }
+
+    @Test
+    @Throws(KushkiException::class)
     fun shouldReturnAskQuestionnaireWhenCalledWithCompleteParams() {
         val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
         val responseBody = buildSecureValidationResponse("000","", "02")
@@ -293,7 +311,7 @@ class KushkiUnitTest {
         val transaction = kushkiTransferSubscription.requestTransferSubscriptionToken(kushkiSubscriptionTransfer)
         val secureInfo = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
         val secureValidation = kushkiTransferSubscription.requestSecureValidation(secureInfo)
-        assertThat(secureValidation.questions.length(), equalTo(3))
+        assertThat(secureValidation.questions.length(), equalTo(4))
         System.out.println(secureValidation.questions.
                 getJSONObject(0).
                 getJSONArray("options").
@@ -341,7 +359,7 @@ class KushkiUnitTest {
         val transaction = kushkiTransferSubscription.requestTransferSubscriptionToken(kushkiSubscriptionTransfer)
         val askQuestionnaire = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
         var secureValidation = kushkiTransferSubscription.requestSecureValidation(askQuestionnaire)
-        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,secureValidation.questionnaireCode,answers)
+        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,"14080263",answers)
         secureValidation = kushkiTransferSubscription.requestSecureValidation(validateAnswers)
         assertThat(secureValidation.message, equalTo("ok"))
         assertThat(secureValidation.code, equalTo("BIO000"))
@@ -356,9 +374,8 @@ class KushkiUnitTest {
         val transaction = kushkiTransferSubscription.requestTransferSubscriptionToken(kushkiSubscriptionTransfer)
         val askQuestionnaire = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
         var secureValidation = kushkiTransferSubscription.requestSecureValidation(askQuestionnaire)
-        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,secureValidation.questionnaireCode,answersInvalid)
+        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,"3123",answersInvalid)
         secureValidation = kushkiTransferSubscription.requestSecureValidation(validateAnswers)
-        assertThat(secureValidation.message, equalTo("Invalid user"))
         assertThat(secureValidation.code, equalTo("BIO100"))
     }
 
@@ -434,6 +451,17 @@ class KushkiUnitTest {
         System.out.println("response---body")
         System.out.println(responseBody)
         wireMockRule.stubFor(get(urlEqualTo("transfer-subscriptions/v1/bankList"))
+                .willReturn(aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Public-Merchant-Id", "20000000100323955000")
+                        .withBody(responseBody)))
+    }
+
+    private fun stubBinInfoApi(responseBody: String, status: Int) {
+        System.out.println("response---body")
+        System.out.println(responseBody)
+        wireMockRule.stubFor(get(urlEqualTo("card/v1/bin"))
                 .willReturn(aResponse()
                         .withStatus(status)
                         .withHeader("Content-Type", "application/json")
