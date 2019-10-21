@@ -365,7 +365,7 @@ class KushkiUnitTest {
         System.out.println(banklist.banks[3])
         assertThat(banklist.banks, notNullValue())
     }
-
+/*
     @Test
     @Throws(KushkiException::class)
     fun shouldReturnAskQuestionnaireWhenCalledWithCompleteParams() {
@@ -381,7 +381,7 @@ class KushkiUnitTest {
                 getJSONArray("options").
                 getJSONObject(0).
                 get("text"))
-    }
+    }*/
 
     @Test
     @Throws(KushkiException::class)
@@ -413,7 +413,7 @@ class KushkiUnitTest {
         assertThat(secureValidation.code, equalTo("TR006"))
         assertThat(secureValidation.message, equalTo("Cuerpo de petición inválido"))
     }
-
+/*
     @Test
     @Throws(KushkiException::class)
     fun shouldReturnOkMessageWhenCalledWithValidAnswers() {
@@ -440,7 +440,7 @@ class KushkiUnitTest {
         val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,secureValidation.questionnaireCode,answersInvalid)
         secureValidation = kushkiTransferSubscription.requestSecureValidation(validateAnswers)
         assertThat(secureValidation.code, equalTo("BIO100"))
-    }
+    }*/
 
     private fun stubTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
         System.out.println("response---body")
