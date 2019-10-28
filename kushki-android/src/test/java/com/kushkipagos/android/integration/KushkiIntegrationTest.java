@@ -2,6 +2,7 @@ package com.kushkipagos.android.integration;
 
 import com.kushkipagos.android.AskQuestionnaire;
 import com.kushkipagos.android.BankList;
+import com.kushkipagos.android.BinInfo;
 import com.kushkipagos.android.Card;
 import com.kushkipagos.android.Kushki;
 import com.kushkipagos.android.KushkiEnvironment;
@@ -39,6 +40,7 @@ public class KushkiIntegrationTest {
     private final Kushki kushkiCardAsyncInvalidMerchant = new Kushki("2000000010309", "CLP", KushkiEnvironment.TESTING);
     private final Kushki kushkiTransferSubscription = new Kushki("20000000102183993000", "COP", KushkiEnvironment.QA);
     private final Kushki kushkiBankList = new Kushki("20000000107415376000","COP",KushkiEnvironment.TESTING);
+    private final Kushki kushkiBinInfo = new Kushki("10000002036955013614148494909956","USD",KushkiEnvironment.QA);
     private final Card validCard = new Card("Lisbeth Salander", "5321952125169352", "123", "12", "21");
     private final Card invalidCard = new Card("Lisbeth Salander", "4242424242", "123", "12", "21");
     private final TransferSubscriptions kushkiSubscriptionTransfer = new TransferSubscriptions("892352","1","jose","gonzalez",
@@ -182,6 +184,11 @@ public class KushkiIntegrationTest {
         BankList resultBankList = kushkiBankList.getBankList();
         assertValidBankList(resultBankList);
     }
+    @Test
+    public void shouldNReturnBinInfoWhenCalledValidResponse() throws Exception {
+        BinInfo resultBinInfo = kushkiBinInfo.getBinInfo("465775");
+        assertValidBinInfo(resultBinInfo);
+    }
 
     @Test
     public void shouldNotReturnAskQuestionnarieWhenCalledWithValidParams() throws Exception {
@@ -255,7 +262,9 @@ public class KushkiIntegrationTest {
     }
     private void assertValidBankList(BankList resultBankList) {
         assertThat(resultBankList.getBanks().length(), notNullValue());
-
+    }
+    private void assertValidBinInfo(BinInfo resultBinInfo) {
+        assertThat(resultBinInfo.getBank().length(), notNullValue());
     }
 
 
