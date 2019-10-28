@@ -34,6 +34,23 @@ internal class KushkiJsonBuilder {
         return buildJsonObject(amount, callbackUrl, userType,documentType,documentNumber,email,currency,
                 paymentDescription).toString()
     }
+    fun buildJson(name: String, lastName: String, identification: String, documentType: String,
+                  email: String,totalAmount: Double, currency: String, description: String) : String {
+        return buildJsonObject(name, lastName, identification, documentType,
+                email,totalAmount, currency, description).toString()
+    }
+
+    fun buildJson(name: String, lastName: String, identification: String, documentType: String,
+                  email: String,totalAmount: Double, currency: String) : String {
+        return buildJsonObject(name, lastName, identification, documentType,
+                email,totalAmount, currency).toString()
+    }
+
+    fun buildJson(name: String, lastName: String, identification: String, documentType: String,
+                  totalAmount: Double, currency: String) : String {
+        return buildJsonObject(name, lastName, identification, documentType,
+                totalAmount, currency).toString()
+    }
 
     fun buildJson(transferSubscriptions: TransferSubscriptions) : String {
         return transferSubscriptions.toJsonObject().toString()
@@ -101,6 +118,41 @@ internal class KushkiJsonBuilder {
                 .put("email", email)
                 .put("currency", currency)
                 .put("paymentDescription", paymentDescription)
+    }
+
+    private fun buildJsonObject(name: String, lastName: String, identification: String, documentType: String,
+                                email: String,totalAmount: Double, currency: String, description: String): JSONObject {
+        return JSONObject()
+                .put("name", name)
+                .put("lastName", lastName)
+                .put("identification", identification)
+                .put("documentType", documentType)
+                .put("email", email)
+                .put("totalAmount", totalAmount)
+                .put("currency", currency)
+                .put("description", description)
+    }
+    private fun buildJsonObject(name: String, lastName: String, identification: String, documentType: String,
+                                email: String,totalAmount: Double, currency: String): JSONObject {
+        return JSONObject()
+                .put("name", name)
+                .put("lastName", lastName)
+                .put("identification", identification)
+                .put("documentType", documentType)
+                .put("email", email)
+                .put("totalAmount", totalAmount)
+                .put("currency", currency)
+    }
+
+    private fun buildJsonObject(name: String, lastName: String, identification: String, documentType: String
+                                ,totalAmount: Double, currency: String): JSONObject {
+        return JSONObject()
+                .put("name", name)
+                .put("lastName", lastName)
+                .put("identification", identification)
+                .put("documentType", documentType)
+                .put("totalAmount", totalAmount)
+                .put("currency", currency)
     }
 
     private fun buildJsonObject(transferSubscriptions: TransferSubscriptions): JSONObject {
