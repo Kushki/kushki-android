@@ -37,7 +37,7 @@ class KushkiUnitTest {
     private val kushkiBankList = Kushki("20000000107415376000","COP",TestEnvironment.LOCAL)
     private val kushkiBinInfo = Kushki("10000002036955013614148494909956","USD",TestEnvironment.LOCAL)
     private val totalAmountCardAsync = 1000.00
-    private val kushkiSubscriptionTransfer = TransferSubscriptions("892352","1","TOBAR","",
+    private val kushkiSubscriptionTransfer = TransferSubscriptions("892352","1","jose","gonzalez",
             "123123123","CC","01",12,"tes@kushkipagos.com","USD")
     private val name = "José"
     private val lastName = "Fernn"
@@ -301,6 +301,7 @@ class KushkiUnitTest {
         assertThat(transaction.code, equalTo("K004"))
         assertThat(transaction.message, equalTo(errorMessage))
     }
+
 
     @Test
     @Throws(KushkiException::class)
