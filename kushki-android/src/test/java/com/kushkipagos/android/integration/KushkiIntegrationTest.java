@@ -38,7 +38,7 @@ public class KushkiIntegrationTest {
     private final Kushki kushkiCardAsync = new Kushki("10000002667885476032150186346335", "CLP", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsyncInvalid = new Kushki("10000002667885476032150186346335", "CPL", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsyncInvalidMerchant = new Kushki("2000000010309", "CLP", KushkiEnvironment.TESTING);
-    private final Kushki kushkiTransferSubscription = new Kushki("20000000107415376000", "COP", KushkiEnvironment.TESTING);
+    private final Kushki kushkiTransferSubscription = new Kushki("20000000102183993000", "COP", KushkiEnvironment.QA);
     private final Kushki kushkiBankList = new Kushki("20000000107415376000","COP",KushkiEnvironment.TESTING);
     private final Kushki kushkiBinInfo = new Kushki("10000002036955013614148494909956","USD",KushkiEnvironment.QA);
     private final Card validCard = new Card("Lisbeth Salander", "5321952125169352", "123", "12", "21");
@@ -197,7 +197,7 @@ public class KushkiIntegrationTest {
         SecureValidation resultAskQuestionnarie = kushkiTransferSubscription.requestSecureValidation(askQuestionnaire);
         assertInvalidAskQuestionnarie(resultAskQuestionnarie);
     }
-
+/*
     @Test
     public void shouldReturnAskQuestionnarieWhenCalledWithInvalidParams() throws Exception {
         Transaction resultTransaction = kushkiTransferSubscription.requestTransferSubscriptionToken(kushkiSubscriptionTransfer);
@@ -205,7 +205,7 @@ public class KushkiIntegrationTest {
                 ,"02","01","092840456","12/12/2019");
         SecureValidation resultAskQuestionnarie = kushkiTransferSubscription.requestSecureValidation(askQuestionnaire);
         assertValidAskQuestionnarie(resultAskQuestionnarie);
-    }
+    }*/
 
     private void assertValidTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(true));
