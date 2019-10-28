@@ -118,15 +118,74 @@
 
     <TextView
         style="@style/Base.TextAppearance.AppCompat.Display1"
-        android:id="@+id/textCardAsync"
+        android:id="@+id/cashText"
         android:layout_marginTop="42dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/sendSubscriptionButton"
-        android:text="Card Async Tokens"
+        android:text="Cash Tokens"
         />
 
     
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/name"
+        android:layout_below="@+id/cashText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp"
+        android:hint="Name"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/lastNameCash"
+        android:layout_below="@+id/name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp"
+        android:hint="Last Name"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/identification"
+        android:layout_below="@+id/lastNameCash"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp"
+        android:hint="Identification "/>
+
+    <Button
+        android:text="Request Cash Token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:id="@+id/sendCashButton"
+        style="@style/Widget.AppCompat.Button"
+        android:background="@color/accent_material_dark"
+        android:layout_below="@+id/identification"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Display1"
+        android:id="@+id/textCardAsync"
+        android:layout_marginTop="42dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sendCashButton"
+        android:text="Card Async Tokens"
+        />
+
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
