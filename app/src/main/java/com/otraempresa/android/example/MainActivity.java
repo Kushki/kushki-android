@@ -9,6 +9,7 @@ import android.widget.Spinner;
 
 import com.kushkipagos.android.Amount;
 import com.kushkipagos.android.Card;
+import com.kushkipagos.android.CashOut;
 import com.kushkipagos.android.Transfer;
 import com.kushkipagos.android.TransferSubscriptions;
 import com.kushkipagos.android.AskQuestionnaire;
@@ -36,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
         final EditText name = (EditText) findViewById(R.id.name);
         final EditText lastNameCash = (EditText) findViewById(R.id.lastNameCash);
         final EditText identification = (EditText) findViewById(R.id.identification);
-
+        final EditText nameCashOut = (EditText) findViewById(R.id.nameCashOut);
+        final EditText lastNameCashOut = (EditText) findViewById(R.id.lastNameCashOut);
+        final EditText docNUmberCashOut = (EditText) findViewById(R.id.docNumberCashOut);
 
 
 
@@ -67,6 +70,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 new RequestCashAsyncTokenAsyncTask(getApplicationContext()).execute(
                         name.getText().toString(),lastNameCash.getText().toString(),identification.getText().toString());
+            }
+        });
+
+        Button cashOutButton = (Button) findViewById(R.id.sendCashOutButton);
+        cashOutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new RequestCashOutAsyncTokenAsyncTask(getApplicationContext()).execute(
+                        new CashOut(nameCashOut.getText().toString(), lastNameCashOut.getText().toString(),
+                                docNUmberCashOut.getText().toString(), "", "", 20, "COP", ""));
             }
         });
 

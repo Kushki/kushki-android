@@ -69,7 +69,8 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
                 email,
                 totalAmount,
                 currency,
-                description
+                description,
+                true
         )
         )
     }
@@ -84,7 +85,8 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
                 documentType,
                 email,
                 totalAmount,
-                currency
+                currency,
+                true
         )
         )
     }
@@ -98,7 +100,56 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
                 identification,
                 documentType,
                 totalAmount,
-                currency
+                currency,
+                true
+        )
+        )
+    }
+
+    @Throws(KushkiException::class)
+    fun requestCashOutToken(name: String, lastName: String, documentNumber: String, documentType: String,
+                            email: String,totalAmount: Double, currency: String, description: String): Transaction {
+        return kushkiClient.post(PAYOUTS_CASH_TOKENS_PATH, kushkiJsonBuilder.buildJson(
+                name,
+                lastName,
+                documentNumber,
+                documentType,
+                email,
+                totalAmount,
+                currency,
+                description,
+                false
+        )
+        )
+    }
+
+    @Throws(KushkiException::class)
+    fun requestCashOutToken(name: String, lastName: String, documentNumber: String, documentType: String,
+                         email: String,totalAmount: Double, currency: String): Transaction {
+        return kushkiClient.post(PAYOUTS_CASH_TOKENS_PATH, kushkiJsonBuilder.buildJson(
+                name,
+                lastName,
+                documentNumber,
+                documentType,
+                email,
+                totalAmount,
+                currency,
+                false
+        )
+        )
+    }
+
+    @Throws(KushkiException::class)
+    fun requestCashOutToken(name: String, lastName: String, identification: String, documentType: String,
+                         totalAmount: Double, currency: String): Transaction {
+        return kushkiClient.post(PAYOUTS_CASH_TOKENS_PATH, kushkiJsonBuilder.buildJson(
+                name,
+                lastName,
+                identification,
+                documentType,
+                totalAmount,
+                currency,
+                false
         )
         )
     }
@@ -166,5 +217,6 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         private const val TRANSFER_SUBSCRIPTION_BANKLIST_PATH = "transfer-subscriptions/v1/bankList"
         private const val TRANSFER_SUBSCRIPTION_SECURE_PATH = "rules/v1/secureValidation"
         private const val CARD_BIN_PATH = "card/v1/bin/"
+        private const val PAYOUTS_CASH_TOKENS_PATH = "payouts/cash/v1/tokens"
     }
 }
