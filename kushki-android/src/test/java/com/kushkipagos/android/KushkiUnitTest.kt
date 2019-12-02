@@ -34,6 +34,9 @@ class KushkiUnitTest {
     private val kushkiCash = Kushki("6000000000154083361249085016881", "USD", TestEnvironment.LOCAL)
     private val kushkiCashErrorMerchant = Kushki("20000000", "USD", TestEnvironment.LOCAL)
     private val kushkiCashErrorCurrency = Kushki("10000002667885476032150186346335", "CCC", TestEnvironment.LOCAL)
+    private val kushkiCashOut = Kushki("20000000107321580000", "COP", TestEnvironment.LOCAL_QA)
+    private val kushkiCashOutErrorMerchant = Kushki("20000000", "COP", TestEnvironment.LOCAL_QA)
+    private val kushkiCashOutErrorCurrency = Kushki("20000000107321580000", "CCC", TestEnvironment.LOCAL_QA)
     private val kushkiBankList = Kushki("20000000107415376000","COP",TestEnvironment.LOCAL)
     private val kushkiBinInfo = Kushki("10000002036955013614148494909956","USD",TestEnvironment.LOCAL)
     private val totalAmountCardAsync = 1000.00
@@ -246,6 +249,49 @@ class KushkiUnitTest {
 
     @Test
     @Throws(KushkiException::class)
+    fun shouldReturnCashOutTokenWhenCalledWithValidParams() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildExpectedRequestCashOutBody(name, lastName, documentNumber, documentType,
+                email,totalAmount, currency, description)
+        val responseBody = buildResponse("000", "", token)
+        stubCashOutTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiCashOut.requestCashOutToken(name, lastName, documentNumber, documentType,
+                email,totalAmount, "COP", description)
+        System.out.println(transaction.token)
+        System.out.println(token)
+        assertThat(transaction.token.length, equalTo(32))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnCashOutTokenWhenCalledWithIncompleteParamsOnlyEmail() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildExpectedRequestCashOutBodyIncompleteOnlyEmail(
+                name, lastName, documentNumber, documentType, email, totalAmount, currency)
+        val responseBody = buildResponse("000", "", token)
+        stubCashOutTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiCashOut.requestCashOutToken(name, lastName, documentNumber, documentType, email, totalAmount, "COP")
+        System.out.println(transaction.token)
+        System.out.println(token)
+        assertThat(transaction.token.length, equalTo(32))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnCashOutTokenWhenCalledWithIncompleteParams() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildExpectedRequestCashOutBodyIncomplete(name, lastName, identification, documentType,
+                totalAmount, currency)
+        val responseBody = buildResponse("000", "", token)
+        stubCashOutTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushkiCashOut.requestCashOutToken(name, lastName, identification, documentType, totalAmount, "COP")
+        System.out.println(transaction.token)
+        System.out.println(token)
+        assertThat(transaction.token.length, equalTo(32))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
     fun shouldReturnTransferSubscriptionTokenWhenCalledWithCompleteParamsOnlyEmail() {
         val token = RandomStringUtils.randomAlphanumeric(32)
         val expectedRequestBody = buildRequestTransferSubscriptionMessage(kushkiSubscriptionTransfer)
@@ -294,7 +340,7 @@ class KushkiUnitTest {
         val expectedRequestBody = buildExpectedRequestCashBody(name, lastName, identification, documentType,
                 email,totalAmount, currency, description)
         val responseBody = buildResponse(errorCode, errorMessage)
-        stubCashAsyncTokenApiErrorMerchant(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
+        stubCashTokenApiErrorMerchant(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
         val transaction = kushkiCashErrorMerchant.requestCashToken(name, lastName, identification, documentType,
                 email,totalAmount, currency, description)
         assertThat(transaction.token, equalTo(""))
@@ -314,6 +360,39 @@ class KushkiUnitTest {
         stubCashTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
         val transaction = kushkiCashErrorCurrency.requestCashToken(name, lastName, identification, documentType,
                 email,totalAmount, currency, description)
+        assertThat(transaction.token, equalTo(""))
+        assertThat(transaction.code, equalTo("C001"))
+        assertThat(transaction.message, equalTo(errorMessage))
+    }
+
+    /*@Test
+    @Throws(KushkiException::class)
+    fun shouldReturnCashOutErrorMessageWhenCalledWithInvalidMerchant() {
+        val errorCode = RandomStringUtils.randomNumeric(3)
+        val errorMessage = "ID de comercio o credencial no válido"
+        val expectedRequestBody = buildExpectedRequestCashOutBody(name, lastName, documentNumber, documentType,
+                email,totalAmount, currency, description)
+        val responseBody = buildResponse(errorCode, errorMessage)
+        stubCashOutTokenApiErrorMerchant(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
+        val transaction = kushkiCashOutErrorMerchant.requestCashOutToken(name, lastName, documentNumber, documentType,
+                email,totalAmount, "COP", description)
+        assertThat(transaction.token, equalTo(""))
+        assertThat(transaction.code, equalTo("K004"))
+        assertThat(transaction.message, equalTo(errorMessage))
+    }*/
+
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnCashOutErrorMessageWhenCalledWithInvalidCurrency() {
+        val errorCode = RandomStringUtils.randomNumeric(3)
+        val errorMessage = "Cuerpo de la petición inválido."
+        val expectedRequestBody = buildExpectedRequestCashOutBody(name, lastName, documentNumber, documentType,
+                email,totalAmount, currency, description)
+        val responseBody = buildResponse(errorCode, errorMessage)
+        stubCashOutTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
+        val transaction = kushkiCashOutErrorCurrency.requestCashOutToken(name, lastName, identification, documentType,
+                email,totalAmount, "PE", description)
         assertThat(transaction.token, equalTo(""))
         assertThat(transaction.code, equalTo("C001"))
         assertThat(transaction.message, equalTo(errorMessage))
@@ -518,6 +597,18 @@ class KushkiUnitTest {
                         .withBody(responseBody)))
     }
 
+    private fun stubCashOutTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
+        System.out.println("response---body")
+        System.out.println(responseBody)
+        wireMockRule.stubFor(post(urlEqualTo("payouts/cash/v1/tokens"))
+                .withRequestBody(equalToJson(expectedRequestBody))
+                .willReturn(aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Public-Merchant-Id", "20000000107321580000")
+                        .withBody(responseBody)))
+    }
+
     private fun stubTransferSubscriptionTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
         System.out.println("response---body")
         System.out.println(responseBody)
@@ -542,15 +633,27 @@ class KushkiUnitTest {
                         .withBody(responseBody)))
     }
 
-    private fun stubCashAsyncTokenApiErrorMerchant(expectedRequestBody: String, responseBody: String, status: Int) {
+    private fun stubCashTokenApiErrorMerchant(expectedRequestBody: String, responseBody: String, status: Int) {
         System.out.println("response---body")
         System.out.println(responseBody)
-        wireMockRule.stubFor(post(urlEqualTo("card-async/v1/tokens"))
+        wireMockRule.stubFor(post(urlEqualTo("cash/v1/tokens"))
                 .withRequestBody(equalToJson(expectedRequestBody))
                 .willReturn(aResponse()
                         .withStatus(status)
                         .withHeader("Content-Type", "application/json")
                         .withHeader("Public-Merchant-Id", "200000001030988")
+                        .withBody(responseBody)))
+    }
+
+    private fun stubCashOutTokenApiErrorMerchant(expectedRequestBody: String, responseBody: String, status: Int) {
+        System.out.println("response---body")
+        System.out.println(responseBody)
+        wireMockRule.stubFor(post(urlEqualTo("payouts/cash/v1/tokens"))
+                .withRequestBody(equalToJson(expectedRequestBody))
+                .willReturn(aResponse()
+                        .withStatus(status)
+                        .withHeader("Content-Type", "application/json")
+                        .withHeader("Public-Merchant-Id", "200000001030")
                         .withBody(responseBody)))
     }
 
@@ -720,6 +823,34 @@ class KushkiUnitTest {
         }
     }
 
+    private fun buildExpectedRequestCashOutBody(name: String, lastName: String, documentNumber: String, documentType: String,
+                                             email: String,totalAmount: Double, currency: String, description: String): String {
+        val expectedRequestMessage = buildRequestCashOutMessage(name, lastName, documentNumber, documentType,
+                email,totalAmount, currency, description)
+        return expectedRequestMessage
+    }
+
+    private fun buildRequestCashOutMessage(name: String, lastName: String, documentNumber: String, documentType: String,
+                                        email: String,totalAmount: Double, currency: String, description: String): String {
+        try {
+            val requestTokenParams = JSONObject()
+
+            requestTokenParams.put("name", name)
+            requestTokenParams.put("lastName", lastName)
+            requestTokenParams.put("documentNumber", documentNumber)
+            requestTokenParams.put("documentType", documentType)
+            requestTokenParams.put("email", email)
+            requestTokenParams.put("totalAmount", totalAmount)
+            requestTokenParams.put("currency", currency)
+            requestTokenParams.put("description", description)
+
+
+            return requestTokenParams.toString()
+        } catch (e: JSONException) {
+            throw IllegalArgumentException(e)
+        }
+    }
+
     private fun buildRequestTransferSubscriptionMessage(transferSubscriptions: TransferSubscriptions): String {
         try {
             val requestTokenParams = transferSubscriptions.toJsonObject()
@@ -822,5 +953,62 @@ class KushkiUnitTest {
         val expectedRequestMessage = buildRequestCashMessageWithIncompleteParametersOnlyEmail(
                 name, lastName, identification, documentType, email, totalAmount,currency)
         return expectedRequestMessage
+    }
+
+
+    private fun buildExpectedRequestCashOutBodyIncompleteOnlyEmail(
+            name: String, lastName: String, documentNumber: String,
+            documentType: String, email:String ,totalAmount: Double, currency: String ): String {
+        val expectedRequestMessage = buildRequestCashOutMessageWithIncompleteParametersOnlyEmail(
+                name, lastName, documentNumber, documentType, email, totalAmount,currency)
+        return expectedRequestMessage
+    }
+
+    private fun buildRequestCashOutMessageWithIncompleteParametersOnlyEmail(
+            name: String, lastName: String, documentNumber: String, documentType: String,
+            email: String, totalAmount: Double, currency: String): String {
+        try {
+            val requestTokenParams = JSONObject()
+
+            requestTokenParams.put("name", name)
+            requestTokenParams.put("lastName", lastName)
+            requestTokenParams.put("documentNumber", documentNumber)
+            requestTokenParams.put("documentType", documentType)
+            requestTokenParams.put("email", email)
+            requestTokenParams.put("totalAmount", totalAmount)
+            requestTokenParams.put("currency", currency)
+
+            return requestTokenParams.toString()
+        } catch (e: JSONException) {
+            throw IllegalArgumentException(e)
+        }
+    }
+
+
+    private fun buildExpectedRequestCashOutBodyIncomplete(
+            name: String, lastName: String, identification: String,
+            documentType: String, totalAmount: Double, currency: String ): String {
+        val expectedRequestMessage = buildRequestCashOutMessageWithIncompleteParameters(
+                name, lastName, identification, documentType, totalAmount,currency)
+        return expectedRequestMessage
+    }
+
+    private fun buildRequestCashOutMessageWithIncompleteParameters(
+            name: String, lastName: String, documentNumber: String, documentType: String,
+            totalAmount: Double, currency: String): String {
+        try {
+            val requestTokenParams = JSONObject()
+
+            requestTokenParams.put("name", name)
+            requestTokenParams.put("lastName", lastName)
+            requestTokenParams.put("documentNumber", documentNumber)
+            requestTokenParams.put("documentType", documentType)
+            requestTokenParams.put("totalAmount", totalAmount)
+            requestTokenParams.put("currency", currency)
+
+            return requestTokenParams.toString()
+        } catch (e: JSONException) {
+            throw IllegalArgumentException(e)
+        }
     }
 }
