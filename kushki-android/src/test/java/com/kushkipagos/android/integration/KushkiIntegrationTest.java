@@ -34,6 +34,8 @@ public class KushkiIntegrationTest {
     private final Kushki kushki = new Kushki("10000001641080185390111217", "USD", KushkiEnvironment.TESTING);
     private final Kushki kushkiCash= new Kushki("6000000000154083361249085016881", "USD", KushkiEnvironment.TESTING);
     private final Kushki kushkiCashInvalid= new Kushki("6000000000154083361249085016881", "CCC", KushkiEnvironment.TESTING);
+    private final Kushki kushkiCashOut= new Kushki("20000000107321580000", "COP", KushkiEnvironment.QA);
+    private final Kushki kushkiCashOutInvalid= new Kushki("20000000107321580000", "CCC", KushkiEnvironment.QA);
     private final Kushki kushkiCashInvalidMerchant= new Kushki("60000000001540", "USD", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsync = new Kushki("10000002667885476032150186346335", "CLP", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsyncInvalid = new Kushki("10000002667885476032150186346335", "CPL", KushkiEnvironment.TESTING);
@@ -137,6 +139,60 @@ public class KushkiIntegrationTest {
                 totalAmount,
                 currency);
         assertValidTransaction(resultTransaction);
+    }
+
+
+    @Test
+    public void shouldReturnCashOutTokenWhenCalledWithValidParams() throws Exception {
+        Transaction resultTransaction = kushkiCashOut.requestCashOutToken(
+                name,
+                lastName,
+                identification,
+                documentType,
+                "test@test.com",
+                totalAmount,
+                "COP",
+                "Description of the payment send from android library");
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldReturnCashOutTokenWhenCalledWithValidParamsButIncompleted() throws Exception {
+        Transaction resultTransaction = kushkiCashOut.requestCashOutToken(
+                name,
+                lastName,
+                identification,
+                documentType,
+                totalAmount,
+                "COP"
+        );
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldReturnCashOutTokenWhenCalledWithValidParamsButIncompletedOnlyEmail() throws Exception {
+        Transaction resultTransaction = kushkiCashOut.requestCashOutToken(
+                name,
+                lastName,
+                identification,
+                documentType,
+                "test@test.com",
+                totalAmount,
+                "COP"
+        );
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldNotReturnCashOutTokenWhenCalledWithInValidParams() throws Exception {
+        Transaction resultTransaction = kushkiCashOutInvalid.requestCashToken(
+                name,
+                lastName,
+                identification,
+                documentType,
+                totalAmount,
+                "CCC");
+        assertInvalidCashTransaction(resultTransaction);
     }
 
     @Test

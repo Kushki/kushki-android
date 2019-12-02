@@ -177,11 +177,70 @@
 
     <TextView
         style="@style/Base.TextAppearance.AppCompat.Display1"
-        android:id="@+id/textCardAsync"
+        android:id="@+id/cashOutText"
         android:layout_marginTop="42dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/sendCashButton"
+        android:text="Cash Out Tokens"
+        />
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/nameCashOut"
+        android:layout_below="@+id/cashOutText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp"
+        android:hint="Name"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/lastNameCashOut"
+        android:layout_below="@+id/nameCashOut"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp"
+        android:hint="Last Name"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/docNumberCashOut"
+        android:layout_below="@+id/lastNameCashOut"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp"
+        android:hint="Doc. Number "/>
+
+    <Button
+        android:text="Request Cash Out Token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:id="@+id/sendCashOutButton"
+        style="@style/Widget.AppCompat.Button"
+        android:background="@color/accent_material_dark"
+        android:layout_below="@+id/docNumberCashOut"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Display1"
+        android:id="@+id/textCardAsync"
+        android:layout_marginTop="42dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sendCashOutButton"
         android:text="Card Async Tokens"
         />
 
