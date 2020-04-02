@@ -26,6 +26,7 @@ class KushkiUnitTest {
     private val validCard = Card("John Doe", "5321952125169352", "123", "12", "21")
     private val invalidCard = Card("Invalid John Doe", "4242424242", "123", "12", "21")
     private val kushki = Kushki("10000002036955013614148494909956", "USD", TestEnvironment.LOCAL)
+    private val kushkiTransfer = Kushki("7871421bff4c4c19a925a50dc6b70af3", "USD", TestEnvironment.LOCAL)
     private val kushkiTransferSubscription = Kushki("20000000107415376000", "COP", TestEnvironment.LOCAL)
     private val kushkiSingleIP = Kushki("10000002036955013614148494909956", "USD", TestEnvironment.LOCAL,true)
     private val kushkiCardAsync = Kushki("10000002667885476032150186346335", "CLP", TestEnvironment.LOCAL)
@@ -61,38 +62,30 @@ class KushkiUnitTest {
     private val phone = "00987654321"
     private val expeditionDate = "15/12/1958"
     private val answers = JSONArray("""
-        [
-            {
-                "id": "5",
-                "answer": "20121352"
-            },
-            {
-                "id": "8",
-                "answer": "20121356"
-            },
-            {
-                "id": "12",
-                "answer": "20121359"
-            },
-            {
-                "id": "19",
-                "answer": "20121363"
-            }
+       [
+        {
+            "id": "1",
+            "answer": "1"
+        },
+        {
+            "id": "2",
+            "answer": "1"
+        },
+        {
+            "id": "3",
+            "answer": "1"
+        },
+        {
+            "id": "4",
+            "answer": "1"
+        }
         ]
     """)
     private val answersInvalid = JSONArray("""
         [
             {
-                "id": "id",
-                "answer": "1"
-            },
-            {
-                "id": "id",
-                "answer": "1"
-            },
-            {
-                "id": "id",
-                "answer": "1"
+                "id": "asdasd",
+                "answer": "asdasd"
             }
         ]
     """)
@@ -301,7 +294,7 @@ class KushkiUnitTest {
         val transaction = kushkiCashErrorMerchant.requestCashToken(name, lastName, identification, documentType,
                 email,totalAmount, currency, description)
         assertThat(transaction.token, equalTo(""))
-        assertThat(transaction.code, equalTo("K004"))
+        assertThat(transaction.code, equalTo("C004"))
         assertThat(transaction.message, equalTo(errorMessage))
     }
 
@@ -312,11 +305,11 @@ class KushkiUnitTest {
         val errorCode = RandomStringUtils.randomNumeric(3)
         val errorMessage = "Cuerpo de la petición inválido."
         val expectedRequestBody = buildExpectedRequestCashBody(name, lastName, identification, documentType,
-                email,totalAmount, currency, description)
+                email,totalAmount, "ABC", description)
         val responseBody = buildResponse(errorCode, errorMessage)
         stubCashTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
-        val transaction = kushkiCashErrorCurrency.requestCashToken(name, lastName, identification, documentType,
-                email,totalAmount, currency, description)
+        val transaction = kushkiCash.requestCashToken(name, lastName, identification, documentType,
+                email,totalAmount, "ABC", description)
         assertThat(transaction.token, equalTo(""))
         assertThat(transaction.code, equalTo("C001"))
         assertThat(transaction.message, equalTo(errorMessage))
@@ -329,7 +322,7 @@ class KushkiUnitTest {
         val expectedRequestBody = buildExpectedRequestTransferBody()
         val responseBody = buildResponse("000", "", token)
         stubTransferTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushki.requestTransferToken(amount, callbackUrl, userType, documentType,
+        val transaction = kushkiTransfer.requestTransferToken(amount, callbackUrl, userType, documentType,
                 documentNumber,email,currency)
         System.out.println(transaction.token)
         System.out.println(token)
@@ -343,7 +336,7 @@ class KushkiUnitTest {
         val expectedRequestBody = buildExpectedRequestTransferBody(paymentDescription)
         val responseBody = buildResponse("000", "", token)
         stubTransferTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushki.requestTransferToken(amount, callbackUrl, userType, documentType,
+        val transaction = kushkiTransfer.requestTransferToken(amount, callbackUrl, userType, documentType,
                 documentNumber,email,currency,paymentDescription)
         System.out.println(transaction.token)
         System.out.println(token)
@@ -397,7 +390,7 @@ class KushkiUnitTest {
         val transaction = kushkiTransferSubscription.requestTransferSubscriptionToken(kushkiSubscriptionTransfer)
         val secureInfo = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
         val secureValidation = kushkiTransferSubscription.requestSecureValidation(secureInfo)
-        assertThat(secureValidation.questions.length(), equalTo(4))
+        assertThat(secureValidation.questions.length(), equalTo(3))
         System.out.println(secureValidation.questions.
                 getJSONObject(0).
                 getJSONArray("options").
@@ -445,7 +438,9 @@ class KushkiUnitTest {
         val transaction = kushkiTransferSubscription.requestTransferSubscriptionToken(kushkiSubscriptionTransfer)
         val askQuestionnaire = AskQuestionnaire(transaction.secureId,transaction.secureService,cityCode,stateCode,phone,expeditionDate)
         var secureValidation = kushkiTransferSubscription.requestSecureValidation(askQuestionnaire)
-        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,"14080263",answers)
+        println(transaction.secureId)
+        println(transaction.secureService)
+        val validateAnswers = ValidateAnswers(transaction.secureId,transaction.secureService,"7224",answers)
         secureValidation = kushkiTransferSubscription.requestSecureValidation(validateAnswers)
         assertThat(secureValidation.message, equalTo("ok"))
         assertThat(secureValidation.code, equalTo("BIO000"))
@@ -642,7 +637,7 @@ class KushkiUnitTest {
                 .willReturn(aResponse()
                         .withStatus(status)
                         .withHeader("Content-Type", "application/json")
-                        .withHeader("Public-Merchant-Id", "20000000102183993000")
+                        .withHeader("Public-Merchant-Id", "20000000107415376000")
                         .withBody(responseBody)))
     }
 
