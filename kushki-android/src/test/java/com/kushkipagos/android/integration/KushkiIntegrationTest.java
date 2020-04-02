@@ -26,7 +26,9 @@ public class KushkiIntegrationTest {
     private static final String INVALID_CARD_MESSAGE = "Cuerpo de la petición inválido.";
     private static final String INVALID_SECURY_ID_MESSAGE = "OTP300";
     private static final String INVALID_CASH_CODE = "C001";
-    private static final String INVALID_CASH_CODE_MERCHANT = "K004";
+    private static final String INVALID_CASH_CODE_MERCHANT = "C004";
+    private static final String INVALID_SUBSCRIPTION_CARD_ASYNC_CODE = "K001";
+    private static final String INVALID_SUBSCRIPTION_CODE_MERCHANT = "K004";
 
 
 
@@ -45,7 +47,7 @@ public class KushkiIntegrationTest {
     private final Card invalidCard = new Card("Lisbeth Salander", "4242424242", "123", "12", "21");
     private final TransferSubscriptions kushkiSubscriptionTransfer = new TransferSubscriptions("892352","1","jose","gonzalez",
             "123123123","CC","01",12,"tes@kushkipagos.com","USD");
-    private final Kushki kushkiSubscriptionCardAsync= new Kushki("6000000000154083361249085016881", "CLP", KushkiEnvironment.QA);
+    private final Kushki kushkiSubscriptionCardAsync= new Kushki("e955d8c491674b08869f0fe6f480c63e", "CLP", KushkiEnvironment.QA);
     private final Kushki kushkiSubscriptionCardAsyncInvalidMerchant= new Kushki("1234567890", "CLP", KushkiEnvironment.QA);
 
     private final Double totalAmount = 10.0;
@@ -275,34 +277,28 @@ public class KushkiIntegrationTest {
     private void assertInvalidTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_CODE));
-        assertThat(resultTransaction.getMessage(), is("Cuerpo de la petición inválido."));
     }
 
     private void assertInvalidTransactionCard(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_CODE));
-        assertThat(resultTransaction.getMessage(), is(INVALID_CARD_MESSAGE));
     }
 
     private void assertInvalidCashTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CASH_CODE));
-        assertThat(resultTransaction.getMessage(), is("Cuerpo de la petición inválido."));
     }
     private void assertInvalidCashMerchant(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CASH_CODE_MERCHANT));
-        assertThat(resultTransaction.getMessage(), is("ID de comercio o credencial no válido"));
     }
     private void assertInvalidCardAsyncTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_ASYNC_CODE));
-        assertThat(resultTransaction.getMessage(), is("Cuerpo de la petición inválido."));
     }
     private void assertInvalidCardAsyncMerchant(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_ASYNC_CODE_MERCHANT));
-        assertThat(resultTransaction.getMessage(), is("ID de comercio o credencial no válido"));
     }
     private void assertValidBankList(BankList resultBankList) {
         assertThat(resultBankList.getBanks().length(), notNullValue());
@@ -312,13 +308,11 @@ public class KushkiIntegrationTest {
     }
     private void assertInvalidSubscriptionCardAsyncTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
-        assertThat(resultTransaction.getCode(), is(INVALID_CASH_CODE));
-        assertThat(resultTransaction.getMessage(), is("Cuerpo de la petición inválido."));
+        assertThat(resultTransaction.getCode(), is(INVALID_SUBSCRIPTION_CARD_ASYNC_CODE));
     }
     private void assertInvalidSubscriptionCardAsyncMerchant(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
-        assertThat(resultTransaction.getCode(), is(INVALID_CASH_CODE_MERCHANT));
-        assertThat(resultTransaction.getMessage(), is("ID de comercio o credencial no válido"));
+        assertThat(resultTransaction.getCode(), is(INVALID_SUBSCRIPTION_CODE_MERCHANT));
     }
 
 }
