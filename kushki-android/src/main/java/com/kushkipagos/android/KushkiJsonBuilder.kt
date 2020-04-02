@@ -63,6 +63,14 @@ internal class KushkiJsonBuilder {
         return validateAnswers.toJsonObject().toString()
     }
 
+    fun buildJson(email: String, currency: String, callbackUrl: String, cardNumber: String): String {
+        return buildJsonObject(email, currency, callbackUrl, cardNumber).toString()
+    }
+
+    fun buildJson(email: String, currency: String, callbackUrl: String): String {
+        return buildJsonObject(email, currency, callbackUrl).toString()
+    }
+
     private fun buildJsonObject(card: Card, totalAmount: Double, currency: String): JSONObject {
         return buildJsonObject(card, currency)
                 .put("totalAmount", totalAmount)
@@ -157,5 +165,20 @@ internal class KushkiJsonBuilder {
 
     private fun buildJsonObject(transferSubscriptions: TransferSubscriptions): JSONObject {
         return JSONObject(transferSubscriptions.toJsonObject())
+    }
+
+    fun buildJsonObject(email: String, currency: String, callbackUrl: String, cardNumber: String): JSONObject {
+        return JSONObject()
+                .put("email", email)
+                .put("currency", currency)
+                .put("callbackUrl", callbackUrl)
+                .put("cardNumber", cardNumber)
+    }
+
+    fun buildJsonObject(email: String, currency: String, callbackUrl: String): JSONObject {
+        return JSONObject()
+                .put("email", email)
+                .put("currency", currency)
+                .put("callbackUrl", callbackUrl)
     }
 }

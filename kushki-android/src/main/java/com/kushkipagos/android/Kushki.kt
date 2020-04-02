@@ -155,6 +155,25 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         return kushkiClient.get_bin(CARD_BIN_PATH+bin)
     }
 
+    @Throws(KushkiException::class)
+    fun requestCardSubscriptionAsyncToken(email: String, currency: String, callbackUrl: String, cardNumber: String): Transaction {
+        return kushkiClient.post(CARD_SUBSCRIPTION_ASYNC_TOKENS_PATH, kushkiJsonBuilder.buildJson(
+                email
+                , currency
+                , callbackUrl
+                , cardNumber
+        )
+        )
+    }
+    @Throws(KushkiException::class)
+    fun requestCardSubscriptionAsyncToken(email: String, currency: String, callbackUrl: String): Transaction {
+        return kushkiClient.post(CARD_SUBSCRIPTION_ASYNC_TOKENS_PATH, kushkiJsonBuilder.buildJson(
+                email
+                , currency
+                , callbackUrl
+        )
+        )
+    }
 
     companion object {
         private const val TOKENS_PATH = "v1/tokens"
@@ -166,5 +185,6 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         private const val TRANSFER_SUBSCRIPTION_BANKLIST_PATH = "transfer-subscriptions/v1/bankList"
         private const val TRANSFER_SUBSCRIPTION_SECURE_PATH = "rules/v1/secureValidation"
         private const val CARD_BIN_PATH = "card/v1/bin/"
+        private const val CARD_SUBSCRIPTION_ASYNC_TOKENS_PATH = "subscriptions/card-async/tokens"
     }
 }

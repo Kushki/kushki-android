@@ -45,6 +45,9 @@ public class KushkiIntegrationTest {
     private final Card invalidCard = new Card("Lisbeth Salander", "4242424242", "123", "12", "21");
     private final TransferSubscriptions kushkiSubscriptionTransfer = new TransferSubscriptions("892352","1","jose","gonzalez",
             "123123123","CC","01",12,"tes@kushkipagos.com","USD");
+    private final Kushki kushkiSubscriptionCardAsync= new Kushki("6000000000154083361249085016881", "CLP", KushkiEnvironment.QA);
+    private final Kushki kushkiSubscriptionCardAsyncInvalidMerchant= new Kushki("1234567890", "CLP", KushkiEnvironment.QA);
+
     private final Double totalAmount = 10.0;
     private final Double totalAmountCardAsync = 1000.00;
     private final String returnUrl = "https://return.url";
@@ -197,6 +200,47 @@ public class KushkiIntegrationTest {
         SecureValidation resultAskQuestionnarie = kushkiTransferSubscription.requestSecureValidation(askQuestionnaire);
         assertInvalidAskQuestionnarie(resultAskQuestionnarie);
     }
+
+    @Test
+    public void shouldReturnSubscriptionCardAsyncTokenWhenCalledWithValidParams() throws Exception {
+        Transaction resultTransaction = kushkiSubscriptionCardAsync.requestCardSubscriptionAsyncToken(
+                "test@test.com",
+                "CLP",
+                "https://mytest.com",
+                "4242424242424242"
+               );
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldReturnSubscriptionCardAsyncTokenWhenCalledWithParamsIncompleted() throws Exception {
+        Transaction resultTransaction = kushkiSubscriptionCardAsync.requestCardSubscriptionAsyncToken(
+                "test@test.com",
+                "CLP",
+                "https://mytest.com"
+                );
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldNotReturnSubscriptionCardAsyncTokenWhenCalledWithInValidParams() throws Exception {
+        Transaction resultTransaction = kushkiSubscriptionCardAsync.requestCardSubscriptionAsyncToken(
+                "test@test.com",
+                "USD",
+                "https://mytest.com");
+        assertInvalidSubscriptionCardAsyncTransaction(resultTransaction);
+    }
+    @Test
+    public void shouldNotReturnSubscriptionCardAsyncTokenWhenCalledWithInValidMerchant() throws Exception {
+        Transaction resultTransaction = kushkiSubscriptionCardAsyncInvalidMerchant.requestCardSubscriptionAsyncToken(
+                "test@test.com",
+                "CLP",
+                "https://mytest.com",
+                "4242424242424242");
+        assertInvalidSubscriptionCardAsyncMerchant(resultTransaction);
+    }
+
+
 /*
     @Test
     public void shouldReturnAskQuestionnarieWhenCalledWithInvalidParams() throws Exception {
@@ -266,6 +310,15 @@ public class KushkiIntegrationTest {
     private void assertValidBinInfo(BinInfo resultBinInfo) {
         assertThat(resultBinInfo.getBank().length(), notNullValue());
     }
-
+    private void assertInvalidSubscriptionCardAsyncTransaction(Transaction resultTransaction) {
+        assertThat(resultTransaction.isSuccessful(), is(false));
+        assertThat(resultTransaction.getCode(), is(INVALID_CASH_CODE));
+        assertThat(resultTransaction.getMessage(), is("Cuerpo de la petición inválido."));
+    }
+    private void assertInvalidSubscriptionCardAsyncMerchant(Transaction resultTransaction) {
+        assertThat(resultTransaction.isSuccessful(), is(false));
+        assertThat(resultTransaction.getCode(), is(INVALID_CASH_CODE_MERCHANT));
+        assertThat(resultTransaction.getMessage(), is("ID de comercio o credencial no válido"));
+    }
 
 }
