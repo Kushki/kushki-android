@@ -900,7 +900,7 @@ class KushkiUnitTest {
     private fun stubCardSubscriptionAsyncTokenApi(expectedRequestBody: String, responseBody: String, status: Int) {
         System.out.println("response---body")
         System.out.println(responseBody)
-        wireMockRule.stubFor(post(urlEqualTo("subscriptions/card-async/tokens"))
+        wireMockRule.stubFor(post(urlEqualTo("subscriptions/v1/card-async/tokens"))
                 .withRequestBody(equalToJson(expectedRequestBody))
                 .willReturn(aResponse()
                         .withStatus(status)
@@ -931,7 +931,7 @@ class KushkiUnitTest {
     private fun stubSubscriptionCardAsyncTokenApiErrorMerchant(expectedRequestBody: String, responseBody: String, status: Int) {
         System.out.println("response---body")
         System.out.println(responseBody)
-        wireMockRule.stubFor(post(urlEqualTo("subscriptions/card-async/tokens"))
+        wireMockRule.stubFor(post(urlEqualTo("subscriptions/v1/card-async/tokens"))
                 .withRequestBody(equalToJson(expectedRequestBody))
                 .willReturn(aResponse()
                         .withStatus(status)

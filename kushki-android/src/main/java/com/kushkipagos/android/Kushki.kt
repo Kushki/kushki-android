@@ -185,6 +185,6 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         private const val TRANSFER_SUBSCRIPTION_BANKLIST_PATH = "transfer-subscriptions/v1/bankList"
         private const val TRANSFER_SUBSCRIPTION_SECURE_PATH = "rules/v1/secureValidation"
         private const val CARD_BIN_PATH = "card/v1/bin/"
-        private const val CARD_SUBSCRIPTION_ASYNC_TOKENS_PATH = "subscriptions/card-async/tokens"
+        private const val CARD_SUBSCRIPTION_ASYNC_TOKENS_PATH = "subscriptions/v1/card-async/tokens"
     }
 }
