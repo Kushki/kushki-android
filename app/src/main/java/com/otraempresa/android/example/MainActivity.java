@@ -36,7 +36,10 @@ public class MainActivity extends AppCompatActivity {
         final EditText name = (EditText) findViewById(R.id.name);
         final EditText lastNameCash = (EditText) findViewById(R.id.lastNameCash);
         final EditText identification = (EditText) findViewById(R.id.identification);
-
+        final EditText emailSubscriptionAsync = (EditText) findViewById(R.id.emailSubscriptionAsync);
+        final EditText currency = (EditText) findViewById(R.id.currency);
+        final EditText callbackUrl = (EditText) findViewById(R.id.callbackUrl);
+        final EditText cardNumber = (EditText) findViewById(R.id.cardNumber);
 
 
 
@@ -111,6 +114,13 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
+        Button cardSubscriptionAsyncButton = (Button) findViewById(R.id.SendCardSubscriptionAsyncTokenButton);
+        cardSubscriptionAsyncButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new RequestCardSubscriptionAsyncTokenAsyncTask(getApplicationContext()).execute(
+                        emailSubscriptionAsync.getText().toString(), currency.getText().toString(), callbackUrl.getText().toString(),cardNumber.getText().toString());
+            }
+        });
     }
 
     private  AskQuestionnaire buildRequestSecure() throws InterruptedException, ExecutionException {
