@@ -24,7 +24,7 @@ public class KushkiIntegrationTest {
     private static final String INVALID_CARD_ASYNC_CODE = "CAS001";
     private static final String INVALID_CARD_ASYNC_CODE_MERCHANT = "CAS004";
     private static final String INVALID_CARD_MESSAGE = "Cuerpo de la petición inválido.";
-    private static final String INVALID_SECURY_ID_MESSAGE = "OTP300";
+    private static final String INVALID_SECURY_ID_MESSAGE = "CardRule Credential not found";
     private static final String INVALID_CASH_CODE = "C001";
     private static final String INVALID_CASH_CODE_MERCHANT = "C004";
     private static final String INVALID_SUBSCRIPTION_CARD_ASYNC_CODE = "K001";
@@ -40,7 +40,7 @@ public class KushkiIntegrationTest {
     private final Kushki kushkiCardAsync = new Kushki("10000002667885476032150186346335", "CLP", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsyncInvalid = new Kushki("10000002667885476032150186346335", "CPL", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsyncInvalidMerchant = new Kushki("2000000010309", "CLP", KushkiEnvironment.TESTING);
-    private final Kushki kushkiTransferSubscription = new Kushki("20000000102183993000", "COP", KushkiEnvironment.QA);
+    private final Kushki kushkiTransferSubscription = new Kushki("20000000107415376000", "COP", KushkiEnvironment.TESTING);
     private final Kushki kushkiBankList = new Kushki("20000000107415376000","COP",KushkiEnvironment.TESTING);
     private final Kushki kushkiBinInfo = new Kushki("10000002036955013614148494909956","USD",KushkiEnvironment.QA);
     private final Card validCard = new Card("Lisbeth Salander", "5321952125169352", "123", "12", "21");
@@ -198,7 +198,7 @@ public class KushkiIntegrationTest {
     @Test
     public void shouldNotReturnAskQuestionnarieWhenCalledWithValidParams() throws Exception {
         AskQuestionnaire askQuestionnaire = new AskQuestionnaire("234","234",
-                "Quito","01","092840456","12/12/2019");
+                "Quito","01","092840456","12/12/2019","20000000107415376000");
         SecureValidation resultAskQuestionnarie = kushkiTransferSubscription.requestSecureValidation(askQuestionnaire);
         assertInvalidAskQuestionnarie(resultAskQuestionnarie);
     }
@@ -266,7 +266,7 @@ public class KushkiIntegrationTest {
     private void assertInvalidAskQuestionnarie(SecureValidation resultAskQuestionnarie) {
         assertThat(resultAskQuestionnarie.isSuccessful(), is(false));
         assertThat(resultAskQuestionnarie.getCode(), is(INVALID_SECURY_ID_MESSAGE));
-        assertThat(resultAskQuestionnarie.getMessage(), is("OTP expirado"));
+        assertThat(resultAskQuestionnarie.getMessage(), is("El ID de comercio no corresponde a la credencial enviada"));
     }
 
     private void assertValidTransactionSubscriptionTransfer(Transaction resultTransaction) {
