@@ -3,12 +3,6 @@ package com.kushkipagos.android
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
-import java.security.InvalidKeyException
-import java.security.NoSuchAlgorithmException
-import java.security.spec.InvalidKeySpecException
-import javax.crypto.BadPaddingException
-import javax.crypto.IllegalBlockSizeException
-import javax.crypto.NoSuchPaddingException
 
 internal class AurusClient(private val environment: Environment) {
 

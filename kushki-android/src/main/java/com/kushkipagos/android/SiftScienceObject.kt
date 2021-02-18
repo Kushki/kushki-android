@@ -1,24 +1,21 @@
 package com.kushkipagos.android
 
+import com.google.gson.JsonObject
 import org.json.JSONException
 import org.json.JSONObject
 
-class BinInfo(responseBody:String) {
-
-    var bank: String = ""
-    var brand: String = ""
-    var cardType: String = ""
+class SiftScienceObject(responseBody:String) {
+    var userId: String =""
+    var sessionId:String=""
     var code: String = ""
     var message: String = ""
-    val jsonResponse: JSONObject = JSONObject(responseBody)
+    val jsonResponse: JSONObject=JSONObject(responseBody)
 
     init{
         try{
-            bank = jsonResponse.getString("bank")
-            brand = jsonResponse.getString("brand")
-            cardType = jsonResponse.getString("cardType")
-        }
-        catch (jsonException: JSONException){
+            userId=jsonResponse.getString("userId")
+            sessionId=jsonResponse.getString("sessionId")
+        }catch (jsonException: JSONException){
             code = try {
                 jsonResponse.getString("code")
             } catch (jsonException: JSONException) {
@@ -31,5 +28,4 @@ class BinInfo(responseBody:String) {
             }
         }
     }
-
 }

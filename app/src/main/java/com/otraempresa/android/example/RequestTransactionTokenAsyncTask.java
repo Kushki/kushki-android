@@ -7,10 +7,12 @@ import com.kushkipagos.android.KushkiException;
 import com.kushkipagos.android.Transaction;
 
 class RequestTransactionTokenAsyncTask extends AbstractRequestTokenAsyncTask {
+    Context context;
 
     RequestTransactionTokenAsyncTask(Context context) {
         super(context);
     }
+
 
     @Override
     protected Transaction requestToken(Card card) throws KushkiException {
