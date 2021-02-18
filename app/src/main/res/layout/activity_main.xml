@@ -483,6 +483,76 @@
         android:background="@color/accent_material_dark"
         android:text="Request Merchant Settings" />
 
+    <!-- Token Sift Science-->
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:layout_below="@id/getMerchantSettingsInfo"
+        android:id="@+id/cardHolderInput"
+        android:hint="Name"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/cardNumberInput"
+        android:layout_below="@+id/cardHolderInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Card Number"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberPassword"
+        android:ems="10"
+        android:id="@+id/cardCvvInput"
+        android:layout_below="@+id/cardNumberInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp"
+        android:hint="CVV"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/cardYearInput"
+        android:layout_below="@+id/cardCvvInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Expiry Year"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/cardMonthInput"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/cardYearInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Expiry Month"/>
+
+    <Button
+        android:text="Request Sift Transaction Token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/SendSiftTokenBtn"
+        style="@style/Widget.AppCompat.Button"
+        android:background="@color/accent_material_dark"
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/cardMonthInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
 
 </RelativeLayout>
 </ScrollView>

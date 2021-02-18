@@ -12,14 +12,15 @@ import org.junit.Test
 import java.net.HttpURLConnection
 
 class SiftTest {
+    private var context: Context?
     private val validCard = Card("John Doe", "5321952125169352", "123", "12", "21")
     private val totalAmount = 10.0
     val wireMockRule = WireMockRule(8888)
     private val kushki = Kushki("10000003012872942409151942277385", "USD", TestEnvironment.LOCAL)
-    val context: Context
-        get() {
-            TODO()
-        }
+
+    init {
+        this.context=null
+    }
 
     @Test
     @Throws(KushkiException::class)
@@ -29,6 +30,19 @@ class SiftTest {
         val responseBody = Helpers.buildResponse("000", "", token)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
         val transaction = kushki.requestToken(validCard, totalAmount)
+        System.out.println(transaction.token)
+        System.out.println(token)
+        MatcherAssert.assertThat(transaction.token.length, CoreMatchers.equalTo(32))
+    }
+
+    @Test
+    @Throws(KushkiException::class)
+    fun shouldReturnTokenWhenCalledWithContext() {
+        val token = RandomStringUtils.randomAlphanumeric(32)
+        val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
+        val responseBody = Helpers.buildResponse("000", "", token)
+        stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
+        val transaction = kushki.requestToken(validCard, totalAmount,context)
         System.out.println(transaction.token)
         System.out.println(token)
         MatcherAssert.assertThat(transaction.token.length, CoreMatchers.equalTo(32))
