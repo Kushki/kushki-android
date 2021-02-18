@@ -463,5 +463,26 @@
         android:background="@color/accent_material_dark"
         android:text="Request Card Subscription Async Token" />
 
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Display1"
+        android:id="@+id/merchantSettingsText"
+        android:layout_marginTop="42dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SendCardSubscriptionAsyncTokenButton"
+        android:text="Merchant Settings"
+        />
+
+    <Button
+        android:id="@+id/getMerchantSettingsInfo"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="372dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/merchantSettingsText"
+        android:layout_marginTop="20dp"
+        android:background="@color/accent_material_dark"
+        android:text="Request Merchant Settings" />
+
+
 </RelativeLayout>
 </ScrollView>
