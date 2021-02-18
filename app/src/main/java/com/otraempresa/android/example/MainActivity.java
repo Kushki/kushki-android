@@ -43,6 +43,15 @@ public class MainActivity extends AppCompatActivity {
         final EditText cardNumber = (EditText) findViewById(R.id.cardNumber);
 
 
+
+        Button siftTokenButton = (Button) findViewById(R.id.SendSiftTokenBtn);
+        siftTokenButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new RequestSiftScienceSessionAsyncTask(getApplicationContext()).execute(buildSiftCard());
+            }
+        });
+
+
         Button merchantSettingsInfo = (Button) findViewById(R.id.getMerchantSettingsInfo);
         merchantSettingsInfo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -167,6 +176,16 @@ public class MainActivity extends AppCompatActivity {
         EditText cvvText = (EditText) findViewById(R.id.cvvText);
         return new Card(nameText.getText().toString(), numberText.getText().toString(),
                 cvvText.getText().toString(), monthText.getText().toString(), yearText.getText().toString());
+    }
+
+    private Card buildSiftCard() {
+        EditText cardNameSift = findViewById(R.id.cardHolderInput);
+        EditText cardNumberSift = findViewById(R.id.cardNumberInput);
+        EditText cardCvvSift = findViewById(R.id.cardCvvInput);
+        EditText cardExpiryYearSift = findViewById(R.id.cardYearInput);
+        EditText cardExpiryMonthSift = findViewById(R.id.cardMonthInput);
+        return new Card(cardNameSift.getText().toString(), cardNumberSift.getText().toString(),
+                cardCvvSift.getText().toString(), cardExpiryMonthSift.getText().toString(), cardExpiryYearSift.getText().toString());
     }
 
     private String mapUser(String usertType){

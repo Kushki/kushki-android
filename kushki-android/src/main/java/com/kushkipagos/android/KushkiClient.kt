@@ -21,8 +21,8 @@ internal class KushkiClient(private val environment: Environment, private val pu
 
     @Throws(KushkiException::class)
     fun getScienceSession(card: Card):SiftScienceObject{
-        var bin:String = card.toJsonObject().getString("number").toString().substring(0, 4)
-        var lastDigits:String = card.toJsonObject().getString("number").toString().substring(card.toJsonObject().length() - 4, card.toJsonObject().length())
+        var bin:String = card.toJsonObject().getString("number").toString().substring(0, 6)
+        var lastDigits:String = card.toJsonObject().getString("number").toString().substring(card.toJsonObject().getString("number").length - 4)
         return createSiftScienceSession(bin, lastDigits, publicMerchantId)
     }
 
