@@ -42,7 +42,12 @@ public class MainActivity extends AppCompatActivity {
         final EditText cardNumber = (EditText) findViewById(R.id.cardNumber);
 
 
-
+        Button merchantSettingsInfo = (Button) findViewById(R.id.getMerchantSettingsInfo);
+        merchantSettingsInfo.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new RequestMerchantSettingsTask(getApplicationContext()).execute();
+            }
+        });
 
         Button transactionButton = (Button) findViewById(R.id.transactionButton);
         transactionButton.setOnClickListener(new View.OnClickListener() {

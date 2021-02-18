@@ -2,21 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Documents-kushki-kushki-android.iml" filepath="$PROJECT_DIR$/Documents-kushki-kushki-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/Documents-kushki-kushki-android-app.iml" filepath="$PROJECT_DIR$/app/Documents-kushki-kushki-android-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kushki-android/Documents-kushki-kushki-android-kushki-android.iml" filepath="$PROJECT_DIR$/kushki-android/Documents-kushki-kushki-android-kushki-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Proyectos-kushki-android.iml" filepath="$PROJECT_DIR$/Proyectos-kushki-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/alex-kushki-android.iml" filepath="$PROJECT_DIR$/alex-kushki-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kushki-android/alex-kushki-android-kushki-android.iml" filepath="$PROJECT_DIR$/kushki-android/alex-kushki-android-kushki-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/josegonzalez-kushki-android.iml" filepath="$PROJECT_DIR$/josegonzalez-kushki-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kushki-android/josegonzalez-kushki-android-kushki-android.iml" filepath="$PROJECT_DIR$/kushki-android/josegonzalez-kushki-android-kushki-android.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/kushki-android.iml" filepath="$PROJECT_DIR$/.idea/kushki-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/kushki-android-app.iml" filepath="$PROJECT_DIR$/app/kushki-android-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kushki-android/kushki-android-kushki-android.iml" filepath="$PROJECT_DIR$/kushki-android/kushki-android-kushki-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kushki-kushki-android.iml" filepath="$PROJECT_DIR$/kushki-kushki-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/kushki-kushki-android-app.iml" filepath="$PROJECT_DIR$/app/kushki-kushki-android-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kushki-android/kushki-kushki-android-kushki-android.iml" filepath="$PROJECT_DIR$/kushki-android/kushki-kushki-android-kushki-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/kushki-android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/kushki-android.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kushki-android/kushki-android.kushki-android.iml" filepath="$PROJECT_DIR$/.idea/modules/kushki-android/kushki-android.kushki-android.iml" />
     </modules>
   </component>
 </project>

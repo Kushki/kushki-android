@@ -174,6 +174,10 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         )
         )
     }
+    @Throws(KushkiException:: class)
+    fun requestMerchantSettings(): MerchantSettings{
+        return kushkiClient.get_merchant_settings(MERCHANT_SETTINGS_PATH)
+    }
 
     companion object {
         private const val TOKENS_PATH = "v1/tokens"
@@ -186,5 +190,6 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         private const val TRANSFER_SUBSCRIPTION_SECURE_PATH = "rules/v1/secureValidation"
         private const val CARD_BIN_PATH = "card/v1/bin/"
         private const val CARD_SUBSCRIPTION_ASYNC_TOKENS_PATH = "subscriptions/v1/card-async/tokens"
+        private const val MERCHANT_SETTINGS_PATH = "merchant/v1/merchant/settings"
     }
 }
