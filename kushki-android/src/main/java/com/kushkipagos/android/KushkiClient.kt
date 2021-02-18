@@ -165,4 +165,21 @@ internal class KushkiClient(private val environment: Environment, private val pu
             return connection.inputStream
         }
     }
+
+    @Throws(IOException::class)
+    fun get_merchant_settings(endpoint: String):MerchantSettings{
+        try {
+            val connection = prepareGetConnection(endpoint)
+            return MerchantSettings(parseResponse(connection))
+        }catch (e: Exception) {
+            when(e){
+                is BadPaddingException, is IllegalBlockSizeException, is NoSuchAlgorithmException,
+                is NoSuchPaddingException, is InvalidKeyException, is InvalidKeySpecException,
+                is IOException -> {
+                    throw KushkiException(e)
+                }
+                else -> throw e
+            }
+        }
+    }
 }
