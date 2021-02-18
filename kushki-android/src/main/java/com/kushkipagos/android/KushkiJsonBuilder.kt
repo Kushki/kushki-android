@@ -8,9 +8,14 @@ internal class KushkiJsonBuilder {
         return buildJsonObject(card, currency).toString()
     }
 
-    fun buildJson(card: Card, totalAmount: Double, currency: String): String {
-        return buildJsonObject(card, totalAmount, currency).toString()
+    fun buildJson(userId: String, sessionId: String): String {
+        return buildJsonObject(userId, sessionId).toString()
     }
+
+    fun buildJson(card: Card, totalAmount: Double, currency: String, userId:String,sessionId:String): String {
+        return buildJsonObject(card, totalAmount, currency,userId,sessionId).toString()
+    }
+
 
     fun buildJson(totalAmount: Double, currency: String, returnUrl: String, description: String, email: String) : String {
         return buildJsonObject(totalAmount, currency, returnUrl, description, email).toString()
@@ -71,6 +76,19 @@ internal class KushkiJsonBuilder {
         return buildJsonObject(email, currency, callbackUrl).toString()
     }
 
+    private fun buildJsonObject(card: Card, totalAmount: Double, currency: String, userId:String,sessionId:String): JSONObject {
+        return buildJsonObject(card, currency,userId,sessionId)
+                .put("totalAmount", totalAmount)
+    }
+
+    private fun buildJsonObject(card: Card, currency: String,userId:String,sessionId:String): JSONObject {
+        return JSONObject()
+                .put("card", card.toJsonObject())
+                .put("currency", currency)
+                .put("userId",userId)
+                .put("sessionId",sessionId)
+    }
+
     private fun buildJsonObject(card: Card, totalAmount: Double, currency: String): JSONObject {
         return buildJsonObject(card, currency)
                 .put("totalAmount", totalAmount)
@@ -80,6 +98,12 @@ internal class KushkiJsonBuilder {
         return JSONObject()
                 .put("card", card.toJsonObject())
                 .put("currency", currency)
+    }
+
+    private fun buildJsonObject(userId: String, sessionId: String): JSONObject {
+        return JSONObject()
+                .put("userId", userId)
+                .put("sessionId", sessionId)
     }
 
     private fun buildJsonObject(totalAmount: Double, currency: String, returnUrl: String, description: String, email: String): JSONObject {

@@ -1,11 +1,12 @@
 package com.otraempresa.android.example;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.kushkipagos.android.Amount;
 import com.kushkipagos.android.Card;
@@ -167,9 +168,6 @@ public class MainActivity extends AppCompatActivity {
         return new Card(nameText.getText().toString(), numberText.getText().toString(),
                 cvvText.getText().toString(), monthText.getText().toString(), yearText.getText().toString());
     }
-
-
-
 
     private String mapUser(String usertType){
         if (usertType.equals("Natural") )

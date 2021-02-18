@@ -1,1 +1,2 @@
 include ':app', ':kushki-android'
+include ':app', 'KushkiAuthorization'
