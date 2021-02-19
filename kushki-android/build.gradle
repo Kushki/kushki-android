@@ -38,6 +38,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.30"
     implementation files('../libs/full.jar')
     implementation 'com.siftscience:sift-java:3.4.0'
+    implementation 'com.siftscience:sift-android:0.11.1'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.slf4j:slf4j-nop:1.7.30'
     testImplementation 'org.mockito:mockito-core:3.6.28'

@@ -1,6 +1,6 @@
 package com.otraempresa.android.example;
 
-import me.ivanzamora.library.KushkiAuth;
+import com.kushkipagos.library.KushkiAuth;
 
 public class Prueba {
 

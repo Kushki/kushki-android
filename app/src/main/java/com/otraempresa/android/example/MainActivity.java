@@ -9,12 +9,11 @@ import android.widget.Spinner;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.kushkipagos.android.Amount;
+import com.kushkipagos.android.AskQuestionnaire;
 import com.kushkipagos.android.Card;
 import com.kushkipagos.android.Transfer;
 import com.kushkipagos.android.TransferSubscriptions;
-import com.kushkipagos.android.AskQuestionnaire;
 
-import java.lang.InterruptedException;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
