@@ -16,7 +16,7 @@ abstract class AbstractRequestSiftScienceSessionAsyncTask extends AsyncTask<Card
 
     AbstractRequestSiftScienceSessionAsyncTask(Context context) {
         this.context = context;
-        kushki = new Kushki("10000003012872942409151942277385", "USD", KushkiEnvironment.TESTING);
+        kushki = new Kushki("e41151f380a145059b6c8f4d45002130", "USD", KushkiEnvironment.TESTING);
     }
 
 

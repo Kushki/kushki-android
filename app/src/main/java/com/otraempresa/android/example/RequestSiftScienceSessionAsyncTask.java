@@ -10,11 +10,13 @@ class RequestSiftScienceSessionAsyncTask extends AbstractRequestSiftScienceSessi
     Context context;
 
     RequestSiftScienceSessionAsyncTask(Context context) {
+
         super(context);
+        this.context=context;
     }
 
     @Override
     protected Transaction requestToken(Card card) throws KushkiException {
-        return kushki.requestToken(card,10,context);
+        return kushki.requestToken(card,10,context,true);
     }
 }

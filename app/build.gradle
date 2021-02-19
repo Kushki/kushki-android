@@ -47,6 +47,7 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation files('../libs/full.jar')
     implementation 'com.siftscience:sift-java:3.4.0'
+    implementation 'com.siftscience:sift-android:0.11.1'
     // Uncomment this line and comment the next one in order to use the library source files instead
     //implementation 'com.kushkipagos:kushki-android:1.3.20-a.1'
     testImplementation 'junit:junit:4.13.2'

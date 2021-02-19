@@ -16,7 +16,7 @@ class SiftTest {
     private val validCard = Card("John Doe", "5321952125169352", "123", "12", "21")
     private val totalAmount = 10.0
     val wireMockRule = WireMockRule(8888)
-    private val kushki = Kushki("10000003012872942409151942277385", "USD", TestEnvironment.LOCAL)
+    private val kushki = Kushki("e41151f380a145059b6c8f4d45002130", "USD", TestEnvironment.LOCAL)
 
     init {
         this.context=null
@@ -24,7 +24,7 @@ class SiftTest {
 
     @Test
     @Throws(KushkiException::class)
-    fun shouldReturnTokenWhenCalledWithValidParams() {
+    fun shouldReturnTokenWhenCalledWithoutContext() {
         val token = RandomStringUtils.randomAlphanumeric(32)
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = Helpers.buildResponse("000", "", token)
@@ -42,7 +42,7 @@ class SiftTest {
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = Helpers.buildResponse("000", "", token)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushki.requestToken(validCard, totalAmount,context)
+        val transaction = kushki.requestToken(validCard, totalAmount,context,true)
         System.out.println(transaction.token)
         System.out.println(token)
         MatcherAssert.assertThat(transaction.token.length, CoreMatchers.equalTo(32))
