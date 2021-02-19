@@ -12,15 +12,11 @@ import org.junit.Test
 import java.net.HttpURLConnection
 
 class SiftTest {
-    private var context: Context?
+    private var context: Context? = null
     private val validCard = Card("John Doe", "5321952125169352", "123", "12", "21")
     private val totalAmount = 10.0
     val wireMockRule = WireMockRule(8888)
     private val kushki = Kushki("e41151f380a145059b6c8f4d45002130", "USD", TestEnvironment.LOCAL)
-
-    init {
-        this.context=null
-    }
 
     @Test
     @Throws(KushkiException::class)

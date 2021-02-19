@@ -12,6 +12,11 @@ internal class KushkiJsonBuilder {
         return buildJsonObject(userId, sessionId).toString()
     }
 
+
+    fun buildJson(card: Card, totalAmount: Double, currency: String): String {
+        return buildJsonObject(card, totalAmount, currency).toString()
+    }
+
     fun buildJson(card: Card, totalAmount: Double, currency: String, userId:String,sessionId:String): String {
         return buildJsonObject(card, totalAmount, currency,userId,sessionId).toString()
     }
@@ -89,6 +94,7 @@ internal class KushkiJsonBuilder {
                 .put("sessionId",sessionId)
     }
 
+
     private fun buildJsonObject(card: Card, totalAmount: Double, currency: String): JSONObject {
         return buildJsonObject(card, currency)
                 .put("totalAmount", totalAmount)
@@ -99,6 +105,7 @@ internal class KushkiJsonBuilder {
                 .put("card", card.toJsonObject())
                 .put("currency", currency)
     }
+
 
     private fun buildJsonObject(userId: String, sessionId: String): JSONObject {
         return JSONObject()

@@ -45,26 +45,34 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
 
     @Throws(KushkiException::class)
     fun requestToken(card: Card, totalAmount: Double): Transaction {
-        val merchantSettings=requestMerchantSettings()
-        val merchantCredentials:SiftScienceObject =kushkiClient.getScienceSession(card)
-        println("SandboxKey: "+merchantSettings.sandboxBaconKey)
-        println("Account ID: "+merchantSettings.sandboxAccountId)
-        println("UserId: "+merchantCredentials.userId)
-        println("SessionId: "+merchantCredentials.sessionId)
-        /*val siftScienceAndroid = SiftScience()
-        siftScienceAndroid.initSiftScience(merchantSettings.sandboxAccountId, merchantSettings.sandboxBaconKey, merchantCredentials.userId, merchantCredentials.sessionId, context)
-*/
-        val siftJava = SiftClient(merchantSettings.sandboxBaconKey, merchantSettings.sandboxAccountId)
-        siftJava.buildRequest(CreateOrderFieldSet().setUserId(merchantCredentials.userId).setSessionId(merchantCredentials.sessionId))
-        return kushkiClient.post(TOKENS_PATH, kushkiJsonBuilder.buildJson(card, totalAmount, this.currency,merchantCredentials.userId,merchantCredentials.sessionId))
+        return kushkiClient.post(TOKENS_PATH, kushkiJsonBuilder.buildJson(card, totalAmount, this.currency))
     }
 
     @Throws(KushkiException::class)
-    fun requestTokenCharge(totalAmount: Double, remoteUrl: String, description: String, email: String): Transaction {
-        return kushkiClient.post(CARD_ASYNC_TOKENS_PATH, kushkiJsonBuilder.buildJson(
-                totalAmount, this.currency, remoteUrl, description, email)
-        )
+    fun requestTokenCharge(card: Card, totalAmount: Double, subscriptionId:String, isTest: Boolean,context: Context?): Transaction {
+        val merchantSettings=requestMerchantSettings()
+        val merchantCredentials:SiftScienceObject =kushkiClient.getScienceSession(card)
+        println("Key: "+merchantSettings.   prodBaconKey)
+        println("UserId: "+merchantCredentials.userId)
+        println("SessionId: "+merchantCredentials.sessionId)
+        val siftScienceAndroid = SiftScience()
+        if(isTest){
+            if (context != null) {
+                siftScienceAndroid.initSiftScience(merchantSettings.sandboxAccountId, merchantSettings.sandboxBaconKey, merchantCredentials.userId, merchantCredentials.sessionId, context)
+            }
+        }else{
+            if (context != null) {
+                siftScienceAndroid.initSiftScience(merchantSettings.prodAccountId, merchantSettings.prodAccountId, merchantCredentials.userId, merchantCredentials.sessionId, context)
+            }
+        }
+        return kushkiClient.post("$TOKEN_CHARGE_PATH$subscriptionId/tokens", kushkiJsonBuilder.buildJson(card, totalAmount, this.currency,merchantCredentials.userId,merchantCredentials.sessionId))
     }
+
+    @Throws(KushkiException::class)
+    fun requestTokenCharge(card: Card, totalAmount: Double, subscriptionId:String): Transaction {
+        return kushkiClient.post("$TOKEN_CHARGE_PATH$subscriptionId/tokens", kushkiJsonBuilder.buildJson(card, totalAmount, this.currency))
+    }
+
 
     @Throws(KushkiException::class)
     fun requestSubscriptionToken(card: Card): Transaction {
@@ -220,6 +228,7 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         private const val TRANSFER_SUBSCRIPTION_BANKLIST_PATH = "transfer-subscriptions/v1/bankList"
         private const val TRANSFER_SUBSCRIPTION_SECURE_PATH = "rules/v1/secureValidation"
         private const val CARD_BIN_PATH = "card/v1/bin/"
+        private const val TOKEN_CHARGE_PATH = "subscriptions/v1/card/"
         private const val CARD_SUBSCRIPTION_ASYNC_TOKENS_PATH = "subscriptions/v1/card-async/tokens"
         private const val MERCHANT_SETTINGS_PATH = "merchant/v1/merchant/settings"
     }
