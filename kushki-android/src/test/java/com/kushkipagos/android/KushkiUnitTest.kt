@@ -44,10 +44,7 @@ class KushkiUnitTest {
             "123123123","CC","01",12,"tes@kushkipagos.com","USD")
     private val kushkiCardSubscriptionAsync = Kushki("e955d8c491674b08869f0fe6f480c63e", "CLP", TestEnvironment.LOCAL_QA)
     private val kushkiCardSubscriptionAsyncErrorMerchant = Kushki("20000000103303102000", "CLP", TestEnvironment.LOCAL_QA)
-    private val context:Context
-        get() {
-            TODO()
-        }
+    private val context:Context? = null
     private val name = "José"
     private val lastName = "Fernn"
     private val identification = "1721834349"
@@ -103,7 +100,7 @@ class KushkiUnitTest {
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = buildResponse("000", "", token)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushki.requestToken(validCard, totalAmount)
+        val transaction = kushki.requestToken(validCard, totalAmount,context,true)
         System.out.println(transaction.token)
         System.out.println(token)
         assertThat(transaction.token.length, equalTo(32))
@@ -119,7 +116,7 @@ class KushkiUnitTest {
         val expectedRequestBody = buildExpectedRequestBody(invalidCard, totalAmount)
         val responseBody = buildResponse(errorCode, errorMessage)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
-        val transaction = kushki.requestToken(invalidCard, totalAmount)
+        val transaction = kushki.requestToken(invalidCard, totalAmount,context,true)
         assertThat(transaction.token, equalTo(""))
         assertThat(transaction.code, equalTo("K001"))
         assertThat(transaction.message, equalTo(errorMessage))
@@ -132,7 +129,7 @@ class KushkiUnitTest {
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = buildResponse("000", "", token)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushkiSingleIP.requestToken(validCard, totalAmount)
+        val transaction = kushkiSingleIP.requestToken(validCard, totalAmount,context,true)
         System.out.println(transaction.token)
         System.out.println(token)
         assertThat(transaction.message, equalTo(""))

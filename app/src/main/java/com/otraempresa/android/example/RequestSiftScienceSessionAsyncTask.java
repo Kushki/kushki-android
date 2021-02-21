@@ -7,16 +7,16 @@ import com.kushkipagos.android.KushkiException;
 import com.kushkipagos.android.Transaction;
 
 class RequestSiftScienceSessionAsyncTask extends AbstractRequestSiftScienceSessionAsyncTask {
-    Context context;
+    Context AppContext;
 
     RequestSiftScienceSessionAsyncTask(Context context) {
 
         super(context);
-        this.context=context;
+        this.AppContext=context;
     }
 
     @Override
     protected Transaction requestToken(Card card) throws KushkiException {
-        return kushki.requestToken(card,10,context,true);
+        return kushki.requestToken(card,10,AppContext,true);
     }
 }

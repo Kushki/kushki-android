@@ -4,7 +4,7 @@ import com.google.gson.JsonObject
 import org.json.JSONException
 import org.json.JSONObject
 
-class SiftScienceObject(responseBody:String) {
+class   SiftScienceObject(responseBody:String) {
     var userId: String =""
     var sessionId:String=""
     var code: String = ""
