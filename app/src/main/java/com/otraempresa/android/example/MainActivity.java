@@ -40,8 +40,14 @@ public class MainActivity extends AppCompatActivity {
         final EditText currency = (EditText) findViewById(R.id.currency);
         final EditText callbackUrl = (EditText) findViewById(R.id.callbackUrl);
         final EditText cardNumber = (EditText) findViewById(R.id.cardNumber);
+        final EditText subscriptionId = findViewById(R.id.subscriptionIdInput);
 
-
+        Button tokenChargeButton = (Button) findViewById(R.id.SendTokenChargeButton);
+        tokenChargeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new RequestTokenChargeAsyncTask(getApplicationContext()).execute(subscriptionId.getText().toString());
+            }
+        });
 
         Button siftTokenButton = (Button) findViewById(R.id.SendSiftTokenBtn);
         siftTokenButton.setOnClickListener(new View.OnClickListener() {
