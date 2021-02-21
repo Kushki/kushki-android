@@ -20,12 +20,12 @@ class SiftTest {
 
     @Test
     @Throws(KushkiException::class)
-    fun shouldReturnTokenWhenCalledWithoutContext() {
+    fun shouldReturnTokenWhenCalledWithContext() {
         val token = RandomStringUtils.randomAlphanumeric(32)
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = Helpers.buildResponse("000", "", token)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushki.requestToken(validCard, totalAmount)
+        val transaction = kushki.requestToken(validCard, totalAmount,context,true)
         System.out.println(transaction.token)
         System.out.println(token)
         MatcherAssert.assertThat(transaction.token.length, CoreMatchers.equalTo(32))
@@ -33,7 +33,7 @@ class SiftTest {
 
     @Test
     @Throws(KushkiException::class)
-    fun shouldReturnTokenWhenCalledWithContext() {
+    fun shouldReturnErrorWhenCalledWithInvalidParameters() {
         val token = RandomStringUtils.randomAlphanumeric(32)
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = Helpers.buildResponse("000", "", token)

@@ -13,7 +13,7 @@ import org.junit.Test
 import java.net.HttpURLConnection
 
 class TokenChargeTest {
-    private var context: Context? = null
+    private var appContext: Context? = null
     private val validCard = Card("John Doe", "5321952125169352", "123", "12", "21")
     private val totalAmount = 10.0
     val wireMockRule = WireMockRule(8888)
@@ -26,7 +26,7 @@ class TokenChargeTest {
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = Helpers.buildResponse("000", "", token)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushki.requestTokenCharge(validCard, totalAmount,"1584564378558000" )
+        val transaction = kushki.requestTokenCharge(validCard, totalAmount,"1584564378558000",true,appContext)
         MatcherAssert.assertThat(transaction.token.length, CoreMatchers.equalTo(32))
     }
 
@@ -37,7 +37,7 @@ class TokenChargeTest {
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = Helpers.buildResponse("000", "", token)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushki.requestTokenCharge(validCard, totalAmount,"15845643785580" )
+        val transaction = kushki.requestTokenCharge(validCard, totalAmount,"15845643785580" ,true,appContext)
         MatcherAssert.assertThat(transaction.message, CoreMatchers.equalTo("ID de suscripción no válida."))
     }
 

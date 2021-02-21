@@ -1,5 +1,7 @@
 package com.kushkipagos.android;
 
+import android.content.Context;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -62,6 +64,6 @@ public class KushkiExceptionTest {
         Kushki kushki = new Kushki("10000001436354684173102102", "USD", TestEnvironment.INVALID);
         expectedException.expect(KushkiException.class);
         expectedException.expectCause(is(expectedCause));
-        kushki.requestToken(card, totalAmount);
+        kushki.requestToken(card, totalAmount, null,true);
     }
 }
