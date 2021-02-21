@@ -484,14 +484,22 @@
         android:text="Request Merchant Settings" />
 
     <!-- Token Sift Science-->
-
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Display1"
+        android:id="@+id/siftScienceTest"
+        android:layout_marginTop="42dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/getMerchantSettingsInfo"
+        android:text="Sift Science Test"
+        />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:layout_below="@id/getMerchantSettingsInfo"
+        android:layout_below="@id/siftScienceTest"
         android:id="@+id/cardHolderInput"
         android:hint="Name"/>
 
@@ -550,6 +558,41 @@
         android:background="@color/accent_material_dark"
         android:layout_marginTop="32dp"
         android:layout_below="@+id/cardMonthInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <!-- TOKEN CHARGE -->
+
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Display1"
+        android:id="@+id/tokenChargeTest"
+        android:layout_marginTop="42dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SendSiftTokenBtn"
+        android:text="Token Charge test"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/subscriptionIdInput"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/tokenChargeTest"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="Subscription Id"/>
+
+    <Button
+        android:text="Request Sift Transaction Token"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/SendTokenChargeButton"
+        style="@style/Widget.AppCompat.Button"
+        android:background="@color/accent_material_dark"
+        android:layout_marginTop="32dp"
+        android:layout_below="@+id/subscriptionIdInput"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
