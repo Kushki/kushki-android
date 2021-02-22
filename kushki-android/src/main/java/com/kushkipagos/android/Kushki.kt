@@ -29,11 +29,11 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         val siftScienceAndroid = SiftScience()
         if (isTest == true) {
             if (context != null) {
-                siftScienceAndroid.initSiftScience(merchantSettings.sandboxAccountId, merchantSettings.sandboxBaconKey, merchantCredentials.userId, merchantCredentials.sessionId, context)
+                siftScienceAndroid.initSiftScience(merchantSettings.sandboxAccountId, merchantSettings.sandboxBaconKey, merchantCredentials.userId,  context)
             }
         } else {
             if (context != null) {
-                siftScienceAndroid.initSiftScience(merchantSettings.prodAccountId, merchantSettings.prodAccountId, merchantCredentials.userId, merchantCredentials.sessionId, context)
+                siftScienceAndroid.initSiftScience(merchantSettings.prodAccountId, merchantSettings.prodAccountId, merchantCredentials.userId, context)
             }
         }
 
@@ -54,11 +54,11 @@ class Kushki(publicMerchantId: String, currency: String = "USD",
         val siftScienceAndroid = SiftScience()
         if(isTest == true){
             if (context != null) {
-                siftScienceAndroid.initSiftScience(merchantSettings.sandboxAccountId, merchantSettings.sandboxBaconKey, merchantCredentials.userId, merchantCredentials.sessionId, context)
+                siftScienceAndroid.initSiftScience(merchantSettings.sandboxAccountId, merchantSettings.sandboxBaconKey, merchantCredentials.userId, context)
             }
         }else{
             if (context != null) {
-                siftScienceAndroid.initSiftScience(merchantSettings.prodAccountId, merchantSettings.prodAccountId, merchantCredentials.userId, merchantCredentials.sessionId, context)
+                siftScienceAndroid.initSiftScience(merchantSettings.prodAccountId, merchantSettings.prodAccountId, merchantCredentials.userId, context)
             }
         }
         return kushkiClient.post("$TOKEN_CHARGE_PATH$subscriptionId/tokens", kushkiJsonBuilder.buildJson(card, totalAmount, this.currency,merchantCredentials.userId,merchantCredentials.sessionId))
