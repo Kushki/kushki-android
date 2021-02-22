@@ -25,7 +25,7 @@ class SiftTest {
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = Helpers.buildResponse("000", "", token)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushki.requestToken(validCard, totalAmount,context,true)
+        val transaction = kushki.requestToken(validCard, totalAmount,null,null)
         System.out.println(transaction.token)
         System.out.println(token)
         MatcherAssert.assertThat(transaction.token.length, CoreMatchers.equalTo(32))

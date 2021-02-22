@@ -93,6 +93,7 @@ class KushkiUnitTest {
     """)
     private val cardNumber = "4242424242424242"
     private val merchantId = "20000000107415376000"
+
     @Test
     @Throws(KushkiException::class)
     fun shouldReturnTokenWhenCalledWithValidParams() {
@@ -100,13 +101,11 @@ class KushkiUnitTest {
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = buildResponse("000", "", token)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushki.requestToken(validCard, totalAmount,context,true)
+        val transaction = kushki.requestToken(validCard, totalAmount)
         System.out.println(transaction.token)
         System.out.println(token)
         assertThat(transaction.token.length, equalTo(32))
     }
-
-
 
     @Test
     @Throws(KushkiException::class)
@@ -116,7 +115,7 @@ class KushkiUnitTest {
         val expectedRequestBody = buildExpectedRequestBody(invalidCard, totalAmount)
         val responseBody = buildResponse(errorCode, errorMessage)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_PAYMENT_REQUIRED)
-        val transaction = kushki.requestToken(invalidCard, totalAmount,context,true)
+        val transaction = kushki.requestToken(invalidCard, totalAmount)
         assertThat(transaction.token, equalTo(""))
         assertThat(transaction.code, equalTo("K001"))
         assertThat(transaction.message, equalTo(errorMessage))
@@ -129,7 +128,7 @@ class KushkiUnitTest {
         val expectedRequestBody = buildExpectedRequestBody(validCard, totalAmount)
         val responseBody = buildResponse("000", "", token)
         stubTokenApi(expectedRequestBody, responseBody, HttpURLConnection.HTTP_OK)
-        val transaction = kushkiSingleIP.requestToken(validCard, totalAmount,context,true)
+        val transaction = kushkiSingleIP.requestToken(validCard, totalAmount)
         System.out.println(transaction.token)
         System.out.println(token)
         assertThat(transaction.message, equalTo(""))
