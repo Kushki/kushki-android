@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
 
-
-
 android {
     compileSdkVersion 29
     buildToolsVersion '29.0.3'
@@ -41,12 +39,10 @@ android {
     }
 }
 
-
 dependencies {
     implementation project(path: ':kushki-android')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation files('../libs/full.jar')
-    implementation 'com.siftscience:sift-java:3.4.0'
+    implementation files('../libs/kushki-library.jar')
     implementation 'com.siftscience:sift-android:0.11.1'
     // Uncomment this line and comment the next one in order to use the library source files instead
     //implementation 'com.kushkipagos:kushki-android:1.3.20-a.1'

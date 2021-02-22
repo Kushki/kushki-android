@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         Button merchantSettingsInfo = (Button) findViewById(R.id.getMerchantSettingsInfo);
         merchantSettingsInfo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

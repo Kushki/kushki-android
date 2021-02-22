@@ -36,8 +36,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.google.android:android:4.1.1.4'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.30"
-    implementation files('../libs/full.jar')
-    implementation 'com.siftscience:sift-java:3.4.0'
+    implementation files('../libs/kushki-library.jar')
     implementation 'com.siftscience:sift-android:0.11.1'
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.slf4j:slf4j-nop:1.7.30'

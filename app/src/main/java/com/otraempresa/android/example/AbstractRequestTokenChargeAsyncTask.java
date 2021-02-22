@@ -33,7 +33,6 @@ abstract class AbstractRequestTokenChargeAsyncTask extends AsyncTask<String, Voi
     protected void onPostExecute(Transaction transaction) {
         if (transaction.isSuccessful()) {
             showToast(transaction.getToken());
-            Log.i("Token: ",transaction.getToken());
         } else {
             showToast("ERROR: " + transaction.getCode() + " " + transaction.getMessage());
         }

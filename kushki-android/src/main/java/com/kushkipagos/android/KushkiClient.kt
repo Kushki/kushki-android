@@ -31,7 +31,7 @@ internal class KushkiClient(private val environment: Environment, private val pu
         var userId:String =""
         var sessionId:String=""
         var uuid: UUID = UUID.randomUUID()
-        if(merchantId==null|| merchantId ==""){
+        if(merchantId ==""){
             userId = ""
             sessionId =""
 

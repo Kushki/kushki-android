@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/KushkiDev.kushki-android.iml" filepath="$PROJECT_DIR$/.idea/modules/KushkiDev.kushki-android.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/KushkiAuthorization/kushki-android.KushkiAuthorization.iml" filepath="$PROJECT_DIR$/.idea/modules/KushkiAuthorization/kushki-android.KushkiAuthorization.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/kushki-android.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/kushki-android.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kushki-android/kushki-android.kushki-android.iml" filepath="$PROJECT_DIR$/.idea/modules/kushki-android/kushki-android.kushki-android.iml" />
     </modules>
