@@ -1,2 +1,0 @@
-com/kushkipagos/library/BuildConfig.java
- com.kushkipagos.library.BuildConfig
