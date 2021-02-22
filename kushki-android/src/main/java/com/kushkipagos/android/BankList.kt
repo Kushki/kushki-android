@@ -1,7 +1,7 @@
 package com.kushkipagos.android
 
-import org.json.JSONException
 import org.json.JSONArray
+import org.json.JSONException
 
 class BankList(responseBody:String) {
 

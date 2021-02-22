@@ -1,7 +1,6 @@
 package com.kushkipagos.android
 
 import org.json.JSONException
-import org.json.JSONArray
 import org.json.JSONObject
 
 class BinInfo(responseBody:String) {

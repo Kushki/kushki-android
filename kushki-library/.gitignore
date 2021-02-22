@@ -1,0 +1,17 @@
+*.iml
+.gradle
+
+/local.properties
+.env
+codeship.aes
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+/.idea
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/gradle.xml
+/kushki-library/build
+/kushki-library/.idea
+/kushki-library/local.properties

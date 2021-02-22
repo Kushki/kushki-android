@@ -1,5 +1,6 @@
 package com.kushkipagos.android
 
+import android.content.Context
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.junit.WireMockRule
 import com.kushkipagos.android.Helpers.buildBankListResponse
@@ -43,7 +44,7 @@ class KushkiUnitTest {
             "123123123","CC","01",12,"tes@kushkipagos.com","USD")
     private val kushkiCardSubscriptionAsync = Kushki("e955d8c491674b08869f0fe6f480c63e", "CLP", TestEnvironment.LOCAL_QA)
     private val kushkiCardSubscriptionAsyncErrorMerchant = Kushki("20000000103303102000", "CLP", TestEnvironment.LOCAL_QA)
-
+    private val context:Context? = null
     private val name = "José"
     private val lastName = "Fernn"
     private val identification = "1721834349"
@@ -92,6 +93,7 @@ class KushkiUnitTest {
     """)
     private val cardNumber = "4242424242424242"
     private val merchantId = "20000000107415376000"
+
     @Test
     @Throws(KushkiException::class)
     fun shouldReturnTokenWhenCalledWithValidParams() {
@@ -104,8 +106,6 @@ class KushkiUnitTest {
         System.out.println(token)
         assertThat(transaction.token.length, equalTo(32))
     }
-
-
 
     @Test
     @Throws(KushkiException::class)

@@ -1,5 +1,7 @@
 package com.kushkipagos.android.integration;
 
+import android.content.Context;
+
 import com.kushkipagos.android.AskQuestionnaire;
 import com.kushkipagos.android.BankList;
 import com.kushkipagos.android.BinInfo;
@@ -21,6 +23,7 @@ public class KushkiIntegrationTest {
     private static final int TOKEN_LENGTH = 32;
     private static final int QUESTIONS_LENGTH = 4;
     private static final String INVALID_CARD_CODE = "K001";
+    private static final String INVALID_SUBSCRIPTION_ID = "K012";
     private static final String INVALID_CARD_ASYNC_CODE = "CAS001";
     private static final String INVALID_CARD_ASYNC_CODE_MERCHANT = "CAS004";
     private static final String INVALID_CARD_MESSAGE = "Cuerpo de la petición inválido.";
@@ -34,6 +37,7 @@ public class KushkiIntegrationTest {
 
 
     private final Kushki kushki = new Kushki("10000001641080185390111217", "USD", KushkiEnvironment.TESTING);
+    private final Kushki kushkiTokenCharge = new Kushki("20000000106952643000", "USD", KushkiEnvironment.QA);
     private final Kushki kushkiCash= new Kushki("6000000000154083361249085016881", "USD", KushkiEnvironment.TESTING);
     private final Kushki kushkiCashInvalid= new Kushki("6000000000154083361249085016881", "CCC", KushkiEnvironment.TESTING);
     private final Kushki kushkiCashInvalidMerchant= new Kushki("60000000001540", "USD", KushkiEnvironment.TESTING);
@@ -58,17 +62,30 @@ public class KushkiIntegrationTest {
     private final String documentType = "NIT";
     private final String identification = "17219439565";
     private final String currency = "USD";
+    private Context appContext= null;
 
     @Test
     public void shouldReturnTokenWhenCalledWithValidParams() throws Exception {
-        Transaction resultTransaction = kushki.requestToken(validCard, totalAmount);
+        Transaction resultTransaction = kushki.requestToken(validCard, totalAmount,appContext,true);
         assertValidTransaction(resultTransaction);
     }
 
     @Test
     public void shouldNotReturnTokenWhenCalledWithInvalidParams() throws Exception {
-        Transaction resultTransaction = kushki.requestToken(invalidCard, totalAmount);
+        Transaction resultTransaction = kushki.requestToken(invalidCard, totalAmount,appContext,true);
         assertInvalidTransactionCard(resultTransaction);
+    }
+
+    @Test
+    public void shouldReturnTokenChargeWhenCalledWithValidParams() throws Exception {
+        Transaction resultTransaction = kushkiTokenCharge.requestTokenCharge(validCard, totalAmount,"1584564378558000",true,appContext);
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldNotReturnTokenChargeWhenCalledWithInvalidParams() throws Exception {
+        Transaction resultTransaction = kushki.requestTokenCharge(invalidCard, totalAmount,"15845643785580",true,appContext);
+        assertInvalidSubscriptionId(resultTransaction);
     }
 
     @Test
@@ -282,6 +299,11 @@ public class KushkiIntegrationTest {
     private void assertInvalidTransactionCard(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_CODE));
+    }
+
+    private void assertInvalidSubscriptionId(Transaction resultTransaction) {
+        assertThat(resultTransaction.isSuccessful(), is(false));
+        assertThat(resultTransaction.getCode(), is(INVALID_SUBSCRIPTION_ID));
     }
 
     private void assertInvalidCashTransaction(Transaction resultTransaction) {
