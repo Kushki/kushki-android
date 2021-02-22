@@ -1,19 +1,19 @@
 package com.otraempresa.android.example;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.kushkipagos.android.Amount;
+import com.kushkipagos.android.AskQuestionnaire;
 import com.kushkipagos.android.Card;
 import com.kushkipagos.android.Transfer;
 import com.kushkipagos.android.TransferSubscriptions;
-import com.kushkipagos.android.AskQuestionnaire;
 
-import java.lang.InterruptedException;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,7 +40,21 @@ public class MainActivity extends AppCompatActivity {
         final EditText currency = (EditText) findViewById(R.id.currency);
         final EditText callbackUrl = (EditText) findViewById(R.id.callbackUrl);
         final EditText cardNumber = (EditText) findViewById(R.id.cardNumber);
+        final EditText subscriptionId = findViewById(R.id.subscriptionIdInput);
 
+        Button tokenChargeButton = (Button) findViewById(R.id.SendTokenChargeButton);
+        tokenChargeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new RequestTokenChargeAsyncTask(getApplicationContext()).execute(subscriptionId.getText().toString());
+            }
+        });
+
+        Button siftTokenButton = (Button) findViewById(R.id.SendSiftTokenBtn);
+        siftTokenButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new RequestSiftScienceSessionAsyncTask(getApplicationContext()).execute(buildSiftCard());
+            }
+        });
 
         Button merchantSettingsInfo = (Button) findViewById(R.id.getMerchantSettingsInfo);
         merchantSettingsInfo.setOnClickListener(new View.OnClickListener() {
@@ -168,8 +182,15 @@ public class MainActivity extends AppCompatActivity {
                 cvvText.getText().toString(), monthText.getText().toString(), yearText.getText().toString());
     }
 
-
-
+    private Card buildSiftCard() {
+        EditText cardNameSift = findViewById(R.id.cardHolderInput);
+        EditText cardNumberSift = findViewById(R.id.cardNumberInput);
+        EditText cardCvvSift = findViewById(R.id.cardCvvInput);
+        EditText cardExpiryYearSift = findViewById(R.id.cardYearInput);
+        EditText cardExpiryMonthSift = findViewById(R.id.cardMonthInput);
+        return new Card(cardNameSift.getText().toString(), cardNumberSift.getText().toString(),
+                cardCvvSift.getText().toString(), cardExpiryMonthSift.getText().toString(), cardExpiryYearSift.getText().toString());
+    }
 
     private String mapUser(String usertType){
         if (usertType.equals("Natural") )
