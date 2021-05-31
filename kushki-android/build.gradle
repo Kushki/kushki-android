@@ -103,8 +103,8 @@ install {
 }
 
 bintray {
-    user = 'kushki'//System.getenv('BINTRAY_USER')
-    key = '55412d0e0d334f721e814092abb0c5594a9e97a2'//System.getenv('BINTRAY_API_KEY')
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_API_KEY')
     configurations = ['archives']
     publish = true
     pkg {
@@ -125,8 +125,8 @@ bintray {
             }
             mavenCentralSync {
                 sync = true
-                user = 'jZ3TVMgY'//System.getenv('MAVEN_CENTRAL_USER')
-                password = 'we8Gif8eMKtno4gfcN2DFZap6sNFnmFwRaG4Oi62TAAb'//System.getenv('MAVEN_CENTRAL_TOKEN')
+                user = System.getenv('MAVEN_CENTRAL_USER')
+                password = System.getenv('MAVEN_CENTRAL_TOKEN')
                 close = '1'
             }
         }
