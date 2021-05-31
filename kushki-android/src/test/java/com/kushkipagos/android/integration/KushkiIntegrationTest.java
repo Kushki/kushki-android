@@ -1,5 +1,7 @@
 package com.kushkipagos.android.integration;
 
+import android.content.Context;
+
 import com.kushkipagos.android.AskQuestionnaire;
 import com.kushkipagos.android.BankList;
 import com.kushkipagos.android.BinInfo;
@@ -21,10 +23,11 @@ public class KushkiIntegrationTest {
     private static final int TOKEN_LENGTH = 32;
     private static final int QUESTIONS_LENGTH = 4;
     private static final String INVALID_CARD_CODE = "K001";
+    private static final String INVALID_SUBSCRIPTION_ID = "K012";
     private static final String INVALID_CARD_ASYNC_CODE = "CAS001";
     private static final String INVALID_CARD_ASYNC_CODE_MERCHANT = "CAS004";
     private static final String INVALID_CARD_MESSAGE = "Cuerpo de la petición inválido.";
-    private static final String INVALID_SECURY_ID_MESSAGE = "OTP300";
+    private static final String INVALID_SECURY_ID_MESSAGE = "CardRule Credential not found";
     private static final String INVALID_CASH_CODE = "C001";
     private static final String INVALID_CASH_CODE_MERCHANT = "C004";
     private static final String INVALID_SUBSCRIPTION_CARD_ASYNC_CODE = "K001";
@@ -34,13 +37,14 @@ public class KushkiIntegrationTest {
 
 
     private final Kushki kushki = new Kushki("10000001641080185390111217", "USD", KushkiEnvironment.TESTING);
+    private final Kushki kushkiTokenCharge = new Kushki("20000000106952643000", "USD", KushkiEnvironment.QA);
     private final Kushki kushkiCash= new Kushki("6000000000154083361249085016881", "USD", KushkiEnvironment.TESTING);
     private final Kushki kushkiCashInvalid= new Kushki("6000000000154083361249085016881", "CCC", KushkiEnvironment.TESTING);
     private final Kushki kushkiCashInvalidMerchant= new Kushki("60000000001540", "USD", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsync = new Kushki("10000002667885476032150186346335", "CLP", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsyncInvalid = new Kushki("10000002667885476032150186346335", "CPL", KushkiEnvironment.TESTING);
     private final Kushki kushkiCardAsyncInvalidMerchant = new Kushki("2000000010309", "CLP", KushkiEnvironment.TESTING);
-    private final Kushki kushkiTransferSubscription = new Kushki("20000000102183993000", "COP", KushkiEnvironment.QA);
+    private final Kushki kushkiTransferSubscription = new Kushki("20000000107415376000", "COP", KushkiEnvironment.TESTING);
     private final Kushki kushkiBankList = new Kushki("20000000107415376000","COP",KushkiEnvironment.TESTING);
     private final Kushki kushkiBinInfo = new Kushki("10000002036955013614148494909956","USD",KushkiEnvironment.QA);
     private final Card validCard = new Card("Lisbeth Salander", "5321952125169352", "123", "12", "21");
@@ -58,17 +62,30 @@ public class KushkiIntegrationTest {
     private final String documentType = "NIT";
     private final String identification = "17219439565";
     private final String currency = "USD";
+    private Context appContext= null;
 
     @Test
     public void shouldReturnTokenWhenCalledWithValidParams() throws Exception {
-        Transaction resultTransaction = kushki.requestToken(validCard, totalAmount);
+        Transaction resultTransaction = kushki.requestToken(validCard, totalAmount,appContext,true);
         assertValidTransaction(resultTransaction);
     }
 
     @Test
     public void shouldNotReturnTokenWhenCalledWithInvalidParams() throws Exception {
-        Transaction resultTransaction = kushki.requestToken(invalidCard, totalAmount);
+        Transaction resultTransaction = kushki.requestToken(invalidCard, totalAmount,appContext,true);
         assertInvalidTransactionCard(resultTransaction);
+    }
+
+    @Test
+    public void shouldReturnTokenChargeWhenCalledWithValidParams() throws Exception {
+        Transaction resultTransaction = kushkiTokenCharge.requestTokenCharge(validCard, totalAmount,"1584564378558000",true,appContext);
+        assertValidTransaction(resultTransaction);
+    }
+
+    @Test
+    public void shouldNotReturnTokenChargeWhenCalledWithInvalidParams() throws Exception {
+        Transaction resultTransaction = kushki.requestTokenCharge(invalidCard, totalAmount,"15845643785580",true,appContext);
+        assertInvalidSubscriptionId(resultTransaction);
     }
 
     @Test
@@ -198,31 +215,31 @@ public class KushkiIntegrationTest {
     @Test
     public void shouldNotReturnAskQuestionnarieWhenCalledWithValidParams() throws Exception {
         AskQuestionnaire askQuestionnaire = new AskQuestionnaire("234","234",
-                "Quito","01","092840456","12/12/2019");
+                "Quito","01","092840456","12/12/2019","20000000107415376000");
         SecureValidation resultAskQuestionnarie = kushkiTransferSubscription.requestSecureValidation(askQuestionnaire);
         assertInvalidAskQuestionnarie(resultAskQuestionnarie);
     }
 
-    @Test
-    public void shouldReturnSubscriptionCardAsyncTokenWhenCalledWithValidParams() throws Exception {
-        Transaction resultTransaction = kushkiSubscriptionCardAsync.requestCardSubscriptionAsyncToken(
-                "test@test.com",
-                "CLP",
-                "https://mytest.com",
-                "4242424242424242"
-               );
-        assertValidTransaction(resultTransaction);
-    }
+//    @Test
+//    public void shouldReturnSubscriptionCardAsyncTokenWhenCalledWithValidParams() throws Exception {
+//        Transaction resultTransaction = kushkiSubscriptionCardAsync.requestCardSubscriptionAsyncToken(
+//                "test@test.com",
+//                "CLP",
+//                "https://mytest.com",
+//                "4242424242424242"
+//               );
+//        assertValidTransaction(resultTransaction);
+//    }
 
-    @Test
-    public void shouldReturnSubscriptionCardAsyncTokenWhenCalledWithParamsIncompleted() throws Exception {
-        Transaction resultTransaction = kushkiSubscriptionCardAsync.requestCardSubscriptionAsyncToken(
-                "test@test.com",
-                "CLP",
-                "https://mytest.com"
-                );
-        assertValidTransaction(resultTransaction);
-    }
+//    @Test
+//    public void shouldReturnSubscriptionCardAsyncTokenWhenCalledWithParamsIncompleted() throws Exception {
+//        Transaction resultTransaction = kushkiSubscriptionCardAsync.requestCardSubscriptionAsyncToken(
+//                "test@test.com",
+//                "CLP",
+//                "https://mytest.com"
+//                );
+//        assertValidTransaction(resultTransaction);
+//    }
 
     @Test
     public void shouldNotReturnSubscriptionCardAsyncTokenWhenCalledWithInValidParams() throws Exception {
@@ -266,7 +283,7 @@ public class KushkiIntegrationTest {
     private void assertInvalidAskQuestionnarie(SecureValidation resultAskQuestionnarie) {
         assertThat(resultAskQuestionnarie.isSuccessful(), is(false));
         assertThat(resultAskQuestionnarie.getCode(), is(INVALID_SECURY_ID_MESSAGE));
-        assertThat(resultAskQuestionnarie.getMessage(), is("OTP expirado"));
+        assertThat(resultAskQuestionnarie.getMessage(), is("El ID de comercio no corresponde a la credencial enviada"));
     }
 
     private void assertValidTransactionSubscriptionTransfer(Transaction resultTransaction) {
@@ -282,6 +299,11 @@ public class KushkiIntegrationTest {
     private void assertInvalidTransactionCard(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
         assertThat(resultTransaction.getCode(), is(INVALID_CARD_CODE));
+    }
+
+    private void assertInvalidSubscriptionId(Transaction resultTransaction) {
+        assertThat(resultTransaction.isSuccessful(), is(false));
+        assertThat(resultTransaction.getCode(), is(INVALID_SUBSCRIPTION_ID));
     }
 
     private void assertInvalidCashTransaction(Transaction resultTransaction) {
@@ -308,7 +330,7 @@ public class KushkiIntegrationTest {
     }
     private void assertInvalidSubscriptionCardAsyncTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
-        assertThat(resultTransaction.getCode(), is(INVALID_SUBSCRIPTION_CARD_ASYNC_CODE));
+        assertThat(resultTransaction.getCode(), is(INVALID_SUBSCRIPTION_CODE_MERCHANT));
     }
     private void assertInvalidSubscriptionCardAsyncMerchant(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));

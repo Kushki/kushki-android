@@ -1,5 +1,6 @@
 *.iml
 .gradle
+
 /local.properties
 .env
 codeship.aes
@@ -10,3 +11,4 @@ codeship.aes
 /.idea
 /.idea/misc.xml
 /.idea/modules.xml
+/.idea/gradle.xml
