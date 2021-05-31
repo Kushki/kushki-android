@@ -220,26 +220,26 @@ public class KushkiIntegrationTest {
         assertInvalidAskQuestionnarie(resultAskQuestionnarie);
     }
 
-    @Test
-    public void shouldReturnSubscriptionCardAsyncTokenWhenCalledWithValidParams() throws Exception {
-        Transaction resultTransaction = kushkiSubscriptionCardAsync.requestCardSubscriptionAsyncToken(
-                "test@test.com",
-                "CLP",
-                "https://mytest.com",
-                "4242424242424242"
-               );
-        assertValidTransaction(resultTransaction);
-    }
+//    @Test
+//    public void shouldReturnSubscriptionCardAsyncTokenWhenCalledWithValidParams() throws Exception {
+//        Transaction resultTransaction = kushkiSubscriptionCardAsync.requestCardSubscriptionAsyncToken(
+//                "test@test.com",
+//                "CLP",
+//                "https://mytest.com",
+//                "4242424242424242"
+//               );
+//        assertValidTransaction(resultTransaction);
+//    }
 
-    @Test
-    public void shouldReturnSubscriptionCardAsyncTokenWhenCalledWithParamsIncompleted() throws Exception {
-        Transaction resultTransaction = kushkiSubscriptionCardAsync.requestCardSubscriptionAsyncToken(
-                "test@test.com",
-                "CLP",
-                "https://mytest.com"
-                );
-        assertValidTransaction(resultTransaction);
-    }
+//    @Test
+//    public void shouldReturnSubscriptionCardAsyncTokenWhenCalledWithParamsIncompleted() throws Exception {
+//        Transaction resultTransaction = kushkiSubscriptionCardAsync.requestCardSubscriptionAsyncToken(
+//                "test@test.com",
+//                "CLP",
+//                "https://mytest.com"
+//                );
+//        assertValidTransaction(resultTransaction);
+//    }
 
     @Test
     public void shouldNotReturnSubscriptionCardAsyncTokenWhenCalledWithInValidParams() throws Exception {
@@ -330,7 +330,7 @@ public class KushkiIntegrationTest {
     }
     private void assertInvalidSubscriptionCardAsyncTransaction(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
-        assertThat(resultTransaction.getCode(), is(INVALID_SUBSCRIPTION_CARD_ASYNC_CODE));
+        assertThat(resultTransaction.getCode(), is(INVALID_SUBSCRIPTION_CODE_MERCHANT));
     }
     private void assertInvalidSubscriptionCardAsyncMerchant(Transaction resultTransaction) {
         assertThat(resultTransaction.isSuccessful(), is(false));
