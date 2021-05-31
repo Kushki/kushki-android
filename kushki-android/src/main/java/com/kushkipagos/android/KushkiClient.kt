@@ -6,6 +6,7 @@ import java.net.URL
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
 import java.security.spec.InvalidKeySpecException
+import java.util.*
 import javax.crypto.BadPaddingException
 import javax.crypto.IllegalBlockSizeException
 import javax.crypto.NoSuchPaddingException
@@ -15,6 +16,32 @@ internal class KushkiClient(private val environment: Environment, private val pu
 
     constructor(environment: Environment, publicMerchantId: String) :
             this(environment, publicMerchantId, false)
+
+    private val kushkiJsonBuilder: KushkiJsonBuilder = KushkiJsonBuilder()
+
+    @Throws(KushkiException::class)
+    fun getScienceSession(card: Card):SiftScienceObject{
+        var bin:String = card.toJsonObject().getString("number").toString().substring(0, 6)
+        var lastDigits:String = card.toJsonObject().getString("number").toString().substring(card.toJsonObject().getString("number").length - 4)
+        return createSiftScienceSession(bin, lastDigits, publicMerchantId)
+    }
+
+    @Throws(KushkiException::class)
+    fun createSiftScienceSession(bin: String, lastDigits: String, merchantId: String):SiftScienceObject{
+        var userId:String =""
+        var sessionId:String=""
+        var uuid: UUID = UUID.randomUUID()
+        if(merchantId ==""){
+            userId = ""
+            sessionId =""
+
+        }else {
+            userId = merchantId+bin+lastDigits
+            sessionId =uuid.toString()
+        }
+
+        return SiftScienceObject(kushkiJsonBuilder.buildJson(userId, sessionId))
+    }
 
     @Throws(KushkiException::class)
     fun post(endpoint: String, requestBody: String): Transaction {
@@ -163,6 +190,23 @@ internal class KushkiClient(private val environment: Environment, private val pu
             return connection.errorStream
         } else {
             return connection.inputStream
+        }
+    }
+
+    @Throws(IOException::class)
+    fun get_merchant_settings(endpoint: String):MerchantSettings{
+        try {
+            val connection = prepareGetConnection(endpoint)
+            return MerchantSettings(parseResponse(connection))
+        }catch (e: Exception) {
+            when(e){
+                is BadPaddingException, is IllegalBlockSizeException, is NoSuchAlgorithmException,
+                is NoSuchPaddingException, is InvalidKeyException, is InvalidKeySpecException,
+                is IOException -> {
+                    throw KushkiException(e)
+                }
+                else -> throw e
+            }
         }
     }
 }

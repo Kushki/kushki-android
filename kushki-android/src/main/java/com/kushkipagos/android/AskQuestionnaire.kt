@@ -4,7 +4,7 @@ import org.json.JSONObject
 
 class AskQuestionnaire(private val secureServiceId: String, private val secureService:String,
                        private val cityCode: String, private val stateCode: String, private val phone: String,
-                       private val expeditionDate: String) {
+                       private val expeditionDate: String, private val merchantId:String) {
 
     fun toJsonObject(): JSONObject {
 
@@ -23,6 +23,7 @@ class AskQuestionnaire(private val secureServiceId: String, private val secureSe
                 .put("secureServiceId",secureServiceId)
                 .put("secureService",secureService)
                 .put("confrontaInfo",confrontaInfo)
+                .put("merchantId",merchantId)
         return request
     }
 }
