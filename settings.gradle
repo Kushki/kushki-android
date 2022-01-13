@@ -1,3 +1,4 @@
 rootProject.name = "KushkiDemo"
 include ':app'
 include ':kushki'
+include ':libs'
