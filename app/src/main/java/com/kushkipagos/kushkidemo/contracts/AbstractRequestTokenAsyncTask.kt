@@ -15,7 +15,7 @@ abstract class AbstractRequestTokenAsyncTask : CoroutineTask<Card, Void, Transac
 
     constructor(context: Context){
         _context = context
-        _kushki = Kushki("1195b05f49b44aae83fafc9c8de01b88", "COP", KushkiEnvironment.QA)
+        _kushki = Kushki("d6b3e17702e64d85b812c089e24a1ca1", "COP", KushkiEnvironment.TESTING)
     }
 
     @Throws(KushkiException::class)

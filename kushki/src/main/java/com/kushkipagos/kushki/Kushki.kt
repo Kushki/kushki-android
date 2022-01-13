@@ -115,13 +115,14 @@ class Kushki(
         if (sandbox3ds && is3DSecure) {
             val jwtResponse: CyberSourceJWT = kushkiClient.get_cybersourceJWT(AUTH_TOKEN)
 
-            show3DSMockView(context, activity, card, totalAmount, merchantSettings)
-
             try {
                 transaction = kushkiClient.post(
                     TOKENS_PATH,
                     kushkiJsonBuilder.buildJson(card, totalAmount, actualCurrency, jwtResponse.jwt)
                 )
+                if(transaction.security!!.authRequired == "true"){
+                    show3DSMockView(context, activity, card, totalAmount, merchantSettings)
+                }
             } catch (e: Exception) {
                 transaction.message = "${transaction.message}  ${e.message.toString()}"
                 return transaction
