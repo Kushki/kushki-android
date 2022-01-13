@@ -3,607 +3,614 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-<RelativeLayout
-    android:id="@+id/activity_main"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="@dimen/activity_vertical_margin"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin"
-                android:paddingTop="@dimen/activity_vertical_margin"
-                tools:context="com.otraempresa.android.example.MainActivity">
-
-    <Spinner
-        android:id="@+id/user_type"
-        android:layout_width="182dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_marginStart="43dp"
-        android:layout_marginLeft="43dp"
-        android:layout_marginTop="22dp"
-        android:layout_toEndOf="@+id/textView2"
-        android:layout_toRightOf="@+id/textView2"
-        android:entries="@array/user_type_array" />
-
-    <Spinner
-        android:id="@+id/document_type"
-        android:layout_width="139dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_marginTop="54dp"
-        android:entries="@array/document_type_array" />
-
-    <Spinner
-        android:id="@+id/card_currency"
-        android:layout_width="139dp"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/cvvText"
-        android:layout_above="@+id/transactionButton"
-        android:entries="@array/currencies" />
-
-    <EditText
+    <RelativeLayout
+        android:id="@+id/activity_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/nameText"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Name"/>
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        tools:context="com.otraempresa.android.example.MainActivity">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/numberText"
-        android:layout_below="@+id/nameText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Card Number"/>
+        <Spinner
+            android:id="@+id/user_type"
+            android:layout_width="182dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:layout_marginStart="43dp"
+            android:layout_marginLeft="43dp"
+            android:layout_marginTop="22dp"
+            android:layout_toEndOf="@+id/textView2"
+            android:layout_toRightOf="@+id/textView2"
+            android:entries="@array/user_type_array" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberPassword"
-        android:ems="10"
-        android:id="@+id/cvvText"
-        android:layout_below="@+id/yearText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="14dp"
-        android:hint="CVV"/>
+        <Spinner
+            android:id="@+id/document_type"
+            android:layout_width="139dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView2"
+            android:layout_marginTop="54dp"
+            android:entries="@array/document_type_array" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/yearText"
-        android:layout_below="@+id/monthText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Expiry Year"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/nameText"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:hint="Name"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/monthText"
-        android:layout_marginTop="13dp"
-        android:layout_below="@+id/numberText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Expiry Month"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/numberText"
+            android:layout_below="@+id/nameText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:hint="Card Number"/>
 
-    <Button
-        android:text="Request Transaction Token"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/transactionButton"
-        style="@style/Widget.AppCompat.Button"
-        android:background="@color/accent_material_dark"
-        android:layout_marginTop="32dp"
-        android:layout_below="@+id/cvvText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberPassword"
+            android:ems="10"
+            android:id="@+id/cvvText"
+            android:layout_below="@+id/yearText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="14dp"
+            android:hint="CVV"/>
 
-    <Button
-        android:text="Request Subscription Token"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:id="@+id/sendSubscriptionButton"
-        style="@style/Widget.AppCompat.Button"
-        android:background="@color/accent_material_dark"
-        android:layout_below="@+id/transactionButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/yearText"
+            android:layout_below="@+id/monthText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:hint="Expiry Year"/>
 
-    <TextView
-        style="@style/Base.TextAppearance.AppCompat.Display1"
-        android:id="@+id/cashText"
-        android:layout_marginTop="42dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sendSubscriptionButton"
-        android:text="Cash Tokens"
-        />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/monthText"
+            android:layout_marginTop="13dp"
+            android:layout_below="@+id/numberText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:hint="Expiry Month"/>
 
-    
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/name"
-        android:layout_below="@+id/cashText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="14dp"
-        android:hint="Name"/>
+        <Button
+            android:text="Request Transaction Token"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/transactionButton"
+            style="@style/Widget.AppCompat.Button"
+            android:background="@color/accent_material_dark"
+            android:layout_marginTop="32dp"
+            android:layout_below="@+id/cvvText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/lastNameCash"
-        android:layout_below="@+id/name"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="14dp"
-        android:hint="Last Name"/>
+        <TextView
+            android:id="@+id/textValidation3DS"
+            android:textSize="17dp"
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/transactionButton"
+            />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/identification"
-        android:layout_below="@+id/lastNameCash"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="14dp"
-        android:hint="Identification "/>
+        <WebView
+            android:id="@+id/webView"
+            android:layout_below="@+id/textValidation3DS"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></WebView>
 
-    <Button
-        android:text="Request Cash Token"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:id="@+id/sendCashButton"
-        style="@style/Widget.AppCompat.Button"
-        android:background="@color/accent_material_dark"
-        android:layout_below="@+id/identification"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        <Button
+            android:text="Request Subscription Token"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:id="@+id/sendSubscriptionButton"
+            style="@style/Widget.AppCompat.Button"
+            android:background="@color/accent_material_dark"
+            android:layout_below="@+id/webView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
-    <TextView
-        style="@style/Base.TextAppearance.AppCompat.Display1"
-        android:id="@+id/textCardAsync"
-        android:layout_marginTop="42dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sendCashButton"
-        android:text="Card Async Tokens"
-        />
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Display1"
+            android:id="@+id/cashText"
+            android:layout_marginTop="42dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sendSubscriptionButton"
+            android:text="Cash Tokens"
+            />
 
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/emailText"
-        android:layout_below="@+id/textCardAsync"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="14dp"
-        android:hint="Email"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/name"
+            android:layout_below="@+id/cashText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="14dp"
+            android:hint="Name"/>
 
-    <Button
-        android:text="Request Card Async Token"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="22dp"
-        android:id="@+id/sendCardAsyncButton"
-        style="@style/Widget.AppCompat.Button"
-        android:background="@color/accent_material_dark"
-        android:layout_below="@+id/emailText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/lastNameCash"
+            android:layout_below="@+id/name"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="14dp"
+            android:hint="Last Name"/>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="366dp"
-        android:layout_height="43dp"
-        android:layout_below="@+id/sendCardAsyncButton"
-        android:layout_marginTop="29dp"
-        android:text="Transfer Tokens"
-        android:textSize="36sp" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/identification"
+            android:layout_below="@+id/lastNameCash"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="14dp"
+            android:hint="Identification "/>
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_marginTop="20dp"
-        android:text="Tipo de Personas"
-        android:textSize="18sp" />
+        <Button
+            android:text="Request Cash Token"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:id="@+id/sendCashButton"
+            style="@style/Widget.AppCompat.Button"
+            android:background="@color/accent_material_dark"
+            android:layout_below="@+id/identification"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
-    <EditText
-        android:id="@+id/reference"
-        android:layout_width="200dp"
-        android:layout_height="55dp"
-        android:layout_below="@+id/user_type"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/document_type"
-        android:layout_toRightOf="@+id/document_type"
-        android:ems="10"
-        android:hint="Referencia"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="373dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/document_type"
-        android:layout_marginTop="14dp"
-        android:ems="10"
-        android:hint="Correo"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/description"
-        android:layout_width="370dp"
-        android:layout_height="61dp"
-        android:layout_below="@+id/email"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:hint="Descripcion"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/sendTransferTokenButton"
-        android:layout_width="372dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/description"
-        android:layout_marginTop="25dp"
-        style="@style/Widget.AppCompat.Button"
-        android:background="@color/accent_material_dark"
-        android:text="Request Transfer Token" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sendTransferTokenButton"
-        android:layout_marginTop="31dp"
-        android:text="Transfer Subscription Token"
-        android:textSize="30sp" />
-
-    <Spinner
-        android:id="@+id/document_type2"
-        android:layout_width="139dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
-        android:layout_marginTop="20dp"
-        android:entries="@array/document_type_2_array" />
-
-    <EditText
-        android:id="@+id/documentNumber_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView3"
-        android:layout_marginStart="33dp"
-        android:layout_marginLeft="33dp"
-        android:layout_marginTop="20dp"
-        android:layout_toEndOf="@+id/document_type2"
-        android:layout_toRightOf="@+id/document_type2"
-        android:ems="10"
-        android:hint="Document Number"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/firstName"
-        android:layout_width="385dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/documentNumber_2"
-        android:layout_marginTop="21dp"
-        android:ems="10"
-        android:hint="First name"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/lastName"
-        android:layout_width="385dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/firstName"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Last Name"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/accountNumber"
-        android:layout_width="373dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/lastName"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Account Number"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/sendTransferSubscriptionTokenButton"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="372dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/accountNumber"
-        android:layout_marginTop="20dp"
-        android:background="@color/accent_material_dark"
-        android:text="Request Transfer Subscriiption Token" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sendTransferSubscriptionTokenButton"
-        android:layout_marginTop="28dp"
-        android:text="Secure Validation"
-        android:textSize="30sp" />
-
-    <EditText
-        android:id="@+id/cityCode"
-        android:layout_width="373dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView4"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="City"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/stateCode"
-        android:layout_width="373dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cityCode"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="State Code"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/phone"
-        android:layout_width="373dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/stateCode"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Phone"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/expeditionDocumentDate"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/phone"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Expedition Document Date"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/sendSecureValidationButton"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="372dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/expeditionDocumentDate"
-        android:layout_marginTop="20dp"
-        android:background="@color/accent_material_dark"
-        android:text="Request Ask Questionnaire Secure Validation" />
-
-    <TextView
-        android:id="@+id/textCardSubscriptionAsync"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/sendSecureValidationButton"
-        android:layout_marginTop="28dp"
-        android:text="Card Subscription Async Tokens"
-        android:textSize="30sp" />
-
-    <EditText
-        android:layout_width="373dp"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/emailSubscriptionAsync"
-        android:layout_below="@+id/textCardSubscriptionAsync"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="14dp"
-        android:hint="Email"/>
-
-    <EditText
-        android:id="@+id/currency"
-        android:layout_width="373dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/emailSubscriptionAsync"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Currency"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/callbackUrl"
-        android:layout_width="373dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/currency"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Callback URL"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/cardNumber"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/callbackUrl"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:hint="Card Number"
-        android:inputType="textPersonName" />
-
-    <Button
-        android:id="@+id/SendCardSubscriptionAsyncTokenButton"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="372dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cardNumber"
-        android:layout_marginTop="20dp"
-        android:background="@color/accent_material_dark"
-        android:text="Request Card Subscription Async Token" />
-
-    <TextView
-        style="@style/Base.TextAppearance.AppCompat.Display1"
-        android:id="@+id/merchantSettingsText"
-        android:layout_marginTop="42dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/SendCardSubscriptionAsyncTokenButton"
-        android:text="Merchant Settings"
-        />
-
-    <Button
-        android:id="@+id/getMerchantSettingsInfo"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="372dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/merchantSettingsText"
-        android:layout_marginTop="20dp"
-        android:background="@color/accent_material_dark"
-        android:text="Request Merchant Settings" />
-
-    <!-- Token Sift Science-->
-    <TextView
-        style="@style/Base.TextAppearance.AppCompat.Display1"
-        android:id="@+id/siftScienceTest"
-        android:layout_marginTop="42dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/getMerchantSettingsInfo"
-        android:text="Sift Science Test"
-        />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_below="@id/siftScienceTest"
-        android:id="@+id/cardHolderInput"
-        android:hint="Name"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/cardNumberInput"
-        android:layout_below="@+id/cardHolderInput"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Card Number"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberPassword"
-        android:ems="10"
-        android:id="@+id/cardCvvInput"
-        android:layout_below="@+id/cardNumberInput"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="14dp"
-        android:hint="CVV"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/cardYearInput"
-        android:layout_below="@+id/cardCvvInput"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Expiry Year"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/cardMonthInput"
-        android:layout_marginTop="13dp"
-        android:layout_below="@+id/cardYearInput"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Expiry Month"/>
-
-    <Button
-        android:text="Request Sift Transaction Token"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/SendSiftTokenBtn"
-        style="@style/Widget.AppCompat.Button"
-        android:background="@color/accent_material_dark"
-        android:layout_marginTop="32dp"
-        android:layout_below="@+id/cardMonthInput"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
-
-    <!-- TOKEN CHARGE -->
-
-    <TextView
-        style="@style/Base.TextAppearance.AppCompat.Display1"
-        android:id="@+id/tokenChargeTest"
-        android:layout_marginTop="42dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/SendSiftTokenBtn"
-        android:text="Token Charge test"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/subscriptionIdInput"
-        android:layout_marginTop="13dp"
-        android:layout_below="@+id/tokenChargeTest"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:hint="Subscription Id"/>
-
-    <Button
-        android:text="Request Sift Transaction Token"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/SendTokenChargeButton"
-        style="@style/Widget.AppCompat.Button"
-        android:background="@color/accent_material_dark"
-        android:layout_marginTop="32dp"
-        android:layout_below="@+id/subscriptionIdInput"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"/>
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Display1"
+            android:id="@+id/textCardAsync"
+            android:layout_marginTop="42dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sendCashButton"
+            android:text="Card Async Tokens"
+            />
 
 
-</RelativeLayout>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/emailText"
+            android:layout_below="@+id/textCardAsync"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="14dp"
+            android:hint="Email"/>
+
+        <Button
+            android:text="Request Card Async Token"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:id="@+id/sendCardAsyncButton"
+            style="@style/Widget.AppCompat.Button"
+            android:background="@color/accent_material_dark"
+            android:layout_below="@+id/emailText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="366dp"
+            android:layout_height="43dp"
+            android:layout_below="@+id/sendCardAsyncButton"
+            android:layout_marginTop="29dp"
+            android:text="Transfer Tokens"
+            android:textSize="36sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView"
+            android:layout_marginTop="20dp"
+            android:text="Tipo de Personas"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/reference"
+            android:layout_width="200dp"
+            android:layout_height="55dp"
+            android:layout_below="@+id/user_type"
+            android:layout_marginStart="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@+id/document_type"
+            android:layout_toRightOf="@+id/document_type"
+            android:ems="10"
+            android:hint="Referencia"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="373dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/document_type"
+            android:layout_marginTop="14dp"
+            android:ems="10"
+            android:hint="Correo"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="370dp"
+            android:layout_height="61dp"
+            android:layout_below="@+id/email"
+            android:layout_marginTop="32dp"
+            android:ems="10"
+            android:hint="Descripcion"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/sendTransferTokenButton"
+            android:layout_width="372dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/description"
+            android:layout_marginTop="25dp"
+            style="@style/Widget.AppCompat.Button"
+            android:background="@color/accent_material_dark"
+            android:text="Request Transfer Token" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sendTransferTokenButton"
+            android:layout_marginTop="31dp"
+            android:text="Transfer Subscription Token"
+            android:textSize="30sp" />
+
+        <Spinner
+            android:id="@+id/document_type2"
+            android:layout_width="139dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView3"
+            android:layout_marginTop="20dp"
+            android:entries="@array/document_type_2_array" />
+
+        <EditText
+            android:id="@+id/documentNumber_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView3"
+            android:layout_marginStart="33dp"
+            android:layout_marginLeft="33dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@+id/document_type2"
+            android:layout_toRightOf="@+id/document_type2"
+            android:ems="10"
+            android:hint="Document Number"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/firstName"
+            android:layout_width="385dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/documentNumber_2"
+            android:layout_marginTop="21dp"
+            android:ems="10"
+            android:hint="First name"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/lastName"
+            android:layout_width="385dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/firstName"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Last Name"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/accountNumber"
+            android:layout_width="373dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lastName"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Account Number"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/sendTransferSubscriptionTokenButton"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="372dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/accountNumber"
+            android:layout_marginTop="20dp"
+            android:background="@color/accent_material_dark"
+            android:text="Request Transfer Subscriiption Token" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sendTransferSubscriptionTokenButton"
+            android:layout_marginTop="28dp"
+            android:text="Secure Validation"
+            android:textSize="30sp" />
+
+        <EditText
+            android:id="@+id/cityCode"
+            android:layout_width="373dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView4"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="City"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/stateCode"
+            android:layout_width="373dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cityCode"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="State Code"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="373dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/stateCode"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Phone"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/expeditionDocumentDate"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/phone"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Expedition Document Date"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/sendSecureValidationButton"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="372dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expeditionDocumentDate"
+            android:layout_marginTop="20dp"
+            android:background="@color/accent_material_dark"
+            android:text="Request Ask Questionnaire Secure Validation" />
+
+        <TextView
+            android:id="@+id/textCardSubscriptionAsync"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sendSecureValidationButton"
+            android:layout_marginTop="28dp"
+            android:text="Card Subscription Async Tokens"
+            android:textSize="30sp" />
+
+        <EditText
+            android:layout_width="373dp"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/emailSubscriptionAsync"
+            android:layout_below="@+id/textCardSubscriptionAsync"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="14dp"
+            android:hint="Email"/>
+
+        <EditText
+            android:id="@+id/currency"
+            android:layout_width="373dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/emailSubscriptionAsync"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Currency"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/callbackUrl"
+            android:layout_width="373dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/currency"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Callback URL"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/cardNumber"
+            android:layout_width="368dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/callbackUrl"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:hint="Card Number"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/SendCardSubscriptionAsyncTokenButton"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="372dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cardNumber"
+            android:layout_marginTop="20dp"
+            android:background="@color/accent_material_dark"
+            android:text="Request Card Subscription Async Token" />
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Display1"
+            android:id="@+id/merchantSettingsText"
+            android:layout_marginTop="42dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/SendCardSubscriptionAsyncTokenButton"
+            android:text="Merchant Settings"
+            />
+
+        <Button
+            android:id="@+id/getMerchantSettingsInfo"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="372dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/merchantSettingsText"
+            android:layout_marginTop="20dp"
+            android:background="@color/accent_material_dark"
+            android:text="Request Merchant Settings" />
+
+        <!-- Token Sift Science-->
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Display1"
+            android:id="@+id/siftScienceTest"
+            android:layout_marginTop="42dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/getMerchantSettingsInfo"
+            android:text="Sift Science Test"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:layout_below="@id/siftScienceTest"
+            android:id="@+id/cardHolderInput"
+            android:hint="Name"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/cardNumberInput"
+            android:layout_below="@+id/cardHolderInput"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:hint="Card Number"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberPassword"
+            android:ems="10"
+            android:id="@+id/cardCvvInput"
+            android:layout_below="@+id/cardNumberInput"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="14dp"
+            android:hint="CVV"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/cardYearInput"
+            android:layout_below="@+id/cardCvvInput"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:hint="Expiry Year"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/cardMonthInput"
+            android:layout_marginTop="13dp"
+            android:layout_below="@+id/cardYearInput"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:hint="Expiry Month"/>
+
+        <Button
+            android:text="Request Sift Transaction Token"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/SendSiftTokenBtn"
+            style="@style/Widget.AppCompat.Button"
+            android:background="@color/accent_material_dark"
+            android:layout_marginTop="32dp"
+            android:layout_below="@+id/cardMonthInput"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <!-- TOKEN CHARGE -->
+
+        <TextView
+            style="@style/Base.TextAppearance.AppCompat.Display1"
+            android:id="@+id/tokenChargeTest"
+            android:layout_marginTop="42dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/SendSiftTokenBtn"
+            android:text="Token Charge test"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/subscriptionIdInput"
+            android:layout_marginTop="13dp"
+            android:layout_below="@+id/tokenChargeTest"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:hint="Subscription Id"/>
+
+        <Button
+            android:text="Request Sift Transaction Token"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/SendTokenChargeButton"
+            style="@style/Widget.AppCompat.Button"
+            android:background="@color/accent_material_dark"
+            android:layout_marginTop="32dp"
+            android:layout_below="@+id/subscriptionIdInput"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+
+    </RelativeLayout>
 </ScrollView>
