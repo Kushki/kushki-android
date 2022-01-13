@@ -43,9 +43,9 @@ dependencies {
     implementation 'com.amplifyframework:core:1.16.13'
     implementation 'com.amplifyframework:aws-auth-cognito:1.16.12'
     implementation 'com.siftscience:sift-android:0.11.1'
-    implementation files('./libs/cardinalmobilesdk-2.2.5-4.aar')
+    implementation project(':libs')
     implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
-    implementation 'junit:junit:4+'
+    implementation 'junit:junit:4.13.2'
     implementation ('com.github.tomakehurst:wiremock:2.27.2') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
