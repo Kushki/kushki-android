@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title3DS">Secure Checkout</string>
+    <string name="btnCancel">Cancel</string>
+    <string name="titlePurchase">Purchase Authentication</string>
+    <string name="descriptionOTP">We have send you a text message with a code to your registered mobile number ending in 5329.</string>
+    <string name="titleMerchant">Merchant:</string>
+    <string name="titleCard">Card number:</string>
+    <string name="titleAmount">Amount:</string>
+    <string name="descriptionCode">Enter your code bellow</string>
+    <string name="descriptionCodeHere">Enter code here</string>
+    <string name="btnSubmit">Submit</string>
+</resources>

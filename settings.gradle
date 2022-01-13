@@ -1,1 +1,3 @@
-include ':app', ':kushki-android'
+rootProject.name = "KushkiDemo"
+include ':app'
+include ':kushki'
