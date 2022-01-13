@@ -15,9 +15,9 @@ abstract class AbstractRequestTokenAsyncTask extends AsyncTask<Card, Void, Trans
     protected final Kushki kushki;
     private final Context context;
 
-    AbstractRequestTokenAsyncTask(Context context) {
+    AbstractRequestTokenAsyncTask(Context context, String currency) {
         this.context = context;
-        kushki = new Kushki("10000001656015280078454110039965", "USD", KushkiEnvironment.TESTING);
+        kushki = new Kushki("10000001656015280078454110039965", currency, KushkiEnvironment.TESTING);
     }
 
     @Override

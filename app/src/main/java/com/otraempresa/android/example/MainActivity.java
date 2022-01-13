@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         final Spinner userType = (Spinner) findViewById(R.id.user_type);
         final Spinner documentType = (Spinner) findViewById(R.id.document_type);
         final Spinner documentType2 = (Spinner) findViewById(R.id.document_type2);
+        final Spinner currencySpinner = (Spinner) findViewById(R.id.card_currency);
         final EditText reference = (EditText) findViewById(R.id.reference);
         final EditText email = (EditText) findViewById(R.id.email);
         final EditText description = (EditText) findViewById(R.id.description);
@@ -66,14 +67,14 @@ public class MainActivity extends AppCompatActivity {
         Button transactionButton = (Button) findViewById(R.id.transactionButton);
         transactionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                new RequestTransactionTokenAsyncTask(getApplicationContext()).execute(buildCard());
+                new RequestTransactionTokenAsyncTask(getApplicationContext(), currencySpinner.getSelectedItem().toString()).execute(buildCard());
             }
         });
 
         Button subscriptionButton = (Button) findViewById(R.id.sendSubscriptionButton);
         subscriptionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                new RequestSubscriptionTokenAsyncTask(getApplicationContext()).execute(buildCard());
+                new RequestSubscriptionTokenAsyncTask(getApplicationContext(), currencySpinner.getSelectedItem().toString()).execute(buildCard());
             }
         });
 

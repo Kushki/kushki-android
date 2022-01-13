@@ -33,6 +33,14 @@
         android:layout_marginTop="54dp"
         android:entries="@array/document_type_array" />
 
+    <Spinner
+        android:id="@+id/card_currency"
+        android:layout_width="139dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/cvvText"
+        android:layout_above="@+id/transactionButton"
+        android:entries="@array/currencies" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

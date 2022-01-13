@@ -8,8 +8,8 @@ import com.kushkipagos.android.Transaction;
 
 class RequestSubscriptionTokenAsyncTask extends AbstractRequestTokenAsyncTask {
 
-    RequestSubscriptionTokenAsyncTask(Context context) {
-        super(context);
+    RequestSubscriptionTokenAsyncTask(Context context, String currency) {
+        super(context, currency);
     }
 
     @Override
