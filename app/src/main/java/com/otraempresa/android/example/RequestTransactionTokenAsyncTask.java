@@ -9,8 +9,8 @@ import com.kushkipagos.android.Transaction;
 class RequestTransactionTokenAsyncTask extends AbstractRequestTokenAsyncTask {
     Context appContext;
 
-    RequestTransactionTokenAsyncTask(Context context) {
-        super(context);
+    RequestTransactionTokenAsyncTask(Context context, String currency) {
+        super(context, currency);
         this.appContext=context;
     }
 

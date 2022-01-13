@@ -16,4 +16,12 @@
         <item>CC</item>
         <item>CE</item>
     </string-array>
+    <string-array name="currencies">
+        <item>USD</item>
+        <item>CRC</item>
+        <item>GTQ</item>
+        <item>HNL</item>
+        <item>NIO</item>
+    </string-array>
+
 </resources>
