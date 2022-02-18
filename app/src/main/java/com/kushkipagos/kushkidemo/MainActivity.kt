@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity() {
 
         transactionButton.setOnClickListener {
             GlobalScope.launch {
-                textValidation3DS.text = "Cargando..."
                 val transactionResult = requestTransactionToken.requestToken(buildCard())
 
                 withContext(Dispatchers.Main) {
