@@ -121,7 +121,7 @@ class KushkiUnitTest {
     suspend fun shouldTest3DSecureWhen3DSIsNotEnabled() {
         context =mock(Context::class.java)
         activity = mock(Activity::class.java)
-        val transaction = kushkiTest.requestToken(validCard, totalAmount, context, activity)
+        val transaction = kushkiTest.requestToken(validCard, totalAmount, context, activity, true)
         assertThat(transaction.code, equalTo("000"))
     }
 

@@ -18,7 +18,7 @@ class RequestTransactionTokenAsyncTask : AbstractRequestTokenAsyncTask {
     }
 
     override fun requestToken(card: Card): Transaction {
-        return runBlocking { _kushki.requestToken(card,111111.9, _context, _activity) }
+        return runBlocking { _kushki.requestToken(card,111111.9, _context, _activity, true) }
     }
 
 }

@@ -48,26 +48,7 @@ class Kushki(
         val merchantCredentials: SiftScienceObject = kushkiClient.getScienceSession(card)
         println("UserId: " + merchantCredentials.userId)
         println("SessionId: " + merchantCredentials.sessionId)
-        val siftScienceAndroid = SiftScience()
-        if (isTest == true) {
-            if (context != null) {
-                siftScienceAndroid.initSiftScience(
-                    merchantSettings.sandboxAccountId,
-                    merchantSettings.sandboxBaconKey,
-                    merchantCredentials.userId,
-                    context
-                )
-            }
-        } else {
-            if (context != null) {
-                siftScienceAndroid.initSiftScience(
-                    merchantSettings.prodAccountId,
-                    merchantSettings.prodAccountId,
-                    merchantCredentials.userId,
-                    context
-                )
-            }
-        }
+        _initializeSiftScience(isTest, context, merchantSettings, merchantCredentials)
         return kushkiClient.post(
             TOKENS_PATH,
             kushkiJsonBuilder.buildJson(
@@ -92,86 +73,112 @@ class Kushki(
     suspend fun requestToken(
         card: Card,
         totalAmount: Double,
-        context: Context,
-        activity: Activity
+        context: Context?,
+        activity: Activity?,
+        isTestEnvironment: Boolean?
     ): Transaction {
 
+        var isTest: Boolean
+        if (isTestEnvironment != null)
+            isTest = isTestEnvironment
+        else
+            isTest = false
         var transaction = Transaction(
             JSONObject()
                 .put("code", "001")
                 .put("message", "invalid request token")
                 .toString()
         )
-
-        val secure3DS = Secure3DS()
         val merchantSettings: MerchantSettings =
             kushkiClient.get_merchant_settings(MERCHANT_SETTINGS_PATH)
+        val merchantCredentials: SiftScienceObject = kushkiClient.getScienceSession(card)
+
+        if (context != null)
+            _initializeSiftScience(
+                    isTest,
+                    context,
+                    merchantSettings,
+                    merchantCredentials
+            )
+
+        val secure3DS = Secure3DS()
 
         val is3DSecure: Boolean = merchantSettings.is3DSecure
         val sandbox3ds: Boolean = merchantSettings.sandboxEnable
 
         val actualCurrency: String = this.currency
-        val isTest: Boolean = this.environment === KushkiEnvironment.QA
-        if (sandbox3ds && is3DSecure) {
+        if (context != null && activity != null) {
+            if (sandbox3ds && is3DSecure) {
+                val jwtResponse: CyberSourceJWT = kushkiClient.get_cybersourceJWT(AUTH_TOKEN)
+
+                try {
+                    transaction = kushkiClient.post(
+                        TOKENS_PATH,
+                        kushkiJsonBuilder.buildJson(
+                                card,
+                                totalAmount,
+                                actualCurrency,
+                                jwtResponse.jwt
+                        )
+                    )
+                    if(transaction.security!!.authRequired == "true"){
+                        show3DSMockView(context, activity, card, totalAmount, merchantSettings)
+                    }
+                } catch (e: Exception) {
+                    transaction.message = "${transaction.message}  ${e.message.toString()}"
+                    return transaction
+                }
+
+                return transaction
+            }
+
+
+            if (!is3DSecure) {
+                try {
+                    return kushkiClient.post(
+                        TOKENS_PATH,
+                        kushkiJsonBuilder.buildJson(card, totalAmount, actualCurrency)
+                    )
+                } catch (e: Exception) {
+                    transaction.message = "${transaction.message} ${e.message.toString()}"
+                    return transaction
+                }
+            }
+
+
             val jwtResponse: CyberSourceJWT = kushkiClient.get_cybersourceJWT(AUTH_TOKEN)
 
-            try {
-                transaction = kushkiClient.post(
-                    TOKENS_PATH,
-                    kushkiJsonBuilder.buildJson(card, totalAmount, actualCurrency, jwtResponse.jwt)
-                )
-                if(transaction.security!!.authRequired == "true"){
-                    show3DSMockView(context, activity, card, totalAmount, merchantSettings)
+            val isInit = secure3DS.init3DSecure(context, jwtResponse.jwt, isTest)
+
+            if (isInit) {
+                try {
+                    transaction = kushkiClient.post(
+                        TOKENS_PATH,
+                        kushkiJsonBuilder.buildJson(
+                                card,
+                                totalAmount,
+                                actualCurrency,
+                                jwtResponse.jwt
+                        )
+                    )
+                } catch (e: Exception) {
+                    transaction.message = "${transaction.message} ${e.message.toString()}"
+                    return transaction
                 }
-            } catch (e: Exception) {
-                transaction.message = "${transaction.message}  ${e.message.toString()}"
-                return transaction
             }
 
-            return transaction
-        }
-
-
-        if (!is3DSecure) {
-            try {
-                return kushkiClient.post(
-                    TOKENS_PATH,
-                    kushkiJsonBuilder.buildJson(card, totalAmount, actualCurrency)
-                )
-            } catch (e: Exception) {
-                transaction.message = "${transaction.message} ${e.message.toString()}"
-                return transaction
-            }
-        }
-
-
-        val jwtResponse: CyberSourceJWT = kushkiClient.get_cybersourceJWT(AUTH_TOKEN)
-
-        val isInit = secure3DS.init3DSecure(context, jwtResponse.jwt, isTest)
-
-        if (isInit) {
-            try {
-                transaction = kushkiClient.post(
-                    TOKENS_PATH,
-                    kushkiJsonBuilder.buildJson(card, totalAmount, actualCurrency, jwtResponse.jwt)
-                )
-            } catch (e: Exception) {
-                transaction.message = "${transaction.message} ${e.message.toString()}"
-                return transaction
-            }
-        }
-        if (transaction.isSecure3DS) {
-            if (transaction.security!!.specificationVersion.startsWith("2.")) {
-                transaction.validated3DS = secure3DS.validate(
-                    activity,
-                    transaction.security!!.authenticationTransactionId,
-                    transaction.security!!.paReq
-                )
-            } else {
+            if (transaction.isSecure3DS) {
+                if (transaction.security!!.specificationVersion.startsWith("2.")) {
+                    transaction.validated3DS = secure3DS.validate(
+                            activity,
+                            transaction.security!!.authenticationTransactionId,
+                            transaction.security!!.paReq
+                    )
+                } else {
                 transaction.validated3DS = Validated3DSResponse(
-                    false,
-                    "NO ACTION - Version 1.x.x cannot be validated natively"
-                )
+                        false,
+                        "NO ACTION - Version 1.x.x cannot be validated natively"
+                )}
             }
         }
         return transaction
@@ -189,9 +196,29 @@ class Kushki(
         val merchantSettings = requestMerchantSettings()
         val merchantCredentials: SiftScienceObject = kushkiClient.getScienceSession(card)
 
+        _initializeSiftScience(isTest, context, merchantSettings, merchantCredentials)
+        return kushkiClient.post(
+                "$TOKEN_CHARGE_PATH$subscriptionId/tokens",
+                kushkiJsonBuilder.buildJson(
+                        card,
+                        totalAmount,
+                        this.currency,
+                        merchantCredentials.userId,
+                        merchantCredentials.sessionId
+                )
+        )
+    }
+
+    private fun _initializeSiftScience(
+            isTest: Boolean?,
+            context: Context?,
+            merchantSettings: MerchantSettings,
+            merchantCredentials: SiftScienceObject
+    ) {
         val siftScienceAndroid = SiftScience()
+
         if (isTest == true) {
-            if (context != null) {
+            if (context != null && merchantSettings.sandboxAccountId != "null" && merchantSettings.sandboxBaconKey !== "null") {
                 siftScienceAndroid.initSiftScience(
                     merchantSettings.sandboxAccountId,
                     merchantSettings.sandboxBaconKey,
@@ -200,7 +227,7 @@ class Kushki(
                 )
             }
         } else {
-            if (context != null) {
+            if (context != null && merchantSettings.prodAccountId != "null" && merchantSettings.prodAccountId != "null") {
                 siftScienceAndroid.initSiftScience(
                     merchantSettings.prodAccountId,
                     merchantSettings.prodAccountId,
@@ -209,16 +236,6 @@ class Kushki(
                 )
             }
         }
-        return kushkiClient.post(
-            "$TOKEN_CHARGE_PATH$subscriptionId/tokens",
-            kushkiJsonBuilder.buildJson(
-                card,
-                totalAmount,
-                this.currency,
-                merchantCredentials.userId,
-                merchantCredentials.sessionId
-            )
-        )
     }
 
     @Throws(KushkiException::class)
